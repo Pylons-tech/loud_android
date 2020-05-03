@@ -9,30 +9,40 @@
 
     <fragment
         android:id="@+id/fragment_game_screen"
-        android:name="com.pylons.loud.fragments.GameScreenFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="320dp"
+        android:name="com.pylons.loud.fragments.GameScreen.GameScreenFragment"
+        android:layout_width="0dp"
+        android:layout_height="250dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <fragment
-        android:id="@+id/fragment_player_actions"
-        android:name="com.pylons.loud.fragments.UserActionsFragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_player_status" />
 
     <fragment
         android:id="@+id/fragment_player_status"
-        android:name="com.pylons.loud.fragments.PlayerStatusFragment"
-        android:layout_width="wrap_content"
+        android:name="com.pylons.loud.fragments.PlayerStatus.PlayerStatusFragment"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <fragment
+        android:id="@+id/fragment_player_action"
+        android:name="com.pylons.loud.fragments.PlayerAction.PlayerActionFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_player_location"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fragment_game_screen" />
+
+    <fragment
+        android:id="@+id/fragment_player_location"
+        android:name="com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

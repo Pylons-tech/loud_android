@@ -1,6 +1,36 @@
 <resources>
     <string name="app_name">LOUD</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="home">Home</string>
+    <string name="forest">Forest</string>
+    <string name="shop">Shop</string>
+    <string name="pylons_central">Pylons Central</string>
+    <string name="home_desc">You are at home. It\'s nice! Cozy. You\'re doing a puzzle.\nIf you like to kill something, though, head to the forest.\nYou can also head to the Blacksmith to work on your weapons.</string>
+    <string name="home_desc_without_character">"Welcome to Legend of the Undead Dragon!\n \nTo play LOUD, you need at least one character.\nYou can manifest a fresh soul at Pylons Central\nor you can head to the market where other players may have one on offer."</string>
+    <string name="select_active_character">Select active character</string>
+    <string name="select_active_weapon">Select active weapon</string>
+    <string name="restore_character_health">Restore character health</string>
+    <string name="update_character_name">Update character name</string>
+    <string name="rabbit">Rabbit 💰1+</string>
+    <string name="goblin">"Goblin 💰50"</string>
+    <string name="wolf">Wolf 💰150</string>
+    <string name="troll">Troll 💰300</string>
+    <string name="giant">Giant 💰3000</string>
+    <string name="buy_items">Buy Items</string>
+    <string name="sell_items">Sell Items</string>
+    <string name="upgrade_items">Upgrade Items</string>
+    <string name="buy_characters">Buy Characters</string>
+    <string name="buy_5000_with_100_pylons">Buy 💰5000 with 100 pylons</string>
+    <string name="sell_gold_from_orderbook_place_order_to_buy">Sell 💰 from orderbook / place order to buy 💰</string>
+    <string name="buy_gold_from_orderbook_place_order_to_sell"> Buy 💰 from orderbook / place order to sell 💰</string>
+    <string name="sell_weapon_from_orderbook_place_order_to_buy"> Sell 🗡️  from orderbook / place order to buy 🗡️</string>
+    <string name="buy_weapon_from_orderbook_place_order_to_sell">Buy 🗡️  from orderbook / place order to sell 🗡</string>
+    <string name="sell_character_from_orderbook_place_order_to_buy">Sell 🦘 from orderbook / place order to buy 🦘</string>
+    <string name="buy_character_from_orderbook_place_order_to_sell">Buy 🦘 from orderbook / place order to sell 🦘</string>
+    <string name="you_cant_go_to_forest_without_character">You can\'t go to forest without character</string>
+    <string name="pylons_central_desc">Got pylons? Get power.\nYou can trade for gold and items.</string>
+    <string name="shop_desc">You are now at the blacksmith.\nIf you want you can buy or sell items here.</string>
+    <string name="forest_desc">You have reached the woods. Now you must kill things for unclear reasons.\nOr go back home to your puzzle.</string>
+    <string name="gold_icon">💰</string>
+    <string name="pylon_icon">🔷</string>
 </resources>

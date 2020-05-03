@@ -1,4 +1,4 @@
-package com.pylons.loud.fragments
+package com.pylons.loud.fragments.GameScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

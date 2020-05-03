@@ -3,11 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.GameScreenFragment">
+    android:background="@drawable/layout_border"
+    tools:context=".fragments.GameScreen.GameScreenFragment">
 
     <TextView
+        android:id="@+id/text_screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Game Screen" />
+        android:layout_height="wrap_content"
+        android:padding="16dp" />
 
 </FrameLayout>
