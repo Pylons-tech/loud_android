@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">LOUD</string>
+    <string name="title_activity_game_screen">GameScreenActivity</string>
 
     <string name="home">Home</string>
     <string name="forest">Forest</string>
@@ -31,6 +32,9 @@
     <string name="pylons_central_desc">Got pylons? Get power.\nYou can trade for gold and items.</string>
     <string name="shop_desc">You are now at the blacksmith.\nIf you want you can buy or sell items here.</string>
     <string name="forest_desc">You have reached the woods. Now you must kill things for unclear reasons.\nOr go back home to your puzzle.</string>
+    <string name="inventory_desc">Your inventory.\nYou can select active weapon.</string>
     <string name="gold_icon">💰</string>
     <string name="pylon_icon">🔷</string>
+    <string name="weapon_icon">🗡️</string>
+    <string name="character_icon">🦘</string>
 </resources>

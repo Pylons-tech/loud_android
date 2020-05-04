@@ -5,7 +5,9 @@ class User(
     var gold: Int,
     var pylonAmount: Int,
     var characters: List<Character>,
-    var activeCharacter: Character?
+    var activeCharacter: Character?,
+    var inventory: List<Item>,
+    var activeWeapon: Weapon?
 ) {
 
 }

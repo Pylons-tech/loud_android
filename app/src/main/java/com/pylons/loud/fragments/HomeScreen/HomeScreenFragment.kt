@@ -1,4 +1,4 @@
-package com.pylons.loud.fragments.PlayerStatus
+package com.pylons.loud.fragments.HomeScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.models.User
-import kotlinx.android.synthetic.main.fragment_player_status.*
-import java.util.logging.Logger
+import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,12 +20,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PlayerStatusFragment.newInstance] factory method to
+ * Use the [HomeScreenFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class PlayerStatusFragment : Fragment() {
-    private val Log = Logger.getLogger(PlayerStatusFragment::class.java.name)
-
+class HomeScreenFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -45,41 +41,22 @@ class PlayerStatusFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_player_status, container, false)
+        return inflater.inflate(R.layout.fragment_home_screen, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        layout_pylon_count.setOnClickListener {
-            findNavController().navigate(R.id.pylonCentralFragment)
-        }
-        layout_gold_count.setOnClickListener {
-            findNavController().navigate(R.id.shopScreenFragment)
-        }
-        text_character_icon.setOnClickListener {
-            findNavController().navigate(R.id.inventoryFragment)
-        }
-        text_weapon_icon.setOnClickListener {
-            findNavController().navigate(R.id.inventoryFragment)
-        }
-
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            text_player_name.text = player.name
-            text_player_gold.text = player.gold.toString()
-            text_player_pylon.text = player.pylonAmount.toString()
-
-            text_active_character_name.text = player.activeCharacter!!.name
-            text_active_character_level.text = player.activeCharacter!!.level.toString()
-            text_active_character_xp.text = player.activeCharacter!!.xp.toString()
-            text_active_character_hp.text =
-                player.activeCharacter!!.hp.toString() + "/" + player.activeCharacter!!.maxHP.toString()
-
-            text_active_weapon_name.text = player.activeWeapon!!.name
-            text_active_weapon_level.text = player.activeWeapon!!.level.toString()
-            text_active_weapon_attack.text = player.activeWeapon!!.attack.toString()
+            if (player.activeCharacter == null) {
+                text_home_screen.setText(R.string.home_desc_without_character)
+            } else {
+                text_home_screen.setText(R.string.home_desc)
+            }
         })
+
+
     }
 
     companion object {
@@ -89,12 +66,12 @@ class PlayerStatusFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment PlayerStatusFragment.
+         * @return A new instance of fragment HomeScreenFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            PlayerStatusFragment().apply {
+            HomeScreenFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

@@ -1,12 +1,18 @@
-package com.pylons.loud.fragments.GameScreen
+package com.pylons.loud.fragments.ShopScreen
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
+import com.pylons.loud.models.PlayerAction
+import kotlinx.android.synthetic.main.fragment_shop_screen.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -15,10 +21,10 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [GameScreenFragment.newInstance] factory method to
+ * Use the [ShopScreenFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GameScreenFragment : Fragment() {
+class ShopScreenFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -36,7 +42,19 @@ class GameScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_game_screen, container, false)
+        return inflater.inflate(R.layout.fragment_shop_screen, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+       text_shop.setText(R.string.shop_desc)
+
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.getActions().observe(viewLifecycleOwner, Observer<List<PlayerAction>> { actions ->
+            val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
+            frag.setAdapter(actions)
+        })
     }
 
     companion object {
@@ -46,12 +64,12 @@ class GameScreenFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment GameScreenFragment.
+         * @return A new instance of fragment ShopScreenFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            GameScreenFragment().apply {
+            ShopScreenFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

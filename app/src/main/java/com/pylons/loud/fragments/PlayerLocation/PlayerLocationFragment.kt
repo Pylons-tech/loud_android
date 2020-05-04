@@ -10,6 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.pylons.loud.R
+import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.models.PlayerAction
 import com.pylons.loud.models.PlayerLocation
 
 /**
@@ -49,12 +51,71 @@ class PlayerLocationFragment : Fragment() {
                 }
                 adapter =
                     MyPlayerLocationRecyclerViewAdapter(
-                        listOf(),
+                        getLocations(),
                         listener
                     )
             }
         }
         return view
+    }
+
+    fun getLocations(): List<PlayerLocation> {
+        return listOf(
+            PlayerLocation(
+                LocationConstants.HOME, getString(R.string.home), listOf(
+                    PlayerAction(1, getString(R.string.select_active_character)),
+                    PlayerAction(2, getString(R.string.select_active_weapon)),
+                    PlayerAction(3, getString(R.string.restore_character_health))
+                )
+            ),
+            PlayerLocation(
+                LocationConstants.FOREST, getString(R.string.forest), listOf(
+                    PlayerAction(1, getString(R.string.rabbit)),
+                    PlayerAction(2, getString(R.string.goblin)),
+                    PlayerAction(3, getString(R.string.wolf)),
+                    PlayerAction(4, getString(R.string.troll)),
+                    PlayerAction(5, getString(R.string.giant))
+                )
+            ),
+            PlayerLocation(
+                LocationConstants.SHOP, getString(R.string.shop), listOf(
+                    PlayerAction(1, getString(R.string.buy_items)),
+                    PlayerAction(2, getString(R.string.sell_items)),
+                    PlayerAction(3, getString(R.string.upgrade_items))
+                )
+            ),
+            PlayerLocation(
+                LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central), listOf(
+                    PlayerAction(1, getString(R.string.buy_characters)),
+                    PlayerAction(2, getString(R.string.buy_5000_with_100_pylons)),
+                    PlayerAction(
+                        3,
+                        getString(R.string.sell_gold_from_orderbook_place_order_to_buy)
+                    ),
+                    PlayerAction(
+                        4,
+                        getString(R.string.buy_gold_from_orderbook_place_order_to_sell)
+                    ),
+                    PlayerAction(
+                        5,
+                        getString(R.string.sell_weapon_from_orderbook_place_order_to_buy)
+                    ),
+                    PlayerAction(
+                        6,
+                        getString(R.string.buy_weapon_from_orderbook_place_order_to_sell)
+                    ),
+                    PlayerAction(
+                        7,
+                        getString(R.string.sell_character_from_orderbook_place_order_to_buy)
+                    ),
+                    PlayerAction(
+                        8,
+                        getString(R.string.buy_character_from_orderbook_place_order_to_sell)
+                    ),
+                    PlayerAction(9, getString(R.string.update_character_name))
+                )
+            )
+        )
     }
 
     fun setAdapter(items: List<PlayerLocation>) {

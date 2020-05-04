@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/layout_border"
-    tools:context=".fragments.GameScreen.GameScreenFragment">
+    tools:context=".fragments.HomeScreen.HomeScreenFragment">
 
     <TextView
-        android:id="@+id/text_screen"
+        android:id="@+id/text_home_screen"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="16dp" />
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/text_margin" />
 
 </FrameLayout>
