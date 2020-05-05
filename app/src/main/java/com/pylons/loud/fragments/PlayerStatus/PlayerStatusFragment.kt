@@ -11,6 +11,7 @@ import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.models.PlayerAction
 import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
@@ -50,6 +51,7 @@ class PlayerStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
         layout_pylon_count.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralFragment)
@@ -62,23 +64,35 @@ class PlayerStatusFragment : Fragment() {
         }
         text_weapon_icon.setOnClickListener {
             findNavController().navigate(R.id.inventoryFragment)
+
         }
 
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_player_name.text = player.name
             text_player_gold.text = player.gold.toString()
             text_player_pylon.text = player.pylonAmount.toString()
 
-            text_active_character_name.text = player.activeCharacter!!.name
-            text_active_character_level.text = player.activeCharacter!!.level.toString()
-            text_active_character_xp.text = player.activeCharacter!!.xp.toString()
-            text_active_character_hp.text =
-                player.activeCharacter!!.hp.toString() + "/" + player.activeCharacter!!.maxHP.toString()
+            val activeCharacter = player.activeCharacter
+            if (activeCharacter != null) {
+                text_active_character_name.text = activeCharacter.name
+                text_active_character_level.text = activeCharacter.level.toString()
+                text_active_character_xp.text = activeCharacter.xp.toString()
+                text_active_character_hp.text =
+                    activeCharacter.hp.toString() + "/" + activeCharacter.maxHP.toString()
+                layout_active_character_details.visibility = View.VISIBLE
+            } else {
+                layout_active_character_details.visibility = View.INVISIBLE
+            }
 
-            text_active_weapon_name.text = player.activeWeapon!!.name
-            text_active_weapon_level.text = player.activeWeapon!!.level.toString()
-            text_active_weapon_attack.text = player.activeWeapon!!.attack.toString()
+            val activeWeapon = player.activeWeapon
+            if (activeWeapon != null) {
+                text_active_weapon_name.text = activeWeapon.name
+                text_active_weapon_level.text = activeWeapon.level.toString()
+                text_active_weapon_attack.text = activeWeapon.attack.toString()
+                layout_active_weapon_details.visibility = View.VISIBLE
+            } else {
+                layout_active_weapon_details.visibility = View.INVISIBLE
+            }
         })
     }
 

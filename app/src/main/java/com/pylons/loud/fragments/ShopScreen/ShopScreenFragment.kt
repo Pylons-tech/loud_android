@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.models.PlayerAction
 import kotlinx.android.synthetic.main.fragment_shop_screen.*
@@ -48,13 +45,17 @@ class ShopScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       text_shop.setText(R.string.shop_desc)
+        text_shop.setText(R.string.shop_desc)
 
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.getActions().observe(viewLifecycleOwner, Observer<List<PlayerAction>> { actions ->
-            val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
-            frag.setAdapter(actions)
-        })
+        val frag =
+            childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
+        frag.setAdapter(
+            listOf(
+                PlayerAction(1, getString(R.string.buy_items)),
+                PlayerAction(2, getString(R.string.sell_items)),
+                PlayerAction(3, getString(R.string.upgrade_items))
+            )
+        )
     }
 
     companion object {

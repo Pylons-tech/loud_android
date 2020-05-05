@@ -25,7 +25,8 @@ class InventoryScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text_inventory.setText(R.string.inventory_desc)
+        text_inventory_character.setText(R.string.inventory_desc)
+        text_inventory_item.setText(R.string.inventory_desc_item)
     }
 
 }

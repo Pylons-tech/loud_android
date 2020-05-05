@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.models.PlayerAction
 import kotlinx.android.synthetic.main.fragment_pylon_central.*
@@ -53,11 +50,36 @@ class PylonCentralFragment : Fragment() {
 
         text_pylon_central.setText(R.string.pylons_central_desc)
 
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.getActions().observe(viewLifecycleOwner, Observer<List<PlayerAction>> { actions ->
-            val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
-            frag.setAdapter(actions)
-        })
+        val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
+        frag.setAdapter(listOf(
+            PlayerAction(1, getString(R.string.buy_characters)),
+            PlayerAction(2, getString(R.string.buy_5000_with_100_pylons)),
+            PlayerAction(
+                3,
+                getString(R.string.sell_gold_from_orderbook_place_order_to_buy)
+            ),
+            PlayerAction(
+                4,
+                getString(R.string.buy_gold_from_orderbook_place_order_to_sell)
+            ),
+            PlayerAction(
+                5,
+                getString(R.string.sell_weapon_from_orderbook_place_order_to_buy)
+            ),
+            PlayerAction(
+                6,
+                getString(R.string.buy_weapon_from_orderbook_place_order_to_sell)
+            ),
+            PlayerAction(
+                7,
+                getString(R.string.sell_character_from_orderbook_place_order_to_buy)
+            ),
+            PlayerAction(
+                8,
+                getString(R.string.buy_character_from_orderbook_place_order_to_sell)
+            ),
+            PlayerAction(9, getString(R.string.update_character_name))
+        ))
     }
 
 

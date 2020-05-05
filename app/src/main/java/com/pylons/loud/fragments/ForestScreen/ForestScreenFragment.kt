@@ -5,11 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.models.PlayerAction
 import kotlinx.android.synthetic.main.fragment_forest_screen.*
@@ -49,12 +46,14 @@ class ForestScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         text_forest_screen.setText(R.string.forest_desc)
-
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.getActions().observe(viewLifecycleOwner, Observer<List<PlayerAction>> { actions ->
-            val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
-            frag.setAdapter(actions)
-        })
+        val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
+        frag.setAdapter(listOf(
+            PlayerAction(1, getString(R.string.rabbit)),
+            PlayerAction(2, getString(R.string.goblin)),
+            PlayerAction(3, getString(R.string.wolf)),
+            PlayerAction(4, getString(R.string.troll)),
+            PlayerAction(5, getString(R.string.giant))
+        ))
     }
 
     companion object {

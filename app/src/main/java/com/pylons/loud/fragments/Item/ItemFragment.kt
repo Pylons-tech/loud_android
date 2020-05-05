@@ -63,7 +63,12 @@ class ItemFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            myview.adapter = MyItemRecyclerViewAdapter(player.inventory, listener)
+            val adapter = MyItemRecyclerViewAdapter(player.inventory, listener)
+            val activeWeapon = player.activeWeapon
+            if (activeWeapon != null) {
+                adapter.selectedItemPostion = player.inventory.indexOf(activeWeapon)
+            }
+            myview.adapter = adapter
         })
     }
 

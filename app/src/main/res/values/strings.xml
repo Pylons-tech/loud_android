@@ -32,7 +32,8 @@
     <string name="pylons_central_desc">Got pylons? Get power.\nYou can trade for gold and items.</string>
     <string name="shop_desc">You are now at the blacksmith.\nIf you want you can buy or sell items here.</string>
     <string name="forest_desc">You have reached the woods. Now you must kill things for unclear reasons.\nOr go back home to your puzzle.</string>
-    <string name="inventory_desc">Your inventory.\nYou can select active weapon.</string>
+    <string name="inventory_desc">Your inventory.\nYou can select active character.</string>
+    <string name="inventory_desc_item">You can select active weapon.</string>
     <string name="gold_icon">💰</string>
     <string name="pylon_icon">🔷</string>
     <string name="weapon_icon">🗡️</string>

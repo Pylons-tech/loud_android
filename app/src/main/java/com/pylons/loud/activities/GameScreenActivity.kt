@@ -3,6 +3,7 @@ package com.pylons.loud.activities
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -10,6 +11,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
 import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
@@ -21,7 +23,8 @@ import java.util.logging.Logger
 class GameScreenActivity : AppCompatActivity(),
     PlayerLocationFragment.OnListFragmentInteractionListener,
     PlayerActionFragment.OnListFragmentInteractionListener,
-    ItemFragment.OnListFragmentInteractionListener {
+    ItemFragment.OnListFragmentInteractionListener,
+    CharacterFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     private val activeCharacter = Character("1", "Tiger", 1, 1, 1.0, 100, 100, 0, 0)
@@ -30,30 +33,21 @@ class GameScreenActivity : AppCompatActivity(),
         "cluo",
         5000,
         50000,
-        listOf(activeCharacter),
+        listOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
         activeCharacter,
-        listOf(activeWeapon),
+        listOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
         activeWeapon
     )
 
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
-        private val actions = MutableLiveData<List<PlayerAction>>()
 
         fun getPlayer(): LiveData<User> {
             return player
         }
 
-        fun getActions(): LiveData<List<PlayerAction>> {
-            return actions
-        }
-
         fun setPlayer(user: User) {
             player.value = user
-        }
-
-        fun setActions(playerActions: List<PlayerAction>) {
-            actions.value = playerActions
         }
     }
 
@@ -84,7 +78,6 @@ class GameScreenActivity : AppCompatActivity(),
             when (location.id) {
                 LocationConstants.HOME -> {
                     nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
-                    model.setActions(location.actions)
                 }
                 LocationConstants.FOREST -> {
                     if (player.activeCharacter == null) {
@@ -95,15 +88,12 @@ class GameScreenActivity : AppCompatActivity(),
                         return
                     }
                     nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
-                    model.setActions(location.actions)
                 }
                 LocationConstants.SHOP -> {
                     nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
-                    model.setActions(location.actions)
                 }
                 LocationConstants.PYLONS_CENTRAL -> {
                     nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
-                    model.setActions(location.actions)
                 }
                 else -> {
                     Log.warning("Not exist")
@@ -113,6 +103,56 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItem(item: Item?) {
-        TODO("Not yet implemented")
+        val name = item?.name
+
+        var prompt = "Set ${name} as active weapon?"
+        if (player.activeWeapon == item) {
+            prompt = "Unset ${name} as active weapon?"
+        }
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage(prompt)
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+                if (player.activeWeapon == item) {
+                    player.activeWeapon = null
+                } else {
+                    player.activeWeapon = item as Weapon
+                }
+                model.setPlayer(player)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    override fun onCharacter(item: Character?) {
+        val name = item?.name
+
+        var prompt = "Set ${name} as active character?"
+        if (player.activeCharacter == item) {
+            prompt = "Unset ${name} as active character?"
+        }
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage(prompt)
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+                if (player.activeCharacter == item) {
+                    player.activeCharacter = null
+                } else {
+                    player.activeCharacter = item
+                }
+                model.setPlayer(player)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
     }
 }

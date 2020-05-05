@@ -78,46 +78,52 @@
                 android:layout_marginRight="@dimen/text_label_margin"
                 android:text="@string/character_icon" />
 
-            <TextView
-                android:id="@+id/text_active_character_name"
+            <LinearLayout
+                android:id="@+id/layout_active_character_details"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/text_margin"
-                android:layout_marginRight="@dimen/text_label_margin"
-                android:text="Level" />
+                <TextView
+                    android:id="@+id/text_active_character_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/text_active_character_level"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_label_margin"
+                    android:text="Level" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/text_margin"
-                android:layout_marginRight="@dimen/text_label_margin"
-                android:text="XP" />
+                <TextView
+                    android:id="@+id/text_active_character_level"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/text_active_character_xp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_label_margin"
+                    android:text="XP" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/text_margin"
-                android:layout_marginRight="@dimen/text_label_margin"
-                android:text="HP" />
+                <TextView
+                    android:id="@+id/text_active_character_xp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-            <TextView
-                android:id="@+id/text_active_character_hp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/text_margin"
+                    android:layout_marginRight="@dimen/text_label_margin"
+                    android:text="HP" />
+
+                <TextView
+                    android:id="@+id/text_active_character_hp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
         </LinearLayout>
 
 
@@ -133,6 +139,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/text_label_margin"
                 android:text="@string/weapon_icon" />
+
+            <LinearLayout
+                android:id="@+id/layout_active_weapon_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             <TextView
                 android:id="@+id/text_active_weapon_name"
@@ -162,7 +173,7 @@
                 android:id="@+id/text_active_weapon_attack"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
-
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 

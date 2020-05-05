@@ -1,4 +1,4 @@
-package com.pylons.loud.fragments.Item
+package com.pylons.loud.fragments.Character
 
 import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
@@ -8,36 +8,37 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.pylons.loud.R
 
-import com.pylons.loud.fragments.Item.ItemFragment.OnListFragmentInteractionListener
-import com.pylons.loud.models.Item
 
-import kotlinx.android.synthetic.main.fragment_item.view.*
+import com.pylons.loud.fragments.Character.CharacterFragment.OnListFragmentInteractionListener
+
+import com.pylons.loud.models.Character
+import kotlinx.android.synthetic.main.fragment_character.view.*
 
 /**
- * [RecyclerView.Adapter] that can display a [Item] and makes a call to the
+ * [RecyclerView.Adapter] that can display a [Character] and makes a call to the
  * specified [OnListFragmentInteractionListener].
  * TODO: Replace the implementation with code for your data type.
  */
-class MyItemRecyclerViewAdapter(
-    private val mValues: List<Item>,
+class MyCharacterRecyclerViewAdapter(
+    private val mValues: List<Character>,
     private val mListener: OnListFragmentInteractionListener?
-) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<MyCharacterRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
-    var selectedItemPostion = RecyclerView.NO_POSITION
+    var selectedCharacterPostion = RecyclerView.NO_POSITION
 
     init {
         mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Item
+            val item = v.tag as Character
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onItem(item)
+            mListener?.onCharacter(item)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_item, parent, false)
+            .inflate(R.layout.fragment_character, parent, false)
         return ViewHolder(view)
     }
 
@@ -45,8 +46,8 @@ class MyItemRecyclerViewAdapter(
         val item = mValues[position]
         holder.mContentView.text = item.name
 
-        if (selectedItemPostion == position) {
-            holder.itemView.content.setTextColor(Color.GREEN)
+        if (selectedCharacterPostion == position) {
+            holder.itemView.content.setTextColor( Color.GREEN)
         }
 
         with(holder.mView) {

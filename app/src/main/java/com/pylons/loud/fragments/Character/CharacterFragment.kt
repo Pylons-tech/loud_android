@@ -1,4 +1,4 @@
-package com.pylons.loud.fragments.PlayerLocation
+package com.pylons.loud.fragments.Character
 
 import android.content.Context
 import android.os.Bundle
@@ -9,17 +9,20 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.pylons.loud.R
-import com.pylons.loud.constants.LocationConstants
-import com.pylons.loud.models.PlayerAction
-import com.pylons.loud.models.PlayerLocation
+import com.pylons.loud.activities.GameScreenActivity
+
+import com.pylons.loud.models.Character
+import com.pylons.loud.models.User
 
 /**
  * A fragment representing a list of Items.
  * Activities containing this fragment MUST implement the
- * [PlayerLocationFragment.OnListFragmentInteractionListener] interface.
+ * [CharacterFragment.OnListFragmentInteractionListener] interface.
  */
-class PlayerLocationFragment : Fragment() {
+class CharacterFragment : Fragment() {
     private lateinit var myview: RecyclerView
 
     // TODO: Customize parameters
@@ -27,31 +30,23 @@ class PlayerLocationFragment : Fragment() {
 
     private var listener: OnListFragmentInteractionListener? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_player_location_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_character_list, container, false)
 
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
                 myview = view
                 layoutManager = when {
-                    columnCount <= 1 -> LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                    columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
                 adapter =
-                    MyPlayerLocationRecyclerViewAdapter(
-                        getLocations(),
+                    MyCharacterRecyclerViewAdapter(
+                        listOf(),
                         listener
                     )
             }
@@ -59,21 +54,15 @@ class PlayerLocationFragment : Fragment() {
         return view
     }
 
-    fun getLocations(): List<PlayerLocation> {
-        return listOf(
-            PlayerLocation(
-                LocationConstants.HOME, getString(R.string.home)
-            ),
-            PlayerLocation(
-                LocationConstants.FOREST, getString(R.string.forest)
-            ),
-            PlayerLocation(
-                LocationConstants.SHOP, getString(R.string.shop)
-            ),
-            PlayerLocation(
-                LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central)
-            )
-        )
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
+            val adapter = MyCharacterRecyclerViewAdapter(player.characters, listener)
+
+            adapter.selectedCharacterPostion = player.characters.indexOf(player.activeCharacter)
+            myview.adapter = adapter
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -102,21 +91,7 @@ class PlayerLocationFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onLocation(location: PlayerLocation?)
+        fun onCharacter(item: Character?)
     }
 
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            PlayerLocationFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
-    }
 }
