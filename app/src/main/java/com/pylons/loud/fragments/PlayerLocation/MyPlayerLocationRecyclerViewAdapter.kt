@@ -23,16 +23,7 @@ class MyPlayerLocationRecyclerViewAdapter(
     private val mListener: OnListFragmentInteractionListener?
 ) : RecyclerView.Adapter<MyPlayerLocationRecyclerViewAdapter.ViewHolder>() {
 
-    private val mOnClickListener: View.OnClickListener
-
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as PlayerLocation
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-            mListener?.onLocation(item)
-        }
-    }
+    var selectedPos = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -43,10 +34,15 @@ class MyPlayerLocationRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = item.name
+        holder.itemView.isSelected = selectedPos == position;
 
         with(holder.mView) {
-            tag = item
-            setOnClickListener(mOnClickListener)
+            setOnClickListener(View.OnClickListener {
+                mListener?.onLocation(item)
+                notifyItemChanged(selectedPos);
+                selectedPos = holder.layoutPosition;
+                notifyItemChanged(selectedPos);
+            })
         }
     }
 

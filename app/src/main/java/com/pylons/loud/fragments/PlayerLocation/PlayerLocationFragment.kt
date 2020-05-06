@@ -9,9 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.constants.LocationConstants
-import com.pylons.loud.models.PlayerAction
 import com.pylons.loud.models.PlayerLocation
 
 /**
@@ -74,6 +76,20 @@ class PlayerLocationFragment : Fragment() {
                 LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central)
             )
         )
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
+            val adapter = myview.adapter as MyPlayerLocationRecyclerViewAdapter
+            if (adapter.selectedPos != location) {
+                adapter?.notifyItemChanged(adapter.selectedPos)
+                adapter.selectedPos = location
+                adapter?.notifyItemChanged(location)
+            }
+        })
     }
 
     override fun onAttach(context: Context) {

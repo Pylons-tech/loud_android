@@ -33,14 +33,15 @@ class GameScreenActivity : AppCompatActivity(),
         "cluo",
         5000,
         50000,
-        listOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
+        mutableListOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
         activeCharacter,
-        listOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
+        mutableListOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
         activeWeapon
     )
 
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
+        private val playerLocation = MutableLiveData<Int>()
 
         fun getPlayer(): LiveData<User> {
             return player
@@ -48,6 +49,14 @@ class GameScreenActivity : AppCompatActivity(),
 
         fun setPlayer(user: User) {
             player.value = user
+        }
+
+        fun getPlayerLocation(): LiveData<Int> {
+            return playerLocation
+        }
+
+        fun setPlayerLocation(location: Int) {
+            playerLocation.value = location
         }
     }
 
@@ -102,7 +111,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onItem(item: Item?) {
+    override fun onItemSelect(item: Item?) {
         val name = item?.name
 
         var prompt = "Set ${name} as active weapon?"
@@ -121,6 +130,69 @@ class GameScreenActivity : AppCompatActivity(),
                 model.setPlayer(player)
             }
             .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    override fun onItemBuy(item: Item?) {
+        val name = item?.name
+        val price = item?.price
+        val goldIcon = getString(R.string.gold_icon)
+
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage("Buy $name for $goldIcon $price?")
+            .setCancelable(false)
+            .setPositiveButton("Buy") { _, _ ->
+                player.inventory.add(item as Weapon)
+                player.gold = player.gold - price!!
+                player.activeWeapon = item
+                model.setPlayer(player)
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    override fun onItemSell(item: Item?) {
+        val name = item?.name
+
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage("Sell $name?")
+            .setCancelable(false)
+            .setPositiveButton("Sell") { _, _ ->
+                player.inventory.remove(item as Weapon)
+                if (player.activeWeapon == item) {
+                    player.activeWeapon = null
+                }
+                model.setPlayer(player)
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    override fun onItemUpgrade(item: Item?) {
+        val name = item?.name
+
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage("Upgrade $name?")
+            .setCancelable(false)
+            .setPositiveButton("Upgrade") { _, _ ->
+                TODO()
+            }
+            .setNegativeButton("No") { dialog, _ ->
                 dialog.cancel()
             }
 

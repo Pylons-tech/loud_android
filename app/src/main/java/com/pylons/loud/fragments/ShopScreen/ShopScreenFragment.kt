@@ -1,14 +1,20 @@
 package com.pylons.loud.fragments.ShopScreen
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
-import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
-import com.pylons.loud.models.PlayerAction
+import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.fragments.Item.ItemFragment
+import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
+import com.pylons.loud.models.User
+import com.pylons.loud.models.Weapon
 import kotlinx.android.synthetic.main.fragment_shop_screen.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -25,6 +31,7 @@ class ShopScreenFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+    private var mode = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,15 +54,54 @@ class ShopScreenFragment : Fragment() {
 
         text_shop.setText(R.string.shop_desc)
 
-        val frag =
-            childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
-        frag.setAdapter(
-            listOf(
-                PlayerAction(1, getString(R.string.buy_items)),
-                PlayerAction(2, getString(R.string.sell_items)),
-                PlayerAction(3, getString(R.string.upgrade_items))
-            )
-        )
+        text_buy.setOnClickListener {
+            val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+            val adapter = MyItemRecyclerViewAdapter(listOf(
+                Weapon("1", "Wooden Sword", 1, 1, 100, "no", 0),
+                Weapon("2", "Cooper Sword", 1, 2, 250, "no", 0),
+                Weapon("3", "Silver Sword", 1, 3, 250, "no", 0),
+                Weapon("4", "Bronze Sword", 1, 4, 250, "no", 0),
+                Weapon("5", "Iron Sword", 1, 5, 250, "no", 0)
+            ), frag.getListener())
+            adapter.mode = 2
+            mode = 2
+            frag.myview.adapter = adapter
+            text_buy.setTextColor(Color.GREEN)
+            text_sell.setTextColor(Color.WHITE)
+            text_upgrade.setTextColor(Color.WHITE)
+        }
+
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
+            text_sell.setOnClickListener {
+                val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
+                adapter.mode = 3
+                mode = 3
+                frag.myview.adapter = adapter
+                text_buy.setTextColor(Color.WHITE)
+                text_sell.setTextColor(Color.GREEN)
+                text_upgrade.setTextColor(Color.WHITE)
+            }
+
+            text_upgrade.setOnClickListener {
+                val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
+                adapter.mode = 4
+                mode = 4
+                frag.myview.adapter = adapter
+                text_buy.setTextColor(Color.WHITE)
+                text_sell.setTextColor(Color.WHITE)
+                text_upgrade.setTextColor(Color.GREEN)
+            }
+
+            if (mode == 3 || mode == 4) {
+                val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
+                adapter.mode = mode
+                frag.myview.adapter = adapter
+            }
+        })
     }
 
     companion object {

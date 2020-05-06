@@ -9,13 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 
 import com.pylons.loud.models.Character
-import com.pylons.loud.models.User
 
 /**
  * A fragment representing a list of Items.
@@ -23,7 +19,7 @@ import com.pylons.loud.models.User
  * [CharacterFragment.OnListFragmentInteractionListener] interface.
  */
 class CharacterFragment : Fragment() {
-    private lateinit var myview: RecyclerView
+    lateinit var myview: RecyclerView
 
     // TODO: Customize parameters
     private var columnCount = 1
@@ -54,17 +50,6 @@ class CharacterFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            val adapter = MyCharacterRecyclerViewAdapter(player.characters, listener)
-
-            adapter.selectedCharacterPostion = player.characters.indexOf(player.activeCharacter)
-            myview.adapter = adapter
-        })
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
@@ -77,6 +62,10 @@ class CharacterFragment : Fragment() {
     override fun onDetach() {
         super.onDetach()
         listener = null
+    }
+
+    fun getListener(): OnListFragmentInteractionListener? {
+        return listener
     }
 
     /**

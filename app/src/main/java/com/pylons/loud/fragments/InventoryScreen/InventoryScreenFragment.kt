@@ -5,8 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.fragments.Character.CharacterFragment
+import com.pylons.loud.fragments.Character.MyCharacterRecyclerViewAdapter
+import com.pylons.loud.fragments.Item.ItemFragment
+import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
+import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_inventory.*
 
 /**
@@ -27,6 +35,23 @@ class InventoryScreenFragment : Fragment() {
 
         text_inventory_character.setText(R.string.inventory_desc)
         text_inventory_item.setText(R.string.inventory_desc_item)
+
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
+            val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+            val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
+            val activeWeapon = player.activeWeapon
+            if (activeWeapon != null) {
+                adapter.selectedItemPostion = player.inventory.indexOf(activeWeapon)
+            }
+            adapter.mode = 1
+            frag.myview.adapter = adapter
+
+            val frag2 = childFragmentManager.findFragmentById(R.id.fragment_character) as CharacterFragment
+            val adapter2 = MyCharacterRecyclerViewAdapter(player.characters, frag2.getListener())
+            adapter2.selectedCharacterPostion = player.characters.indexOf(player.activeCharacter)
+            frag2.myview.adapter = adapter2
+        })
     }
 
 }

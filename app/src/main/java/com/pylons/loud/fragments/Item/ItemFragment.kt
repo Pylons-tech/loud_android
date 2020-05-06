@@ -9,13 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 
 import com.pylons.loud.models.Item
-import com.pylons.loud.models.User
 
 /**
  * A fragment representing a list of Items.
@@ -23,7 +19,7 @@ import com.pylons.loud.models.User
  * [ItemFragment.OnListFragmentInteractionListener] interface.
  */
 class ItemFragment : Fragment() {
-    private lateinit var myview: RecyclerView
+    lateinit var myview: RecyclerView
 
     // TODO: Customize parameters
     private var columnCount = 1
@@ -58,20 +54,6 @@ class ItemFragment : Fragment() {
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            val adapter = MyItemRecyclerViewAdapter(player.inventory, listener)
-            val activeWeapon = player.activeWeapon
-            if (activeWeapon != null) {
-                adapter.selectedItemPostion = player.inventory.indexOf(activeWeapon)
-            }
-            myview.adapter = adapter
-        })
-    }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
@@ -86,6 +68,10 @@ class ItemFragment : Fragment() {
         listener = null
     }
 
+    fun getListener(): OnListFragmentInteractionListener? {
+        return listener
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -98,7 +84,10 @@ class ItemFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onItem(item: Item?)
+        fun onItemSelect(item: Item?)
+        fun onItemBuy(item: Item?)
+        fun onItemSell(item: Item?)
+        fun onItemUpgrade(item: Item?)
     }
 
     companion object {

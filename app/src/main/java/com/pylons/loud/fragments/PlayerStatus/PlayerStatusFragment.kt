@@ -55,16 +55,19 @@ class PlayerStatusFragment : Fragment() {
 
         layout_pylon_count.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralFragment)
+            model.setPlayerLocation(3);
         }
         layout_gold_count.setOnClickListener {
             findNavController().navigate(R.id.shopScreenFragment)
+            model.setPlayerLocation(2);
         }
         text_character_icon.setOnClickListener {
             findNavController().navigate(R.id.inventoryFragment)
+            model.setPlayerLocation(-1);
         }
         text_weapon_icon.setOnClickListener {
             findNavController().navigate(R.id.inventoryFragment)
-
+            model.setPlayerLocation(-1);
         }
 
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
