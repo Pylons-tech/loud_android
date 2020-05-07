@@ -6,7 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textColor">@color/colorText</item>
         <item name="android:textSize">16dp</item>
     </style>
 
@@ -20,7 +20,12 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="MyDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:background">#1D1D1D</item>
-        <item name="android:textColorPrimary">#FFFFFF</item>
+        <item name="android:background">@color/colorBackgroundSecondary</item>
+        <item name="android:textColorPrimary">@color/colorText</item>
+    </style>
+
+    <style name="MyEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlNormal">@color/colorText</item>
+        <item name="colorControlActivated">@color/colorText</item>
     </style>
 </resources>

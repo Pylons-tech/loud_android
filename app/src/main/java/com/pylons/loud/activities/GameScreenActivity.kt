@@ -1,5 +1,7 @@
 package com.pylons.loud.activities
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -16,6 +18,8 @@ import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.models.*
+import com.squareup.moshi.JsonAdapter
+import com.squareup.moshi.Moshi
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import java.util.logging.Logger
@@ -27,17 +31,19 @@ class GameScreenActivity : AppCompatActivity(),
     CharacterFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
-    private val activeCharacter = Character("1", "Tiger", 1, 1, 1.0, 100, 100, 0, 0)
-    private val activeWeapon = Weapon("1", "Wooden Sword", 1, 3, 1, "no", 0)
-    private val player = User(
-        "cluo",
-        5000,
-        50000,
-        mutableListOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
-        activeCharacter,
-        mutableListOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
-        activeWeapon
-    )
+//    private val activeCharacter = Character("1", "Tiger", 1, 1, 1.0, 100, 100, 0, 0)
+//    private val activeWeapon = Weapon("1", "Wooden Sword", 1, 3, 1, "no", 0)
+//    private val player = User(
+//        "cluo",
+//        5000,
+//        50000,
+//        mutableListOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
+//        activeCharacter,
+//        mutableListOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
+//        activeWeapon
+//    )
+
+    private lateinit var player: User
 
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
@@ -66,8 +72,28 @@ class GameScreenActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
 
-        val model: SharedViewModel by viewModels()
-        model.setPlayer(player)
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_account), Context.MODE_PRIVATE)
+
+        val playerJSON = sharedPref.getString(getString(R.string.key_current_account), "");
+
+        if (playerJSON.equals("")) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter: JsonAdapter<User> =
+            moshi.adapter<User>(User::class.java)
+
+        val currentPlayer = jsonAdapter.fromJson(playerJSON)
+        if (currentPlayer != null) {
+            val model: SharedViewModel by viewModels()
+            player = currentPlayer
+            model.setPlayer(currentPlayer)
+        }
     }
 
     override fun onAction(action: PlayerAction?) {

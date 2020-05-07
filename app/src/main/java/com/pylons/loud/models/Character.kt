@@ -1,5 +1,8 @@
 package com.pylons.loud.models
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 class Character(
     val id: String,
     val name: String,

@@ -1,0 +1,4 @@
+<resources>
+    <string name="preference_file_account">Account</string>
+    <string name="key_current_account">currentAccount</string>
+</resources>
