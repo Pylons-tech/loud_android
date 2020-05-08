@@ -39,9 +39,6 @@ class MyPlayerLocationRecyclerViewAdapter(
         with(holder.mView) {
             setOnClickListener(View.OnClickListener {
                 mListener?.onLocation(item)
-                notifyItemChanged(selectedPos);
-                selectedPos = holder.layoutPosition;
-                notifyItemChanged(selectedPos);
             })
         }
     }

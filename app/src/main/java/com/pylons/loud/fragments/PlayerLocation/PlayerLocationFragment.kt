@@ -74,6 +74,9 @@ class PlayerLocationFragment : Fragment() {
             ),
             PlayerLocation(
                 LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central)
+            ),
+            PlayerLocation(
+                LocationConstants.SETTINGS, getString(R.string.settings)
             )
         )
     }
@@ -85,9 +88,9 @@ class PlayerLocationFragment : Fragment() {
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
             val adapter = myview.adapter as MyPlayerLocationRecyclerViewAdapter
             if (adapter.selectedPos != location) {
-                adapter?.notifyItemChanged(adapter.selectedPos)
+                adapter.notifyItemChanged(adapter.selectedPos)
                 adapter.selectedPos = location
-                adapter?.notifyItemChanged(location)
+                adapter.notifyItemChanged(location)
             }
         })
     }

@@ -22,21 +22,19 @@ import java.util.logging.Logger
  */
 class MyItemRecyclerViewAdapter(
     private val mValues: List<Item>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListener: OnListFragmentInteractionListener?,
+    private val mode: Int
 ) : RecyclerView.Adapter<MyItemRecyclerViewAdapter.ViewHolder>() {
     private val Log = Logger.getLogger(MyItemRecyclerViewAdapter::class.java.name)
 
     private val mOnClickListener: View.OnClickListener
     var selectedItemPostion = RecyclerView.NO_POSITION
-    var mode = -1;
 
     init {
         mOnClickListener = View.OnClickListener { v ->
             val item = v.tag as Item
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            Log.info(item.toString())
-            Log.info(mode.toString())
             when (mode) {
                 1 -> mListener?.onItemSelect(item)
                 2 -> mListener?.onItemBuy(item)
@@ -55,7 +53,7 @@ class MyItemRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mContentView.text = item.name
+        holder.mContentView.text = "${item.name} Lv${item.level}"
 
         if (selectedItemPostion == position) {
             holder.itemView.content.setTextColor(Color.GREEN)

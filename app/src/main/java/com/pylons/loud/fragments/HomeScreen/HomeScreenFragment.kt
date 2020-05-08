@@ -49,7 +49,7 @@ class HomeScreenFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            if (player.activeCharacter == null) {
+            if (player.activeCharacter == -1) {
                 text_home_screen.setText(R.string.home_desc_without_character)
             } else {
                 text_home_screen.setText(R.string.home_desc)

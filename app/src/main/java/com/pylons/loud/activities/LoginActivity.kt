@@ -33,29 +33,40 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun setAccount(username: String) {
-        val player = User(
-            username,
-            5000,
-            50000,
-            mutableListOf(),
-            null,
-            mutableListOf(),
-            null
+        val sharedPref = getSharedPreferences(
+            getString(R.string.preference_file_account), Context.MODE_PRIVATE
         )
 
-        val moshi = Moshi.Builder().build()
-        val jsonAdapter: JsonAdapter<User> =
-            moshi.adapter<User>(User::class.java)
+        val playerJSON = sharedPref.getString(username, "");
 
-        val json = jsonAdapter.toJson(player)
-        val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_account), Context.MODE_PRIVATE)
+        if (playerJSON.equals("")) {
+            val player = User(
+                username,
+                5000,
+                50000,
+                mutableListOf(),
+                -1,
+                mutableListOf(),
+                -1
+            )
 
-        with (sharedPref.edit()) {
-            putString(username, json)
-            putString(getString(R.string.key_current_account), json)
-            commit()
-            goToGame()
+            val moshi = Moshi.Builder().build()
+            val jsonAdapter: JsonAdapter<User> =
+                moshi.adapter<User>(User::class.java)
+            val json = jsonAdapter.toJson(player)
+
+            with(sharedPref.edit()) {
+                putString(username, json)
+                putString(getString(R.string.key_current_account), username)
+                commit()
+                goToGame()
+            }
+        } else {
+            with(sharedPref.edit()) {
+                putString(getString(R.string.key_current_account), username)
+                commit()
+                goToGame()
+            }
         }
     }
 

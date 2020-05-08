@@ -43,7 +43,8 @@ class CharacterFragment : Fragment() {
                 adapter =
                     MyCharacterRecyclerViewAdapter(
                         listOf(),
-                        listener
+                        listener,
+                        1
                     )
             }
         }
@@ -81,6 +82,7 @@ class CharacterFragment : Fragment() {
      */
     interface OnListFragmentInteractionListener {
         fun onCharacter(item: Character?)
+        fun onBuyCharacter(item: Character?)
     }
 
 }

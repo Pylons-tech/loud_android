@@ -6,6 +6,7 @@
     <string name="forest">Forest</string>
     <string name="shop">Shop</string>
     <string name="pylons_central">Pylons Central</string>
+    <string name="settings">Settings</string>
     <string name="home_desc">You are at home. It\'s nice! Cozy. You\'re doing a puzzle.\nIf you like to kill something, though, head to the forest.\nYou can also head to the Blacksmith to work on your weapons.</string>
     <string name="home_desc_without_character">"Welcome to Legend of the Undead Dragon!\n \nTo play LOUD, you need at least one character.\nYou can manifest a fresh soul at Pylons Central\nor you can head to the market where other players may have one on offer."</string>
     <string name="select_active_character">Select active character</string>
@@ -38,7 +39,9 @@
     <string name="pylon_icon">🔷</string>
     <string name="weapon_icon">🗡️</string>
     <string name="character_icon">🦘</string>
+    <string name="health_icon">🔶</string>
     <string name="login_desc">Enter your username</string>
     <string name="login_button_text">Continue</string>
     <string name="login_no_username_text">Enter valid username</string>
+    <string name="buy_character_desc">Summon a weakling with huge potential from the ether? Hell yeah.</string>
 </resources>

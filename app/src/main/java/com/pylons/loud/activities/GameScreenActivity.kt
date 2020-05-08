@@ -31,18 +31,6 @@ class GameScreenActivity : AppCompatActivity(),
     CharacterFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
-//    private val activeCharacter = Character("1", "Tiger", 1, 1, 1.0, 100, 100, 0, 0)
-//    private val activeWeapon = Weapon("1", "Wooden Sword", 1, 3, 1, "no", 0)
-//    private val player = User(
-//        "cluo",
-//        5000,
-//        50000,
-//        mutableListOf(activeCharacter, Character("2", "Lion", 2, 1, 1.0, 100, 100, 0, 0)),
-//        activeCharacter,
-//        mutableListOf(activeWeapon, Weapon("2", "Steel Sword", 1, 6, 1, "no", 0)),
-//        activeWeapon
-//    )
-
     private lateinit var player: User
 
     class SharedViewModel : ViewModel() {
@@ -73,9 +61,19 @@ class GameScreenActivity : AppCompatActivity(),
         setContentView(R.layout.activity_game_screen)
 
         val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_account), Context.MODE_PRIVATE)
+            getString(R.string.preference_file_account), Context.MODE_PRIVATE
+        )
 
-        val playerJSON = sharedPref.getString(getString(R.string.key_current_account), "");
+        val currentUsername = sharedPref.getString(getString(R.string.key_current_account), "");
+
+        if (currentUsername.equals("")) {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
+        }
+
+        val playerJSON = sharedPref.getString(currentUsername, "");
 
         if (playerJSON.equals("")) {
             val intent = Intent(this, LoginActivity::class.java)
@@ -93,6 +91,7 @@ class GameScreenActivity : AppCompatActivity(),
             val model: SharedViewModel by viewModels()
             player = currentPlayer
             model.setPlayer(currentPlayer)
+            model.setPlayerLocation(0);
         }
     }
 
@@ -113,9 +112,10 @@ class GameScreenActivity : AppCompatActivity(),
             when (location.id) {
                 LocationConstants.HOME -> {
                     nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
+                    model.setPlayerLocation(0);
                 }
                 LocationConstants.FOREST -> {
-                    if (player.activeCharacter == null) {
+                    if (player.activeCharacter == -1) {
                         Toast.makeText(
                             this,
                             R.string.you_cant_go_to_forest_without_character, Toast.LENGTH_SHORT
@@ -123,12 +123,20 @@ class GameScreenActivity : AppCompatActivity(),
                         return
                     }
                     nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
+                    model.setPlayerLocation(1);
                 }
                 LocationConstants.SHOP -> {
                     nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
+                    model.setPlayerLocation(2);
                 }
                 LocationConstants.PYLONS_CENTRAL -> {
                     nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
+                    model.setPlayerLocation(3);
+                }
+                LocationConstants.SETTINGS -> {
+                    val intent = Intent(this, LoginActivity::class.java)
+                    startActivity(intent)
+                    finish()
                 }
                 else -> {
                     Log.warning("Not exist")
@@ -141,19 +149,20 @@ class GameScreenActivity : AppCompatActivity(),
         val name = item?.name
 
         var prompt = "Set ${name} as active weapon?"
-        if (player.activeWeapon == item) {
+        if (player.getActiveWeapon() == item) {
             prompt = "Unset ${name} as active weapon?"
         }
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage(prompt)
             .setCancelable(false)
             .setPositiveButton("Proceed") { _, _ ->
-                if (player.activeWeapon == item) {
-                    player.activeWeapon = null
+                if (player.getActiveWeapon() == item) {
+                    player.activeWeapon = -1
                 } else {
-                    player.activeWeapon = item as Weapon
+                    player.setActiveWeapon(item as Weapon)
                 }
                 model.setPlayer(player)
+                player.saveAsync(this)
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()
@@ -173,10 +182,11 @@ class GameScreenActivity : AppCompatActivity(),
         dialogBuilder.setMessage("Buy $name for $goldIcon $price?")
             .setCancelable(false)
             .setPositiveButton("Buy") { _, _ ->
-                player.inventory.add(item as Weapon)
+                player.weapons.add(item as Weapon)
                 player.gold = player.gold - price!!
-                player.activeWeapon = item
+                player.setActiveWeapon(item)
                 model.setPlayer(player)
+                player.saveAsync(this)
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.cancel()
@@ -194,11 +204,12 @@ class GameScreenActivity : AppCompatActivity(),
         dialogBuilder.setMessage("Sell $name?")
             .setCancelable(false)
             .setPositiveButton("Sell") { _, _ ->
-                player.inventory.remove(item as Weapon)
-                if (player.activeWeapon == item) {
-                    player.activeWeapon = null
+                player.weapons.remove(item as Weapon)
+                if (player.getActiveWeapon() == item) {
+                    player.activeWeapon = -1
                 }
                 model.setPlayer(player)
+                player.saveAsync(this)
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.cancel()
@@ -231,19 +242,46 @@ class GameScreenActivity : AppCompatActivity(),
         val name = item?.name
 
         var prompt = "Set ${name} as active character?"
-        if (player.activeCharacter == item) {
+        if (player.getActiveCharacter() == item) {
             prompt = "Unset ${name} as active character?"
         }
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage(prompt)
             .setCancelable(false)
             .setPositiveButton("Proceed") { _, _ ->
-                if (player.activeCharacter == item) {
-                    player.activeCharacter = null
+                if (player.getActiveCharacter() == item) {
+                    player.activeCharacter = -1
                 } else {
-                    player.activeCharacter = item
+                    player.setActiveCharacter(item as Character)
                 }
                 model.setPlayer(player)
+                player.saveAsync(this)
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    override fun onBuyCharacter(item: Character?) {
+        val name = item?.name
+        val price = item?.price
+        val pylonIcon = getString(R.string.pylon_icon)
+
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage("Buy $name for $pylonIcon $price?")
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+                if (item != null) {
+                    player.characters.add(item)
+                }
+                player.pylonAmount = player.pylonAmount - price!!
+                player.setActiveCharacter(item)
+                model.setPlayer(player)
+                player.saveAsync(this)
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.cancel()

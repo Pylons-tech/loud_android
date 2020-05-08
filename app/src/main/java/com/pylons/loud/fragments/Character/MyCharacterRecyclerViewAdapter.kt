@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.pylons.loud.R
 
@@ -21,7 +22,8 @@ import kotlinx.android.synthetic.main.fragment_character.view.*
  */
 class MyCharacterRecyclerViewAdapter(
     private val mValues: List<Character>,
-    private val mListener: OnListFragmentInteractionListener?
+    private val mListener: OnListFragmentInteractionListener?,
+    private val mode: Int
 ) : RecyclerView.Adapter<MyCharacterRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -32,7 +34,12 @@ class MyCharacterRecyclerViewAdapter(
             val item = v.tag as Character
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onCharacter(item)
+
+            when(mode) {
+                1-> mListener?.onCharacter(item)
+                2-> mListener?.onBuyCharacter(item)
+            }
+
         }
     }
 
@@ -44,10 +51,20 @@ class MyCharacterRecyclerViewAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
-        holder.mContentView.text = item.name
+        holder.mContentView.text = "${item.name} Lv${item.level}"
 
         if (selectedCharacterPostion == position) {
             holder.itemView.content.setTextColor( Color.GREEN)
+        }
+
+        when (mode) {
+            2 -> {
+                holder.mPriceLayout.visibility = View.VISIBLE
+                holder.mPriceView.text = item.price.toString()
+            }
+            else -> {
+                holder.mPriceLayout.visibility = View.INVISIBLE
+            }
         }
 
         with(holder.mView) {
@@ -60,6 +77,8 @@ class MyCharacterRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mContentView: TextView = mView.content
+        val mPriceView: TextView = mView.price
+        val mPriceLayout: LinearLayout = mView.layout_price
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

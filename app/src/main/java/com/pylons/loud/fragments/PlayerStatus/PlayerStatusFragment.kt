@@ -5,16 +5,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
-import com.pylons.loud.models.PlayerAction
 import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
+import kotlin.math.ceil
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -75,19 +76,30 @@ class PlayerStatusFragment : Fragment() {
             text_player_gold.text = player.gold.toString()
             text_player_pylon.text = player.pylonAmount.toString()
 
-            val activeCharacter = player.activeCharacter
+            val activeCharacter = player.getActiveCharacter()
             if (activeCharacter != null) {
                 text_active_character_name.text = activeCharacter.name
                 text_active_character_level.text = activeCharacter.level.toString()
                 text_active_character_xp.text = activeCharacter.xp.toString()
                 text_active_character_hp.text =
                     activeCharacter.hp.toString() + "/" + activeCharacter.maxHP.toString()
+
+                layout_character_health_bar.removeAllViews()
+                for (x in 0 until ceil(activeCharacter.hp.toDouble() / 10).toInt()){
+                    val textHealth = TextView(context)
+                    textHealth.textSize = 12f
+                    textHealth.text = getString(R.string.health_icon)
+                    layout_character_health_bar.addView(textHealth)
+                }
+
                 layout_active_character_details.visibility = View.VISIBLE
+                layout_character_health.visibility = View.VISIBLE
             } else {
                 layout_active_character_details.visibility = View.INVISIBLE
+                layout_character_health.visibility = View.GONE
             }
 
-            val activeWeapon = player.activeWeapon
+            val activeWeapon = player.getActiveWeapon()
             if (activeWeapon != null) {
                 text_active_weapon_name.text = activeWeapon.name
                 text_active_weapon_level.text = activeWeapon.level.toString()

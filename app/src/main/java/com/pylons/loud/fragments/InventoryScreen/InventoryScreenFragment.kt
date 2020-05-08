@@ -39,17 +39,15 @@ class InventoryScreenFragment : Fragment() {
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-            val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
-            val activeWeapon = player.activeWeapon
-            if (activeWeapon != null) {
-                adapter.selectedItemPostion = player.inventory.indexOf(activeWeapon)
-            }
-            adapter.mode = 1
+            val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 1)
+
+            adapter.selectedItemPostion = player.activeWeapon
             frag.myview.adapter = adapter
 
-            val frag2 = childFragmentManager.findFragmentById(R.id.fragment_character) as CharacterFragment
-            val adapter2 = MyCharacterRecyclerViewAdapter(player.characters, frag2.getListener())
-            adapter2.selectedCharacterPostion = player.characters.indexOf(player.activeCharacter)
+            val frag2 =
+                childFragmentManager.findFragmentById(R.id.fragment_character) as CharacterFragment
+            val adapter2 = MyCharacterRecyclerViewAdapter(player.characters, frag2.getListener(), 1)
+            adapter2.selectedCharacterPostion = player.activeCharacter
             frag2.myview.adapter = adapter2
         })
     }

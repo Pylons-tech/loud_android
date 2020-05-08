@@ -62,8 +62,7 @@ class ShopScreenFragment : Fragment() {
                 Weapon("3", "Silver Sword", 1, 3, 250, "no", 0),
                 Weapon("4", "Bronze Sword", 1, 4, 250, "no", 0),
                 Weapon("5", "Iron Sword", 1, 5, 250, "no", 0)
-            ), frag.getListener())
-            adapter.mode = 2
+            ), frag.getListener(), 2)
             mode = 2
             frag.myview.adapter = adapter
             text_buy.setTextColor(Color.GREEN)
@@ -75,8 +74,7 @@ class ShopScreenFragment : Fragment() {
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_sell.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
-                adapter.mode = 3
+                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 3)
                 mode = 3
                 frag.myview.adapter = adapter
                 text_buy.setTextColor(Color.WHITE)
@@ -86,8 +84,7 @@ class ShopScreenFragment : Fragment() {
 
             text_upgrade.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
-                adapter.mode = 4
+                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 4)
                 mode = 4
                 frag.myview.adapter = adapter
                 text_buy.setTextColor(Color.WHITE)
@@ -97,8 +94,7 @@ class ShopScreenFragment : Fragment() {
 
             if (mode == 3 || mode == 4) {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.inventory, frag.getListener())
-                adapter.mode = mode
+                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), mode)
                 frag.myview.adapter = adapter
             }
         })
