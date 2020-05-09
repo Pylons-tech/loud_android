@@ -49,6 +49,7 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.setPlayerLocation(0)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_home_screen.setText(getHomeDesc(player))
         })

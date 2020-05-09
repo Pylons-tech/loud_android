@@ -76,6 +76,7 @@ class ShopScreenFragment : Fragment() {
         }
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.setPlayerLocation(2)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_sell.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment

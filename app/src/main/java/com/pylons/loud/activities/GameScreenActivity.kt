@@ -101,7 +101,6 @@ class GameScreenActivity : AppCompatActivity(),
             val model: SharedViewModel by viewModels()
             player = currentPlayer
             model.setPlayer(currentPlayer)
-            model.setPlayerLocation(0);
         }
     }
 
@@ -130,7 +129,6 @@ class GameScreenActivity : AppCompatActivity(),
             when (location.id) {
                 LocationConstants.HOME -> {
                     nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
-                    model.setPlayerLocation(0);
                 }
                 LocationConstants.FOREST -> {
                     if (player.activeCharacter == -1) {
@@ -141,15 +139,12 @@ class GameScreenActivity : AppCompatActivity(),
                         return
                     }
                     nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
-                    model.setPlayerLocation(1);
                 }
                 LocationConstants.SHOP -> {
                     nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
-                    model.setPlayerLocation(2);
                 }
                 LocationConstants.PYLONS_CENTRAL -> {
                     nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
-                    model.setPlayerLocation(3);
                 }
                 LocationConstants.SETTINGS -> {
                     val intent = Intent(this, LoginActivity::class.java)

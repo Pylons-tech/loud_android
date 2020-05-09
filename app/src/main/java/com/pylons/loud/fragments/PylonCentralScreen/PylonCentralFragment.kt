@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
 import java.util.logging.Logger
 
 // TODO: Rename parameter arguments, choose names that match
@@ -44,6 +46,9 @@ class PylonCentralFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.setPlayerLocation(3)
     }
 
 

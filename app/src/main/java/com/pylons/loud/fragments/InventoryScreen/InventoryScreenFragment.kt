@@ -37,6 +37,7 @@ class InventoryScreenFragment : Fragment() {
         text_inventory_item.setText(R.string.inventory_desc_item)
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.setPlayerLocation(-1)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
             val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 1)
