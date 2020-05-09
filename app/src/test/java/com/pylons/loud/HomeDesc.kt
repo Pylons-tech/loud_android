@@ -1,0 +1,140 @@
+package com.pylons.loud
+
+import com.pylons.loud.models.Character
+import com.pylons.loud.models.User
+import com.pylons.loud.utils.RenderText.getHomeDesc
+import org.junit.Test
+
+import org.junit.Assert.*
+
+class HomeDesc {
+    private val playerDefault = User(
+        "cluo",
+        5000,
+        50000,
+        mutableListOf(
+            Character(
+                "001",
+                "Tiger",
+                1,
+                1,
+                1.0,
+                100,
+                100,
+                0,
+                0
+            )
+        ),
+        0,
+        mutableListOf(),
+        -1
+    )
+
+    private val playerNoCharacter = User(
+        "cluo",
+        5000,
+        50000,
+        mutableListOf(),
+        -1,
+        mutableListOf(),
+        -1
+    )
+
+    private val playerNoPylon = User(
+        "cluo",
+        5000,
+        0,
+        mutableListOf(),
+        -1,
+        mutableListOf(),
+        -1
+    )
+
+    private val playerNoPylon2 = User(
+        "cluo",
+        5000,
+        0,
+        mutableListOf(
+            Character(
+                "001",
+                "Tiger",
+                1,
+                1,
+                1.0,
+                100,
+                100,
+                0,
+                0
+            )
+        ),
+        0,
+        mutableListOf(),
+        -1
+    )
+
+    private val playerNoPylon3 = User(
+        "cluo",
+        5000,
+        0,
+        mutableListOf(
+            Character(
+                "001",
+                "Tiger",
+                1,
+                1,
+                1.0,
+                100,
+                100,
+                0,
+                0
+            )
+        ),
+        -1,
+        mutableListOf(),
+        -1
+    )
+
+    private val playerLowHP = User(
+        "cluo",
+        5000,
+        50000,
+        mutableListOf(
+            Character(
+                "001",
+                "Tiger",
+                1,
+                1,
+                1.0,
+                24,
+                100,
+                0,
+                0
+            )
+        ),
+        0,
+        mutableListOf(),
+        -1
+    )
+
+    @Test
+    fun homeDescNoCharacter() {
+        assertEquals(R.string.home_desc_without_character, getHomeDesc(playerNoCharacter))
+    }
+
+    @Test
+    fun homeDescNoPylon() {
+        assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon))
+        assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon2))
+        assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon3))
+    }
+
+    @Test
+    fun homeDescLowHp() {
+        assertEquals(R.string.home_desc_with_low_hp, getHomeDesc(playerLowHP))
+    }
+
+    @Test
+    fun homeDescDefault() {
+        assertEquals(R.string.home_desc, getHomeDesc(playerDefault))
+    }
+}

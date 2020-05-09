@@ -7,9 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.pylons.loud.R
-import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
-import com.pylons.loud.models.PlayerAction
-import kotlinx.android.synthetic.main.fragment_forest_screen.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -40,20 +37,6 @@ class ForestScreenFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_forest_screen, container, false)
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        text_forest_screen.setText(R.string.forest_desc)
-        val frag = childFragmentManager.findFragmentById(R.id.fragment_player_action) as PlayerActionFragment
-        frag.setAdapter(listOf(
-            PlayerAction(1, getString(R.string.rabbit)),
-            PlayerAction(2, getString(R.string.goblin)),
-            PlayerAction(3, getString(R.string.wolf)),
-            PlayerAction(4, getString(R.string.troll)),
-            PlayerAction(5, getString(R.string.giant))
-        ))
     }
 
     companion object {

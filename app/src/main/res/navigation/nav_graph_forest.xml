@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/forestHomeFragment">
+
+    <fragment
+        android:id="@+id/forestHomeFragment"
+        android:name="com.pylons.loud.fragments.ForestScreen.ForestHomeFragment"
+        android:label="fragment_forest_home"
+        tools:layout="@layout/fragment_forest_home" />
+    <fragment
+        android:id="@+id/forestFightPreviewFragment"
+        android:name="com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment"
+        android:label="fragment_forest_fight_preview"
+        tools:layout="@layout/fragment_forest_fight_preview" />
+</navigation>

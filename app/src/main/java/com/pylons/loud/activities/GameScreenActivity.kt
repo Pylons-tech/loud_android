@@ -10,12 +10,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
 import com.pylons.loud.constants.LocationConstants
 import com.pylons.loud.fragments.Character.CharacterFragment
+import com.pylons.loud.fragments.Fight.FightFragment
 import com.pylons.loud.fragments.Item.ItemFragment
-import com.pylons.loud.fragments.PlayerAction.PlayerActionFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.models.*
 import com.squareup.moshi.JsonAdapter
@@ -26,7 +27,7 @@ import java.util.logging.Logger
 
 class GameScreenActivity : AppCompatActivity(),
     PlayerLocationFragment.OnListFragmentInteractionListener,
-    PlayerActionFragment.OnListFragmentInteractionListener,
+    FightFragment.OnListFragmentInteractionListener,
     ItemFragment.OnListFragmentInteractionListener,
     CharacterFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
@@ -36,6 +37,7 @@ class GameScreenActivity : AppCompatActivity(),
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
         private val playerLocation = MutableLiveData<Int>()
+        private val fightPreview = MutableLiveData<Fight>()
 
         fun getPlayer(): LiveData<User> {
             return player
@@ -51,6 +53,14 @@ class GameScreenActivity : AppCompatActivity(),
 
         fun setPlayerLocation(location: Int) {
             playerLocation.value = location
+        }
+
+        fun getFightPreview(): LiveData<Fight> {
+            return fightPreview
+        }
+
+        fun setFightPreview(fight: Fight) {
+            fightPreview.value = fight
         }
     }
 
@@ -95,13 +105,21 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onAction(action: PlayerAction?) {
-        if (action != null) {
-            when (action.id) {
-                1 -> Log.info("1")
-                2 -> Log.info("2")
-                else -> {
-                    Log.warning("3")
+    override fun onFight(fight: Fight?) {
+        if (fight != null) {
+            model.getPlayer().value?.let {
+                if (fight.meetsRequirements(it)) {
+                    val frag =
+                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                    frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+                        .navigate(R.id.forestFightPreviewFragment)
+                    model.setFightPreview(fight)
+                } else {
+                    Toast.makeText(
+                        this,
+                        "Need ${fight.requirements.toString()}",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

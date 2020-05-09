@@ -11,6 +11,11 @@ import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Item.BRONZE_SWORD
+import com.pylons.loud.constants.Item.COPPER_SWORD
+import com.pylons.loud.constants.Item.IRON_SWORD
+import com.pylons.loud.constants.Item.SILVER_SWORD
+import com.pylons.loud.constants.Item.WOODEN_SWORD
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
 import com.pylons.loud.models.User
@@ -57,11 +62,11 @@ class ShopScreenFragment : Fragment() {
         text_buy.setOnClickListener {
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
             val adapter = MyItemRecyclerViewAdapter(listOf(
-                Weapon("1", "Wooden Sword", 1, 1, 100, "no", 0),
-                Weapon("2", "Cooper Sword", 1, 2, 250, "no", 0),
-                Weapon("3", "Silver Sword", 1, 3, 250, "no", 0),
-                Weapon("4", "Bronze Sword", 1, 4, 250, "no", 0),
-                Weapon("5", "Iron Sword", 1, 5, 250, "no", 0)
+                Weapon("1", WOODEN_SWORD, 1, 1, 100, "no", 0),
+                Weapon("2", COPPER_SWORD, 1, 2, 250, "no", 0),
+                Weapon("3", SILVER_SWORD, 1, 3, 250, "no", 0),
+                Weapon("4", BRONZE_SWORD, 1, 4, 250, "no", 0),
+                Weapon("5", IRON_SWORD, 1, 5, 250, "no", 0)
             ), frag.getListener(), 2)
             mode = 2
             frag.myview.adapter = adapter

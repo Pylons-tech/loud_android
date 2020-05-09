@@ -11,6 +11,7 @@ import androidx.lifecycle.Observer
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.models.User
+import com.pylons.loud.utils.RenderText.getHomeDesc
 import kotlinx.android.synthetic.main.fragment_home_screen.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -49,14 +50,8 @@ class HomeScreenFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
-            if (player.activeCharacter == -1) {
-                text_home_screen.setText(R.string.home_desc_without_character)
-            } else {
-                text_home_screen.setText(R.string.home_desc)
-            }
+            text_home_screen.setText(getHomeDesc(player))
         })
-
-
     }
 
     companion object {
