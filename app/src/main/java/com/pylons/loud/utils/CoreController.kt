@@ -3,12 +3,15 @@ package com.pylons.loud.utils
 import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Backend
 import com.pylons.wallet.core.types.Config
+import java.util.logging.Logger
 
 /**
  * Object encapsulating some walletcore setup/config boilerplate.
  */
 object CoreController {
-    private val config = Config(Backend.LIVE_DEV, listOf("127.0.0.1")) // should list real ips for remote notes, ask mike for that
+    private val Log = Logger.getLogger(CoreController::class.java.name)
+
+    private val config = Config(Backend.LIVE_DEV, listOf("http://35.223.7.2:26657")) // should list real ips for remote notes, ask mike for that
     private var userJson = ""
 
     /**
