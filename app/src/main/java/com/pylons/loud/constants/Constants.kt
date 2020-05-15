@@ -13,13 +13,4 @@ object FightRequirements {
     const val IRON_SWORD = "iron sword"
 }
 
-object Item {
-    const val WOODEN_SWORD = "Wooden Sword"
-    const val COPPER_SWORD = "Copper Sword"
-    const val SILVER_SWORD = "Silver Sword"
-    const val BRONZE_SWORD = "Bronze Sword"
-    const val IRON_SWORD = "Iron Sword"
-    const val GOBLIN_EAR = "Goblin Ear"
-    const val WOLF_TAIL = "Wolf Tail"
-    const val TROLL_TOES = "Troll Toes"
-}
+val LOUD_CBID = "LOUD-v0.1.0-1589223853"

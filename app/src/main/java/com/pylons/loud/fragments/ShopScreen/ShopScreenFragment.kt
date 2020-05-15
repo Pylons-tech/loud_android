@@ -8,14 +8,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Item.ANGEL_SWORD
 import com.pylons.loud.constants.Item.BRONZE_SWORD
 import com.pylons.loud.constants.Item.COPPER_SWORD
+import com.pylons.loud.constants.Item.DROP_DRAGONACID
+import com.pylons.loud.constants.Item.DROP_DRAGONFIRE
+import com.pylons.loud.constants.Item.DROP_DRAGONICE
+import com.pylons.loud.constants.Item.GOBLIN_EAR
 import com.pylons.loud.constants.Item.IRON_SWORD
 import com.pylons.loud.constants.Item.SILVER_SWORD
+import com.pylons.loud.constants.Item.TROLL_TOES
+import com.pylons.loud.constants.Item.WOLF_TAIL
 import com.pylons.loud.constants.Item.WOODEN_SWORD
+import com.pylons.loud.constants.ItemID.ID_ANGEL_SWORD
+import com.pylons.loud.constants.ItemID.ID_BRONZE_SWORD
+import com.pylons.loud.constants.ItemID.ID_COPPER_SWORD
+import com.pylons.loud.constants.ItemID.ID_IRON_SWORD
+import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
+import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
 import com.pylons.loud.models.User
@@ -61,15 +75,27 @@ class ShopScreenFragment : Fragment() {
 
         text_buy.setOnClickListener {
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-            val adapter = MyItemRecyclerViewAdapter(listOf(
-                Weapon("1", WOODEN_SWORD, 1, 1, 100, "no", 0),
-                Weapon("2", COPPER_SWORD, 1, 2, 250, "no", 0),
-                Weapon("3", SILVER_SWORD, 1, 3, 250, "no", 0),
-                Weapon("4", BRONZE_SWORD, 1, 4, 250, "no", 0),
-                Weapon("5", IRON_SWORD, 1, 5, 250, "no", 0)
-            ), frag.getListener(), 2)
+            val adapter = MyItemRecyclerViewAdapter(
+                listOf(
+                    Weapon(ID_WOODEN_SWORD, WOODEN_SWORD, 1, 1.0, 100, listOf(), 0),
+                    Weapon(ID_COPPER_SWORD, COPPER_SWORD, 1, 2.0, 250, listOf(), 0),
+                    Weapon(ID_SILVER_SWORD, SILVER_SWORD, 1, 3.0, 250, listOf(GOBLIN_EAR), 0),
+                    Weapon(ID_BRONZE_SWORD, BRONZE_SWORD, 1, 4.0, 250, listOf(WOLF_TAIL), 0),
+                    Weapon(ID_IRON_SWORD, IRON_SWORD, 1, 5.0, 250, listOf(TROLL_TOES), 0),
+                    Weapon(
+                        ID_ANGEL_SWORD,
+                        ANGEL_SWORD,
+                        1,
+                        5.0,
+                        20000,
+                        listOf(DROP_DRAGONFIRE, DROP_DRAGONICE, DROP_DRAGONACID),
+                        0
+                    )
+                ), frag.getListener(), 2
+            )
             mode = 2
-            frag.myview.adapter = adapter
+            val myView = frag.view as RecyclerView
+            myView.adapter = adapter
             text_buy.setTextColor(Color.GREEN)
             text_sell.setTextColor(Color.WHITE)
             text_upgrade.setTextColor(Color.WHITE)
@@ -82,7 +108,8 @@ class ShopScreenFragment : Fragment() {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
                 val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 3)
                 mode = 3
-                frag.myview.adapter = adapter
+                val myView = frag.view as RecyclerView
+                myView.adapter = adapter
                 text_buy.setTextColor(Color.WHITE)
                 text_sell.setTextColor(Color.GREEN)
                 text_upgrade.setTextColor(Color.WHITE)
@@ -92,7 +119,8 @@ class ShopScreenFragment : Fragment() {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
                 val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 4)
                 mode = 4
-                frag.myview.adapter = adapter
+                val myView = frag.view as RecyclerView
+                myView.adapter = adapter
                 text_buy.setTextColor(Color.WHITE)
                 text_sell.setTextColor(Color.WHITE)
                 text_upgrade.setTextColor(Color.GREEN)
@@ -101,7 +129,8 @@ class ShopScreenFragment : Fragment() {
             if (mode == 3 || mode == 4) {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
                 val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), mode)
-                frag.myview.adapter = adapter
+                val myView = frag.view as RecyclerView
+                myView.adapter = adapter
             }
         })
     }

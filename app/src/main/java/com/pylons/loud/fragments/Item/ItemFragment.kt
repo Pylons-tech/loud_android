@@ -19,8 +19,6 @@ import com.pylons.loud.models.Item
  * [ItemFragment.OnListFragmentInteractionListener] interface.
  */
 class ItemFragment : Fragment() {
-    lateinit var myview: RecyclerView
-
     // TODO: Customize parameters
     private var columnCount = 1
 
@@ -42,7 +40,6 @@ class ItemFragment : Fragment() {
 
         // Set the adapter
         if (view is RecyclerView) {
-            myview = view
             with(view) {
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)

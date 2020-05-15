@@ -22,8 +22,6 @@ import com.pylons.loud.models.PlayerLocation
  * [PlayerLocationFragment.OnListFragmentInteractionListener] interface.
  */
 class PlayerLocationFragment : Fragment() {
-    private lateinit var myview: RecyclerView
-
     // TODO: Customize parameters
     private var columnCount = 1
 
@@ -46,7 +44,6 @@ class PlayerLocationFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                myview = view
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                     else -> GridLayoutManager(context, columnCount)
@@ -86,7 +83,8 @@ class PlayerLocationFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
-            val adapter = myview.adapter as MyPlayerLocationRecyclerViewAdapter
+            val view = getView() as RecyclerView
+            val adapter = view.adapter as MyPlayerLocationRecyclerViewAdapter
             if (adapter.selectedPos != location) {
                 adapter.notifyItemChanged(adapter.selectedPos)
                 adapter.selectedPos = location

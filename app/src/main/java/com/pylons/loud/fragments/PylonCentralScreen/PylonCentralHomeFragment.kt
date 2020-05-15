@@ -5,9 +5,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Recipe.RCP_BUY_GOLD_WITH_PYLON
 import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
 
 /**
@@ -29,6 +32,12 @@ class PylonCentralHomeFragment : Fragment() {
         text_buy_character.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralBuyCharacterFragment)
         }
+
+        text_buy_5000_with_100_pylons.setOnClickListener {
+            val model: GameScreenActivity.SharedViewModel by activityViewModels()
+            model.setPlayerAction(RCP_BUY_GOLD_WITH_PYLON)
+        }
+
     }
 
 }

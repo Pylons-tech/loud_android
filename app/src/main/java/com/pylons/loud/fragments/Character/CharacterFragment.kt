@@ -19,8 +19,6 @@ import com.pylons.loud.models.Character
  * [CharacterFragment.OnListFragmentInteractionListener] interface.
  */
 class CharacterFragment : Fragment() {
-    lateinit var myview: RecyclerView
-
     // TODO: Customize parameters
     private var columnCount = 1
 
@@ -35,7 +33,6 @@ class CharacterFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                myview = view
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)

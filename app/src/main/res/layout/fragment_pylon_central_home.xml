@@ -44,6 +44,7 @@
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
+                    android:id="@+id/text_buy_5000_with_100_pylons"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"

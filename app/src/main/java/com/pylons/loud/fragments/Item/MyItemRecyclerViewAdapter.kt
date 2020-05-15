@@ -28,7 +28,7 @@ class MyItemRecyclerViewAdapter(
     private val Log = Logger.getLogger(MyItemRecyclerViewAdapter::class.java.name)
 
     private val mOnClickListener: View.OnClickListener
-    var selectedItemPostion = RecyclerView.NO_POSITION
+    var selectedPos = RecyclerView.NO_POSITION
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -54,10 +54,7 @@ class MyItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
-
-        if (selectedItemPostion == position) {
-            holder.itemView.content.setTextColor(Color.GREEN)
-        }
+        holder.itemView.isSelected = selectedPos == position;
 
         when (mode) {
             2 -> {

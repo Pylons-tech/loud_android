@@ -18,9 +18,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-
         val sharedPref = getSharedPreferences(getString(R.string.preference_file_account), Context.MODE_PRIVATE)
         sharedPref.all.forEach {
+            Log.info(it.toString())
+        }
+
+        val sharedPrefKeys = getSharedPreferences(
+            getString(R.string.preference_file_account_keys), Context.MODE_PRIVATE
+        )
+        sharedPrefKeys.all.forEach {
             Log.info(it.toString())
         }
 
@@ -38,7 +44,9 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        goToGameScreen()
+        goToLogin()
+
+//        goToGameScreen()
     }
 
     private fun goToLogin() {
