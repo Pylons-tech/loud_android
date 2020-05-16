@@ -19,6 +19,7 @@ import com.pylons.loud.constants.LocationConstants
 import com.pylons.loud.constants.Recipe.RCP_BUY_CHARACTER
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Fight.FightFragment
+import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.models.*
@@ -37,7 +38,8 @@ class GameScreenActivity : AppCompatActivity(),
     PlayerLocationFragment.OnListFragmentInteractionListener,
     FightFragment.OnListFragmentInteractionListener,
     ItemFragment.OnListFragmentInteractionListener,
-    CharacterFragment.OnListFragmentInteractionListener {
+    CharacterFragment.OnListFragmentInteractionListener,
+    ForestFightPreviewFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -124,7 +126,7 @@ class GameScreenActivity : AppCompatActivity(),
             if (player != null) {
                 layout_loading.visibility = View.VISIBLE
                 CoroutineScope(IO).launch {
-                    val profile = executeRecipe(it)
+                    val profile = executeRecipe(it, arrayOf())
                     if (profile != null) {
                         player.syncProfile(profile)
                         withContext(Main) {
@@ -323,12 +325,13 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    private suspend fun executeRecipe(recipeId: String): Profile? {
+    private suspend fun executeRecipe(recipeId: String, itemIds: Array<String>): Profile? {
         val tx = Core.engine.applyRecipe(
             recipeId,
-            arrayOf()
+            itemIds
         )
         tx.submit()
+        delay(5000)
         Log.info(tx.toString())
         Log.info(tx.id)
 
@@ -355,7 +358,7 @@ class GameScreenActivity : AppCompatActivity(),
                 .setPositiveButton("Proceed") { _, _ ->
                     layout_loading.visibility = View.VISIBLE
                     CoroutineScope(IO).launch {
-                        val profile = executeRecipe(RCP_BUY_CHARACTER)
+                        val profile = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
                         if (profile != null) {
                             player.syncProfile(profile)
                             withContext(Main) {
@@ -382,6 +385,40 @@ class GameScreenActivity : AppCompatActivity(),
             val alert = dialogBuilder.create()
             alert.setTitle("Confirm")
             alert.show()
+        }
+    }
+
+    override fun onEngageFight(recipeId: String, itemIds: Array<String>) {
+        Log.info(recipeId)
+
+        itemIds.forEach {
+            Log.info(it)
+        }
+
+        val player = model.getPlayer().value
+
+        if (player != null) {
+            layout_loading.visibility = View.VISIBLE
+
+            CoroutineScope(IO).launch {
+                val profile = executeRecipe(recipeId, itemIds)
+                if (profile != null) {
+                    player.syncProfile(profile)
+                    withContext(Main) {
+                        model.setPlayer(player)
+                    }
+                    player.saveAsync(this@GameScreenActivity)
+                }
+
+                withContext(Main) {
+                    layout_loading.visibility = View.INVISIBLE
+                    Toast.makeText(
+                        this@GameScreenActivity,
+                        "Success: Fought $recipeId",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         }
     }
 }

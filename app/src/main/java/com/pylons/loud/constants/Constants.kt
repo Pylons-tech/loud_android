@@ -8,9 +8,4 @@ object LocationConstants {
     const val SETTINGS = 5
 }
 
-object FightRequirements {
-    const val SWORD = "sword"
-    const val IRON_SWORD = "iron sword"
-}
-
 val LOUD_CBID = "LOUD-v0.1.0-1589223853"

@@ -1,6 +1,11 @@
 package com.pylons.loud.models
 
+import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
+import com.pylons.loud.constants.FightRequirements.ANGEL_SWORD
+import com.pylons.loud.constants.FightRequirements.FIRE_SPECIAL
+import com.pylons.loud.constants.FightRequirements.ICE_SPECIAL
 import com.pylons.loud.constants.FightRequirements.IRON_SWORD
+import com.pylons.loud.constants.FightRequirements.NO_SPECIAL
 import com.pylons.loud.constants.FightRequirements.SWORD
 
 class Fight(
@@ -15,12 +20,18 @@ class Fight(
 
     fun meetsRequirements(player: User): Boolean {
         val activeWeapon = player.getActiveWeapon()
+        val activeCharacter = player.getActiveCharacter()
 
         var isValid: Boolean
         requirements.forEach {
             isValid = when (it) {
                 SWORD -> activeWeapon != null
                 IRON_SWORD -> activeWeapon != null && activeWeapon.name == IRON_SWORD
+                ANGEL_SWORD -> activeWeapon != null && activeWeapon.name == ANGEL_SWORD
+                NO_SPECIAL -> activeCharacter != null && activeCharacter.special == NO_SPECIAL.toLong()
+                FIRE_SPECIAL -> activeCharacter != null && activeCharacter.special == FIRE_SPECIAL.toLong()
+                ICE_SPECIAL -> activeCharacter != null && activeCharacter.special == ICE_SPECIAL.toLong()
+                ACID_SPECIAL -> activeCharacter != null && activeCharacter.special == ACID_SPECIAL.toLong()
                 else -> false
             }
 
