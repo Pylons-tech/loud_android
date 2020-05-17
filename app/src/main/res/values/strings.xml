@@ -20,9 +20,9 @@
     <string name="wolf">Wolf 💰150</string>
     <string name="troll">Troll 💰300</string>
     <string name="giant">Giant 💰3000</string>
-    <string name="fire_dragon">Fire Dragon 💰20000</string>
-    <string name="ice_dragon">Ice Dragon 💰20000</string>
-    <string name="acid_dragon">Acid Dragon 💰20000</string>
+    <string name="fire_dragon">Fire Dragon 💰10000</string>
+    <string name="ice_dragon">Ice Dragon 💰10000</string>
+    <string name="acid_dragon">Acid Dragon 💰10000</string>
     <string name="undead_dragon">Undead Dragon 💰50000</string>
     <string name="buy_items">Buy Items</string>
     <string name="sell_items">Sell Items</string>

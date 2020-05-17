@@ -44,6 +44,10 @@ data class User(
         activeWeapon = weapons.indexOf(item)
     }
 
+    fun getItemIdByName(name: String): String {
+        TODO("Got to fix data structure first")
+    }
+
     fun saveAsync(context: Context) {
         val player = this
         with(context) {

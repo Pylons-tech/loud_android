@@ -15,8 +15,26 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
+import com.pylons.loud.constants.Item.DROP_DRAGONACID
+import com.pylons.loud.constants.Item.DROP_DRAGONFIRE
+import com.pylons.loud.constants.Item.DROP_DRAGONICE
+import com.pylons.loud.constants.Item.GOBLIN_EAR
+import com.pylons.loud.constants.Item.TROLL_TOES
+import com.pylons.loud.constants.Item.WOLF_TAIL
+import com.pylons.loud.constants.ItemID.ID_ANGEL_SWORD
+import com.pylons.loud.constants.ItemID.ID_BRONZE_SWORD
+import com.pylons.loud.constants.ItemID.ID_COPPER_SWORD
+import com.pylons.loud.constants.ItemID.ID_IRON_SWORD
+import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
+import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.constants.Recipe.RCP_BUY_ANGEL_SWORD
+import com.pylons.loud.constants.Recipe.RCP_BUY_BRONZE_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_CHARACTER
+import com.pylons.loud.constants.Recipe.RCP_BUY_COPPER_SWORD
+import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
+import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
+import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Fight.FightFragment
 import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
@@ -237,11 +255,64 @@ class GameScreenActivity : AppCompatActivity(),
         val name = item?.name
         val price = item?.price
         val goldIcon = getString(R.string.gold_icon)
+        val player = model.getPlayer().value ?: return
+
         Log.info(item.toString())
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage("Buy $name for $goldIcon $price?")
             .setCancelable(false)
             .setPositiveButton("Buy") { _, _ ->
+                val itemIds = mutableListOf<String>()
+                var recipeId = ""
+
+                when (item?.id) {
+                    ID_WOODEN_SWORD -> {
+                        recipeId = RCP_BUY_WOODEN_SWORD
+                    }
+                    ID_COPPER_SWORD -> {
+                        recipeId = RCP_BUY_COPPER_SWORD
+                    }
+                    ID_SILVER_SWORD -> {
+                        recipeId = RCP_BUY_SILVER_SWORD
+                        itemIds.add(GOBLIN_EAR)
+                    }
+                    ID_BRONZE_SWORD -> {
+                        recipeId = RCP_BUY_BRONZE_SWORD
+                        itemIds.add(player.getItemIdByName(WOLF_TAIL))
+                    }
+                    ID_IRON_SWORD -> {
+                        recipeId = RCP_BUY_IRON_SWORD
+                        itemIds.add(player.getItemIdByName(TROLL_TOES))
+                    }
+                    ID_ANGEL_SWORD -> {
+                        recipeId = RCP_BUY_ANGEL_SWORD
+                        itemIds.add(player.getItemIdByName(DROP_DRAGONFIRE))
+                        itemIds.add(player.getItemIdByName(DROP_DRAGONICE))
+                        itemIds.add(player.getItemIdByName(DROP_DRAGONACID))
+                    }
+                }
+
+                layout_loading.visibility = View.VISIBLE
+
+                CoroutineScope(IO).launch {
+                    val profile = executeRecipe(recipeId, itemIds.toTypedArray())
+                    if (profile != null) {
+                        player.syncProfile(profile)
+                        withContext(Main) {
+                            model.setPlayer(player)
+                        }
+                        player.saveAsync(this@GameScreenActivity)
+                    }
+
+                    withContext(Main) {
+                        layout_loading.visibility = View.INVISIBLE
+                        Toast.makeText(
+                            this@GameScreenActivity,
+                            "Success: Bought $recipeId",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
             .setNegativeButton("No") { dialog, _ ->
                 dialog.cancel()
