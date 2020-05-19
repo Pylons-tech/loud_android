@@ -17,11 +17,12 @@ data class User(
     var activeCharacter: Int,
     var weapons: MutableList<Weapon>,
     var activeWeapon: Int,
+    var materials: MutableList<Material>,
     var address: String
 ) {
 
     fun getActiveCharacter(): Character? {
-        return if (activeCharacter > -1) {
+        return if (activeCharacter != -1 && activeCharacter < characters.size) {
             characters[activeCharacter]
         } else {
             null
@@ -33,7 +34,7 @@ data class User(
     }
 
     fun getActiveWeapon(): Weapon? {
-        return if (activeWeapon > -1) {
+        return if (activeWeapon != -1 && activeWeapon < weapons.size) {
             weapons[activeWeapon]
         } else {
             null
@@ -45,7 +46,19 @@ data class User(
     }
 
     fun getItemIdByName(name: String): String {
-        TODO("Got to fix data structure first")
+        return materials.find {
+            it.name == name
+        }?.id ?: return weapons.find {
+            it.name == name
+        }?.id ?: ""
+    }
+
+    fun getItemNameByItemId(id: String): String {
+        return materials.find {
+            it.id == id
+        }?.name ?: return weapons.find {
+            it.id == id
+        }?.name ?: ""
     }
 
     fun saveAsync(context: Context) {
@@ -67,6 +80,9 @@ data class User(
     }
 
     fun syncProfile(profile: Profile) {
+        val prevActiveCharacterId = getActiveCharacter()?.id
+        val prevActiveWeaponId = getActiveWeapon()?.id
+
         address = profile.credentials.address
 
         profile.coins?.forEach {
@@ -78,7 +94,8 @@ data class User(
 
         val characters = mutableListOf<Character>()
         val weapons = mutableListOf<Weapon>()
-        profile.items.forEach i@ {
+        val materials = mutableListOf<Material>()
+        profile.items.forEach i@{
             if (it.cookbookId != LOUD_CBID) {
                 return@i
             }
@@ -99,21 +116,41 @@ data class User(
                     characters.add(character)
                 }
                 else -> {
-                    val weapon = Weapon(
-                        it.id,
-                        it.strings["Name"]!!,
-                        it.longs["level"]!!,
-                        it.doubles["attack"]!!,
-                        0,
-                        listOf(),
-                        it.lastUpdate
-                    )
-                    weapons.add(weapon)
+                    if (it.strings["Name"]?.contains("sword")!!) {
+                        val weapon = Weapon(
+                            it.id,
+                            it.strings["Name"]!!,
+                            it.longs["level"]!!,
+                            it.doubles["attack"]!!,
+                            0,
+                            listOf(),
+                            it.lastUpdate
+                        )
+                        weapons.add(weapon)
+                    } else {
+                        val material = Material(
+                            it.id,
+                            it.strings["Name"]!!,
+                            it.longs["level"]!!,
+                            it.doubles["attack"]!!,
+                            it.lastUpdate
+                        )
+                        materials.add(material)
+                    }
                 }
             }
         }
 
         this.characters = characters
         this.weapons = weapons
+        this.materials = materials
+
+        if (getActiveCharacter()?.id != prevActiveCharacterId) {
+            activeCharacter = -1
+        }
+
+        if (getActiveWeapon()?.id != prevActiveWeaponId) {
+            activeWeapon = -1
+        }
     }
 }

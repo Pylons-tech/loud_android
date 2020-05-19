@@ -1,12 +1,9 @@
 package com.pylons.loud.models
 
-abstract class Item(
-    open val id: String,
-    open val name: String,
-    open val level: Long,
-    open val attack: Double,
-    open val price: Int,
-    open val preItem: List<String>,
-    open var lastUpdate: Long
-) {
+abstract class Item {
+    abstract val id: String
+    abstract val name: String
+    abstract val level: Long
+    abstract val attack: Double
+    abstract val lastUpdate: Long
 }

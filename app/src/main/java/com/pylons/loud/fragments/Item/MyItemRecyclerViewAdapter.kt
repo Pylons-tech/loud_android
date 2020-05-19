@@ -11,6 +11,7 @@ import com.pylons.loud.R
 
 import com.pylons.loud.fragments.Item.ItemFragment.OnListFragmentInteractionListener
 import com.pylons.loud.models.Item
+import com.pylons.loud.models.Weapon
 
 import kotlinx.android.synthetic.main.fragment_item.view.*
 import java.util.logging.Logger
@@ -59,7 +60,9 @@ class MyItemRecyclerViewAdapter(
         when (mode) {
             2 -> {
                 holder.mPriceLayout.visibility = View.VISIBLE
-                holder.mPriceView.text = item.price.toString()
+                if (item is Weapon) {
+                    holder.mPriceView.text = item.price.toString()
+                }
             }
             else -> {
                 holder.mPriceLayout.visibility = View.INVISIBLE

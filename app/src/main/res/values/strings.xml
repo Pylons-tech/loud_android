@@ -15,15 +15,15 @@
     <string name="select_active_weapon">Select active weapon</string>
     <string name="restore_character_health">Restore character health</string>
     <string name="update_character_name">Update character name</string>
-    <string name="rabbit">Rabbit 💰1+</string>
-    <string name="goblin">"Goblin 💰50"</string>
-    <string name="wolf">Wolf 💰150</string>
-    <string name="troll">Troll 💰300</string>
-    <string name="giant">Giant 💰3000</string>
-    <string name="fire_dragon">Fire Dragon 💰10000</string>
-    <string name="ice_dragon">Ice Dragon 💰10000</string>
-    <string name="acid_dragon">Acid Dragon 💰10000</string>
-    <string name="undead_dragon">Undead Dragon 💰50000</string>
+    <string name="rabbit">Rabbit</string>
+    <string name="goblin">Goblin</string>
+    <string name="wolf">Wolf </string>
+    <string name="troll">Troll</string>
+    <string name="giant">Giant</string>
+    <string name="fire_dragon">Fire Dragon</string>
+    <string name="ice_dragon">Ice Dragon</string>
+    <string name="acid_dragon">Acid Dragon</string>
+    <string name="undead_dragon">Undead Dragon</string>
     <string name="buy_items">Buy Items</string>
     <string name="sell_items">Sell Items</string>
     <string name="upgrade_items">Upgrade Items</string>
@@ -51,4 +51,10 @@
     <string name="login_no_username_text">Enter valid username</string>
     <string name="buy_character_desc">Summon a weakling with huge potential from the ether? Hell yeah.</string>
     <string name="fight">Fight</string>
+    <string name="you_have_bought_from_shop">You have bought %1$s from shop</string>
+    <string name="you_have_bought_from_pylons_central">You have bought %1$s from Pylons Central</string>
+    <string name="you_did_fight_with_and_earned">You did fight with %1$s and earned %2$d 💰</string>
+    <string name="you_have_lost_your_weapon">You have lost your weapon accidentally</string>
+    <string name="you_got_bonus_item">You got bonus item called %1$s</string>
+    <string name="you_were_killed">You were killed by %1$s accidentally</string>
 </resources>

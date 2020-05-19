@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import java.util.logging.Logger
 
 
@@ -85,6 +86,7 @@ class LoginActivity : AppCompatActivity() {
             -1,
             mutableListOf(),
             -1,
+            mutableListOf(),
             ""
         )
 
@@ -92,11 +94,15 @@ class LoginActivity : AppCompatActivity() {
 
         val playerJSON = sharedPref.getString(username, "")
         if (!playerJSON.equals("")) {
-            val moshi = Moshi.Builder().build()
-            val jsonAdapter: JsonAdapter<User> =
-                moshi.adapter<User>(User::class.java)
+            try {
+                val moshi = Moshi.Builder().build()
+                val jsonAdapter: JsonAdapter<User> =
+                    moshi.adapter<User>(User::class.java)
 
-            currentPlayer = jsonAdapter.fromJson(playerJSON)!!
+                currentPlayer = jsonAdapter.fromJson(playerJSON)!!
+            } catch (ex: Exception) {
+                Log.warning(ex.toString())
+            }
         }
 
         CoroutineScope(IO).launch {

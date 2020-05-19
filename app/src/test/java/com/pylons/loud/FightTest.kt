@@ -43,6 +43,7 @@ class FightTest {
                 0,
                 mutableListOf(),
                 -1,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_RABBIT_NO_SWORD,
@@ -76,6 +77,7 @@ class FightTest {
                 0,
                 mutableListOf(),
                 -1,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_RABBIT_SWORD,
@@ -119,6 +121,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_RABBIT_SWORD,
@@ -162,6 +165,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_GIANT,
@@ -205,6 +209,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_GIANT,
@@ -239,6 +244,7 @@ class FightTest {
                 mutableListOf(
                 ),
                 -1,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_GIANT,
@@ -282,6 +288,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_GIANT,
@@ -325,6 +332,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_GIANT,
@@ -368,6 +376,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_FIRE_DRAGON,
@@ -411,6 +420,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_FIRE_DRAGON,
@@ -454,6 +464,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_ICE_DRAGON,
@@ -497,6 +508,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_ICE_DRAGON,
@@ -541,6 +553,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_ACID_DRAGON,
@@ -585,6 +598,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 FightId.ID_ACID_DRAGON,
@@ -629,6 +643,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_UNDEAD_DRAGON,
@@ -673,6 +688,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_UNDEAD_DRAGON,
@@ -717,6 +733,7 @@ class FightTest {
                     )
                 ),
                 0,
+                mutableListOf(),
                 ""
             ), Fight(
                 ID_UNDEAD_DRAGON,

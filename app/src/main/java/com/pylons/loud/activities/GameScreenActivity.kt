@@ -42,7 +42,7 @@ import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.models.*
 import com.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.Profile
+import com.pylons.wallet.core.types.Transaction
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 
@@ -144,14 +144,8 @@ class GameScreenActivity : AppCompatActivity(),
             if (player != null) {
                 layout_loading.visibility = View.VISIBLE
                 CoroutineScope(IO).launch {
-                    val profile = executeRecipe(it, arrayOf())
-                    if (profile != null) {
-                        player.syncProfile(profile)
-                        withContext(Main) {
-                            model.setPlayer(player)
-                        }
-                        player.saveAsync(this@GameScreenActivity)
-                    }
+                    val tx = executeRecipe(it, arrayOf())
+                    syncProfile()
 
                     withContext(Main) {
                         layout_loading.visibility = View.INVISIBLE
@@ -253,7 +247,7 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onItemBuy(item: Item?) {
         val name = item?.name
-        val price = item?.price
+        val price = (item as Weapon).price
         val goldIcon = getString(R.string.gold_icon)
         val player = model.getPlayer().value ?: return
 
@@ -274,7 +268,7 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                     ID_SILVER_SWORD -> {
                         recipeId = RCP_BUY_SILVER_SWORD
-                        itemIds.add(GOBLIN_EAR)
+                        itemIds.add(player.getItemIdByName(GOBLIN_EAR))
                     }
                     ID_BRONZE_SWORD -> {
                         recipeId = RCP_BUY_BRONZE_SWORD
@@ -292,23 +286,28 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                 }
 
+                if (itemIds.contains("")) {
+                    Toast.makeText(
+                        this@GameScreenActivity,
+                        "Not enough resources or gold",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setPositiveButton
+                }
+
                 layout_loading.visibility = View.VISIBLE
 
                 CoroutineScope(IO).launch {
-                    val profile = executeRecipe(recipeId, itemIds.toTypedArray())
-                    if (profile != null) {
-                        player.syncProfile(profile)
-                        withContext(Main) {
-                            model.setPlayer(player)
-                        }
-                        player.saveAsync(this@GameScreenActivity)
-                    }
+                    val tx = executeRecipe(recipeId, itemIds.toTypedArray())
+                    syncProfile()
+
+                    Log.info(tx.toString())
 
                     withContext(Main) {
                         layout_loading.visibility = View.INVISIBLE
                         Toast.makeText(
                             this@GameScreenActivity,
-                            "Success: Bought $recipeId",
+                            getString(R.string.you_have_bought_from_shop, name),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -396,7 +395,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    private suspend fun executeRecipe(recipeId: String, itemIds: Array<String>): Profile? {
+    private suspend fun executeRecipe(recipeId: String, itemIds: Array<String>): Transaction? {
         val tx = Core.engine.applyRecipe(
             recipeId,
             itemIds
@@ -407,13 +406,31 @@ class GameScreenActivity : AppCompatActivity(),
         Log.info(tx.id)
 
         delay(5000)
-        val profile = Core.engine.getOwnBalances()
-        if (profile != null) {
-            Log.info(profile.toString())
-            Log.info(profile.items.size.toString())
-
+        val txId = tx.id
+        if (txId != null) {
+            val tx = Core.engine.getTransaction(txId)
+            Log.info(tx.toString())
+            return tx
         }
-        return profile
+
+        return null
+    }
+
+    private suspend fun syncProfile() {
+        val player = model.getPlayer().value
+        if (player != null) {
+            val profile = Core.engine.getOwnBalances()
+            if (profile != null) {
+                player.syncProfile(profile)
+                withContext(Main) {
+                    model.setPlayer(player)
+                }
+                player.saveAsync(this@GameScreenActivity)
+                Log.info("saved user")
+            }
+        }
+
+        Log.info("Done syncProfile")
     }
 
     override fun onBuyCharacter(item: Character?) {
@@ -429,20 +446,13 @@ class GameScreenActivity : AppCompatActivity(),
                 .setPositiveButton("Proceed") { _, _ ->
                     layout_loading.visibility = View.VISIBLE
                     CoroutineScope(IO).launch {
-                        val profile = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
-                        if (profile != null) {
-                            player.syncProfile(profile)
-                            withContext(Main) {
-                                model.setPlayer(player)
-                            }
-                            player.saveAsync(this@GameScreenActivity)
-                        }
-
+                        val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
+                        syncProfile()
                         withContext(Main) {
                             layout_loading.visibility = View.INVISIBLE
                             Toast.makeText(
                                 this@GameScreenActivity,
-                                "Success: Bought $name",
+                                getString(R.string.you_have_bought_from_pylons_central, name),
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -459,7 +469,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onEngageFight(recipeId: String, itemIds: Array<String>) {
+    override fun onEngageFight(fight: Fight, recipeId: String, itemIds: Array<String>) {
         Log.info(recipeId)
 
         itemIds.forEach {
@@ -467,27 +477,53 @@ class GameScreenActivity : AppCompatActivity(),
         }
 
         val player = model.getPlayer().value
-
         if (player != null) {
             layout_loading.visibility = View.VISIBLE
 
             CoroutineScope(IO).launch {
-                val profile = executeRecipe(recipeId, itemIds)
-                if (profile != null) {
-                    player.syncProfile(profile)
-                    withContext(Main) {
-                        model.setPlayer(player)
+                val tx = executeRecipe(recipeId, itemIds)
+                syncProfile()
+                Log.info(tx?.txData.toString())
+
+                var prompt = ""
+                if (tx != null) {
+                    val output = tx.txData.output
+                    if (output.isEmpty()) {
+                        prompt = getString(R.string.you_were_killed, fight.name)
+                    } else {
+                        prompt = getString(
+                            R.string.you_did_fight_with_and_earned, fight.name,
+                            tx.txData.output[0].amount
+                        )
+
+                        when (output.size) {
+                            2 -> {
+                                // can fight rabbit without weapon
+                                // if two itemIds then used weapon
+                                if (itemIds.size == 2) {
+                                    prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
+                                }
+                            }
+                            4 -> prompt += "\n ${getString(
+                                R.string.you_got_bonus_item,
+                                player.getItemNameByItemId(tx.txData.output[3].itemId)
+                            )}"
+                        }
                     }
-                    player.saveAsync(this@GameScreenActivity)
                 }
 
                 withContext(Main) {
                     layout_loading.visibility = View.INVISIBLE
-                    Toast.makeText(
-                        this@GameScreenActivity,
-                        "Success: Fought $recipeId",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val dialogBuilder =
+                        AlertDialog.Builder(this@GameScreenActivity, R.style.MyDialogTheme)
+                    dialogBuilder.setMessage(
+                        prompt
+                    )
+                        .setCancelable(false)
+                        .setPositiveButton("OK") { _, _ ->
+                        }
+                    val alert = dialogBuilder.create()
+                    alert.show()
                 }
             }
         }

@@ -112,7 +112,7 @@ class ForestFightPreviewFragment : Fragment() {
                     if (activeWeapon != null) {
                         itemIds.add(activeWeapon.id)
                     }
-                    listener?.onEngageFight(recipeId, itemIds.toTypedArray())
+                    listener?.onEngageFight(fight, recipeId, itemIds.toTypedArray())
                 }
             }
         })
@@ -130,6 +130,6 @@ class ForestFightPreviewFragment : Fragment() {
     }
 
     interface OnFragmentInteractionListener {
-        fun onEngageFight(recipeId: String, itemIds: Array<String>)
+        fun onEngageFight(fight: Fight, recipeId: String, itemIds: Array<String>)
     }
 }
