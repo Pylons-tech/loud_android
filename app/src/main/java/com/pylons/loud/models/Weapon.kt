@@ -1,5 +1,7 @@
 package com.pylons.loud.models
 
+import com.pylons.loud.constants.Item.WOODEN_SWORD
+import com.pylons.loud.constants.Item.COPPER_SWORD
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -11,4 +13,12 @@ data class Weapon(
     val price: Int,
     val preItem: List<String>,
     override val lastUpdate: Long
-) : Item()
+) : Item() {
+    fun getUpgradePrice(): Int {
+        return when (name) {
+            WOODEN_SWORD -> 100
+            COPPER_SWORD -> 250
+            else -> -1
+        }
+    }
+}

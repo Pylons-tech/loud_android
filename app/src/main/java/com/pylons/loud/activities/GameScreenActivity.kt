@@ -15,12 +15,14 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
+import com.pylons.loud.constants.Item.COPPER_SWORD
 import com.pylons.loud.constants.Item.DROP_DRAGONACID
 import com.pylons.loud.constants.Item.DROP_DRAGONFIRE
 import com.pylons.loud.constants.Item.DROP_DRAGONICE
 import com.pylons.loud.constants.Item.GOBLIN_EAR
 import com.pylons.loud.constants.Item.TROLL_TOES
 import com.pylons.loud.constants.Item.WOLF_TAIL
+import com.pylons.loud.constants.Item.WOODEN_SWORD
 import com.pylons.loud.constants.ItemID.ID_ANGEL_SWORD
 import com.pylons.loud.constants.ItemID.ID_BRONZE_SWORD
 import com.pylons.loud.constants.ItemID.ID_COPPER_SWORD
@@ -35,6 +37,8 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_COPPER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
+import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPG
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Fight.FightFragment
 import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
@@ -219,9 +223,9 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
 
         if (player != null) {
-            var prompt = "Set ${name} as active weapon?"
+            var prompt = "Set $name as active weapon?"
             if (player.getActiveWeapon() == item) {
-                prompt = "Unset ${name} as active weapon?"
+                prompt = "Unset $name as active weapon?"
             }
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage(prompt)
@@ -349,20 +353,55 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onItemUpgrade(item: Item?) {
         val name = item?.name
+        val player = model.getPlayer().value
 
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-        dialogBuilder.setMessage("Upgrade $name?")
-            .setCancelable(false)
-            .setPositiveButton("Upgrade") { _, _ ->
-                TODO()
-            }
-            .setNegativeButton("No") { dialog, _ ->
-                dialog.cancel()
-            }
+        if (item is Weapon && player != null) {
+            if (player.gold > item.getUpgradePrice()) {
+                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                dialogBuilder.setMessage("Upgrade $name?")
+                    .setCancelable(false)
+                    .setPositiveButton("Upgrade") { _, _ ->
+                        val recipeId = when (item.name) {
+                            WOODEN_SWORD -> RCP_WOODEN_SWORD_UPG
+                            COPPER_SWORD -> RCP_COPPER_SWORD_UPG
+                            else -> ""
+                        }
 
-        val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
-        alert.show()
+                        layout_loading.visibility = View.VISIBLE
+
+                        CoroutineScope(IO).launch {
+                            val tx = executeRecipe(recipeId, arrayOf(item.id))
+                            syncProfile()
+
+                            Log.info(tx.toString())
+
+                            withContext(Main) {
+                                layout_loading.visibility = View.INVISIBLE
+                                Toast.makeText(
+                                    this@GameScreenActivity,
+                                    getString(R.string.you_have_upgraded_item, name),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
+                    .setNegativeButton("No") { dialog, _ ->
+                        dialog.cancel()
+                    }
+
+                val alert = dialogBuilder.create()
+                alert.setTitle("Confirm")
+                alert.show()
+            } else {
+                Toast.makeText(
+                    this,
+                    getString(R.string.you_dont_have_enough_gold_to_upgrade, name),
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+
     }
 
     override fun onCharacter(item: Character?) {
@@ -371,7 +410,7 @@ class GameScreenActivity : AppCompatActivity(),
         if (player != null) {
             var prompt = "Set ${name} as active character?"
             if (player.getActiveCharacter() == item) {
-                prompt = "Unset ${name} as active character?"
+                prompt = "Unset $name as active character?"
             }
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage(prompt)

@@ -57,4 +57,6 @@
     <string name="you_have_lost_your_weapon">You have lost your weapon accidentally</string>
     <string name="you_got_bonus_item">You got bonus item called %1$s</string>
     <string name="you_were_killed">You were killed by %1$s accidentally</string>
+    <string name="you_dont_have_enough_gold_to_upgrade">You don\'t have enough gold to upgrade %1$s</string>
+    <string name="you_have_upgraded_item">You have upgraded %1$s to get better hunt result</string>
 </resources>

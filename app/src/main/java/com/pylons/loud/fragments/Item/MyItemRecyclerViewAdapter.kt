@@ -64,6 +64,12 @@ class MyItemRecyclerViewAdapter(
                     holder.mPriceView.text = item.price.toString()
                 }
             }
+            4 -> {
+                holder.mPriceLayout.visibility = View.VISIBLE
+                if (item is Weapon) {
+                    holder.mPriceView.text = item.getUpgradePrice().toString()
+                }
+            }
             else -> {
                 holder.mPriceLayout.visibility = View.INVISIBLE
             }

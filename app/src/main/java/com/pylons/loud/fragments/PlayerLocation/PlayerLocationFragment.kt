@@ -58,7 +58,7 @@ class PlayerLocationFragment : Fragment() {
         return view
     }
 
-    fun getLocations(): List<PlayerLocation> {
+    private fun getLocations(): List<PlayerLocation> {
         return listOf(
             PlayerLocation(
                 LocationConstants.HOME, getString(R.string.home)

@@ -59,11 +59,11 @@ class ShopScreenFragment : Fragment() {
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
             val adapter = MyItemRecyclerViewAdapter(
                 listOf(
-                    Weapon(ID_WOODEN_SWORD, WOODEN_SWORD, 1, 1.0, 100, listOf(), 0),
-                    Weapon(ID_COPPER_SWORD, COPPER_SWORD, 1, 2.0, 250, listOf(), 0),
-                    Weapon(ID_SILVER_SWORD, SILVER_SWORD, 1, 3.0, 250, listOf(GOBLIN_EAR), 0),
-                    Weapon(ID_BRONZE_SWORD, BRONZE_SWORD, 1, 4.0, 250, listOf(WOLF_TAIL), 0),
-                    Weapon(ID_IRON_SWORD, IRON_SWORD, 1, 5.0, 250, listOf(TROLL_TOES), 0),
+                    Weapon(ID_WOODEN_SWORD, WOODEN_SWORD, 1, 3.0, 100, listOf(), 0),
+                    Weapon(ID_COPPER_SWORD, COPPER_SWORD, 1, 10.0, 250, listOf(), 0),
+                    Weapon(ID_SILVER_SWORD, SILVER_SWORD, 1, 30.0, 250, listOf(GOBLIN_EAR), 0),
+                    Weapon(ID_BRONZE_SWORD, BRONZE_SWORD, 1, 50.0, 250, listOf(WOLF_TAIL), 0),
+                    Weapon(ID_IRON_SWORD, IRON_SWORD, 1, 100.0, 250, listOf(TROLL_TOES), 0),
                     Weapon(
                         ID_ANGEL_SWORD,
                         ANGEL_SWORD,
@@ -99,7 +99,11 @@ class ShopScreenFragment : Fragment() {
 
             text_upgrade.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 4)
+                val adapter = MyItemRecyclerViewAdapter(
+                    player.weapons.filter { it.level == 1L },
+                    frag.getListener(),
+                    4
+                )
                 mode = 4
                 val myView = frag.view as RecyclerView
                 myView.adapter = adapter
@@ -108,11 +112,27 @@ class ShopScreenFragment : Fragment() {
                 text_upgrade.setTextColor(Color.GREEN)
             }
 
-            if (mode == 3 || mode == 4) {
-                val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), mode)
-                val myView = frag.view as RecyclerView
-                myView.adapter = adapter
+            when (mode) {
+                3 -> {
+                    val frag =
+                        childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                    val adapter =
+                        MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), mode)
+                    val myView = frag.view as RecyclerView
+                    myView.adapter = adapter
+                }
+                4 -> {
+                    val frag =
+                        childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                    val adapter =
+                        MyItemRecyclerViewAdapter(
+                            player.weapons.filter { it.level == 1L },
+                            frag.getListener(),
+                            mode
+                        )
+                    val myView = frag.view as RecyclerView
+                    myView.adapter = adapter
+                }
             }
         })
     }
