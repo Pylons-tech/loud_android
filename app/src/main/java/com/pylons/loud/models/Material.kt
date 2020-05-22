@@ -8,5 +8,6 @@ data class Material(
     override val name: String,
     override val level: Long,
     override val attack: Double,
+    override val value: Long,
     override val lastUpdate: Long
 ) : Item()

@@ -122,6 +122,7 @@ data class User(
                             it.strings["Name"]!!,
                             it.longs["level"]!!,
                             it.doubles["attack"]!!,
+                            it.longs["value"] ?: 0,
                             0,
                             listOf(),
                             it.lastUpdate
@@ -133,6 +134,7 @@ data class User(
                             it.strings["Name"]!!,
                             it.longs["level"]!!,
                             it.doubles["attack"]!!,
+                            it.longs["value"] ?: 0,
                             it.lastUpdate
                         )
                         materials.add(material)

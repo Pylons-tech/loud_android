@@ -38,6 +38,7 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
 import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_SELL_SWORD
 import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPG
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Fight.FightFragment
@@ -290,10 +291,19 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                 }
 
+                if (player.gold < item.price) {
+                    Toast.makeText(
+                        this@GameScreenActivity,
+                        getString(R.string.you_dont_have_enough_gold),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setPositiveButton
+                }
+
                 if (itemIds.contains("")) {
                     Toast.makeText(
                         this@GameScreenActivity,
-                        "Not enough resources or gold",
+                        getString(R.string.you_dont_have_enough_resources),
                         Toast.LENGTH_SHORT
                     ).show()
                     return@setPositiveButton
@@ -327,19 +337,39 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSell(item: Item?) {
-        val name = item?.name
         val player = model.getPlayer().value
-        if (player != null) {
+        if (player != null && item != null) {
+            val name = item.name
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage("Sell $name?")
                 .setCancelable(false)
                 .setPositiveButton("Sell") { _, _ ->
-                    player.weapons.remove(item as Weapon)
-                    if (player.getActiveWeapon() == item) {
-                        player.activeWeapon = -1
+                    layout_loading.visibility = View.VISIBLE
+
+                    CoroutineScope(IO).launch {
+                        val tx = executeRecipe(RCP_SELL_SWORD, arrayOf(item.id))
+                        syncProfile()
+
+                        Log.info(tx.toString())
+
+                        var amount = 0L
+
+                        if (tx != null) {
+                            val output = tx.txData.output
+                            if (output.isNotEmpty()) {
+                                amount = output[0].amount
+                            }
+                        }
+
+                        withContext(Main) {
+                            Toast.makeText(
+                                this@GameScreenActivity,
+                                getString(R.string.you_sold_item_for_gold, name, amount),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            layout_loading.visibility = View.INVISIBLE
+                        }
                     }
-                    model.setPlayer(player)
-                    player.saveAsync(this)
                 }
                 .setNegativeButton("No") { dialog, _ ->
                     dialog.cancel()

@@ -116,6 +116,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -160,6 +161,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -203,6 +205,7 @@ class FightTest {
                         Item.IRON_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000
@@ -283,6 +286,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -326,6 +330,7 @@ class FightTest {
                         Item.IRON_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000
@@ -371,6 +376,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -414,6 +420,7 @@ class FightTest {
                         Item.IRON_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000
@@ -459,6 +466,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -502,6 +510,7 @@ class FightTest {
                         Item.IRON_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000
@@ -548,6 +557,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -592,6 +602,7 @@ class FightTest {
                         Item.IRON_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000
@@ -638,6 +649,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -683,6 +695,7 @@ class FightTest {
                         1,
                         3.0,
                         0,
+                        0,
                         listOf(),
                         5000
                     )
@@ -727,6 +740,7 @@ class FightTest {
                         Item.ANGEL_SWORD,
                         1,
                         3.0,
+                        0,
                         0,
                         listOf(),
                         5000

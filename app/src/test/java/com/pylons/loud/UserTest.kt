@@ -37,6 +37,7 @@ class UserTest {
                 WOODEN_SWORD,
                 1,
                 3.0,
+                100,
                 0,
                 listOf(),
                 5000
@@ -49,6 +50,7 @@ class UserTest {
                 GOBLIN_EAR,
                 1,
                 0.0,
+                50,
                 5500
             )
         ),

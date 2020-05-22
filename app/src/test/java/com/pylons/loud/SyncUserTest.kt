@@ -95,7 +95,7 @@ class SyncUserTest {
                         true,
                         5000,
                         mapOf("attack" to 3.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 100L),
                         mapOf("Name" to "Wooden sword")
                     )
                 )
@@ -124,6 +124,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000
@@ -244,7 +245,7 @@ class SyncUserTest {
                         true,
                         5000,
                         mapOf("attack" to 3.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 100L),
                         mapOf("Name" to "Wooden sword")
                     )
                 )
@@ -261,6 +262,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000
@@ -317,7 +319,7 @@ class SyncUserTest {
                         true,
                         5000,
                         mapOf("attack" to 3.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 100L),
                         mapOf("Name" to "Wooden sword")
                     ),
                     Item(
@@ -328,7 +330,7 @@ class SyncUserTest {
                         true,
                         5500,
                         mapOf("attack" to 0.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 50L),
                         mapOf("Name" to "Goblin ear")
                     )
                 )
@@ -357,6 +359,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000
@@ -369,6 +372,7 @@ class SyncUserTest {
                         "Goblin ear",
                         1,
                         0.0,
+                        50,
                         5500
                     )
                 ),
@@ -403,6 +407,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000
@@ -415,6 +420,7 @@ class SyncUserTest {
                         "Goblin ear",
                         1,
                         0.0,
+                        50,
                         5500
                     )
                 ),
@@ -452,7 +458,7 @@ class SyncUserTest {
                         true,
                         5000,
                         mapOf("attack" to 3.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 100L),
                         mapOf("Name" to "Wooden sword")
                     ),
                     Item(
@@ -463,7 +469,7 @@ class SyncUserTest {
                         true,
                         5500,
                         mapOf("attack" to 0.0),
-                        mapOf("level" to 1L),
+                        mapOf("level" to 1L, "value" to 50L),
                         mapOf("Name" to "Goblin ear")
                     )
                 )
@@ -492,6 +498,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000
@@ -504,6 +511,7 @@ class SyncUserTest {
                         "Goblin ear",
                         1,
                         0.0,
+                        50,
                         5500
                     )
                 ),
@@ -538,6 +546,7 @@ class SyncUserTest {
                         "Wooden sword",
                         1,
                         3.0,
+                        100,
                         0,
                         listOf(),
                         5000

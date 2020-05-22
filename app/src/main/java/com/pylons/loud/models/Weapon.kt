@@ -10,6 +10,7 @@ data class Weapon(
     override val name: String,
     override val level: Long,
     override val attack: Double,
+    override val value: Long,
     val price: Int,
     val preItem: List<String>,
     override val lastUpdate: Long

@@ -32,6 +32,7 @@ import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
 import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
+import com.pylons.loud.models.Item
 import com.pylons.loud.models.User
 import com.pylons.loud.models.Weapon
 import kotlinx.android.synthetic.main.fragment_shop_screen.*
@@ -59,16 +60,17 @@ class ShopScreenFragment : Fragment() {
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
             val adapter = MyItemRecyclerViewAdapter(
                 listOf(
-                    Weapon(ID_WOODEN_SWORD, WOODEN_SWORD, 1, 3.0, 100, listOf(), 0),
-                    Weapon(ID_COPPER_SWORD, COPPER_SWORD, 1, 10.0, 250, listOf(), 0),
-                    Weapon(ID_SILVER_SWORD, SILVER_SWORD, 1, 30.0, 250, listOf(GOBLIN_EAR), 0),
-                    Weapon(ID_BRONZE_SWORD, BRONZE_SWORD, 1, 50.0, 250, listOf(WOLF_TAIL), 0),
-                    Weapon(ID_IRON_SWORD, IRON_SWORD, 1, 100.0, 250, listOf(TROLL_TOES), 0),
+                    Weapon(ID_WOODEN_SWORD, WOODEN_SWORD, 1, 3.0, 100, 100, listOf(), 0),
+                    Weapon(ID_COPPER_SWORD, COPPER_SWORD, 1, 10.0, 250, 250, listOf(), 0),
+                    Weapon(ID_SILVER_SWORD, SILVER_SWORD, 1, 30.0, 250, 250, listOf(GOBLIN_EAR), 0),
+                    Weapon(ID_BRONZE_SWORD, BRONZE_SWORD, 1, 50.0, 250, 250, listOf(WOLF_TAIL), 0),
+                    Weapon(ID_IRON_SWORD, IRON_SWORD, 1, 100.0, 250, 250, listOf(TROLL_TOES), 0),
                     Weapon(
                         ID_ANGEL_SWORD,
                         ANGEL_SWORD,
                         1,
                         5.0,
+                        20000,
                         20000,
                         listOf(DROP_DRAGONFIRE, DROP_DRAGONICE, DROP_DRAGONACID),
                         0
@@ -88,7 +90,10 @@ class ShopScreenFragment : Fragment() {
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_sell.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
-                val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 3)
+                val items = mutableListOf<Item>()
+                items.addAll(player.weapons)
+                items.addAll(player.materials)
+                val adapter = MyItemRecyclerViewAdapter(items, frag.getListener(), 3)
                 mode = 3
                 val myView = frag.view as RecyclerView
                 myView.adapter = adapter
@@ -116,8 +121,11 @@ class ShopScreenFragment : Fragment() {
                 3 -> {
                     val frag =
                         childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
+                    val items = mutableListOf<Item>()
+                    items.addAll(player.weapons)
+                    items.addAll(player.materials)
                     val adapter =
-                        MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), mode)
+                        MyItemRecyclerViewAdapter(items, frag.getListener(), mode)
                     val myView = frag.view as RecyclerView
                     myView.adapter = adapter
                 }

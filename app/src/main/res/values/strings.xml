@@ -59,4 +59,7 @@
     <string name="you_were_killed">You were killed by %1$s accidentally</string>
     <string name="you_dont_have_enough_gold_to_upgrade">You don\'t have enough gold to upgrade %1$s</string>
     <string name="you_have_upgraded_item">You have upgraded %1$s to get better hunt result</string>
+    <string name="you_sold_item_for_gold">You sold %1$s for %2$d gold</string>
+    <string name="you_dont_have_enough_gold">You don\'t have enough gold</string>
+    <string name="you_dont_have_enough_resources">You don\'t have enough resources</string>
 </resources>
