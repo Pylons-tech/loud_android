@@ -17,8 +17,7 @@ import com.pylons.loud.constants.FightId.ID_FIRE_DRAGON
 import com.pylons.loud.constants.FightId.ID_GIANT
 import com.pylons.loud.constants.FightId.ID_GOBLIN
 import com.pylons.loud.constants.FightId.ID_ICE_DRAGON
-import com.pylons.loud.constants.FightId.ID_RABBIT_NO_SWORD
-import com.pylons.loud.constants.FightId.ID_RABBIT_SWORD
+import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightId.ID_TROLL
 import com.pylons.loud.constants.FightId.ID_UNDEAD_DRAGON
 import com.pylons.loud.constants.FightId.ID_WOLF
@@ -30,8 +29,7 @@ import com.pylons.loud.constants.Recipe.RCP_FIGHT_GIANT
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_GOBLIN
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_TROLL
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_WOLF
-import com.pylons.loud.constants.Recipe.RCP_HUNT_RABBITS_NOSWORD
-import com.pylons.loud.constants.Recipe.RCP_HUNT_RABBITS_YESWORD
+import com.pylons.loud.constants.Recipe.RCP_HUNT_RABBITS
 import com.pylons.loud.models.Fight
 import kotlinx.android.synthetic.main.fragment_forest_fight_preview.*
 import java.util.logging.Logger
@@ -86,8 +84,7 @@ class ForestFightPreviewFragment : Fragment() {
 
             button_fight.setOnClickListener {
                 val recipeId = when (fight.id) {
-                    ID_RABBIT_NO_SWORD -> RCP_HUNT_RABBITS_NOSWORD
-                    ID_RABBIT_SWORD -> RCP_HUNT_RABBITS_YESWORD
+                    ID_RABBIT -> RCP_HUNT_RABBITS
                     ID_GOBLIN -> RCP_FIGHT_GOBLIN
                     ID_WOLF -> RCP_FIGHT_WOLF
                     ID_TROLL -> RCP_FIGHT_TROLL
@@ -110,7 +107,10 @@ class ForestFightPreviewFragment : Fragment() {
 
                     val activeWeapon = player.getActiveWeapon()
                     if (activeWeapon != null) {
-                        itemIds.add(activeWeapon.id)
+                        // Rabbit does not use weapon
+                        if (fight.id != ID_RABBIT) {
+                            itemIds.add(activeWeapon.id)
+                        }
                     }
                     listener?.onEngageFight(fight, recipeId, itemIds.toTypedArray())
                 }

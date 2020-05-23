@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
+import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.Item.COPPER_SWORD
 import com.pylons.loud.constants.Item.DROP_DRAGONACID
 import com.pylons.loud.constants.Item.DROP_DRAGONFIRE
@@ -567,9 +568,8 @@ class GameScreenActivity : AppCompatActivity(),
 
                         when (output.size) {
                             2 -> {
-                                // can fight rabbit without weapon
-                                // if two itemIds then used weapon
-                                if (itemIds.size == 2) {
+                                // Rabbit does not use weapon
+                                if (fight.id != ID_RABBIT) {
                                     prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
                                 }
                             }

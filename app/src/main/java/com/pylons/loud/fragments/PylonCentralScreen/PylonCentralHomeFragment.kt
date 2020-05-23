@@ -36,6 +36,7 @@ class PylonCentralHomeFragment : Fragment() {
         text_buy_5000_with_100_pylons.setOnClickListener {
             val model: GameScreenActivity.SharedViewModel by activityViewModels()
             model.setPlayerAction(RCP_BUY_GOLD_WITH_PYLON)
+            // TODO("Need to display response message")
         }
 
     }

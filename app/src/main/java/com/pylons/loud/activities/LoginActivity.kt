@@ -15,6 +15,7 @@ import com.squareup.moshi.Moshi
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import java.util.logging.Logger
@@ -107,8 +108,18 @@ class LoginActivity : AppCompatActivity() {
 
         CoroutineScope(IO).launch {
             CoreController.bootstrapCore()
-            val profile = Core.engine.getOwnBalances()
+            var profile = Core.engine.getOwnBalances()
             Log.info(profile.toString())
+
+            // I have keys but no account on chain
+            // No coins mean no account on chain?
+            // TODO("Remove this check, walletcore should handle this once done")
+            if (profile != null && profile.coins.isEmpty()) {
+                val tx = Core.engine.getPylons(500)
+                tx.submit()
+                delay(5000)
+                profile = Core.engine.getOwnBalances()
+            }
 
             if (currentPlayer != null && profile != null) {
                 currentPlayer.syncProfile(profile)

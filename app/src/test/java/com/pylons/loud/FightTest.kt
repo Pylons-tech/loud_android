@@ -46,92 +46,13 @@ class FightTest {
                 mutableListOf(),
                 ""
             ), Fight(
-                FightId.ID_RABBIT_NO_SWORD,
-                "getString(R.string.rabbit)",
+                FightId.ID_RABBIT,
+                "",
                 0,
                 0,
                 "",
                 listOf(),
-                listOf("5% chance of character dying")
-            ), true
-        ),
-        MyTest(
-            "rabbit sword user no sword", User(
-                "cluo",
-                5000,
-                50000,
-                mutableListOf(
-                    Character(
-                        "001",
-                        "Tiger",
-                        1,
-                        1,
-                        1.0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    )
-                ),
-                0,
-                mutableListOf(),
-                -1,
-                mutableListOf(),
-                ""
-            ), Fight(
-                FightId.ID_RABBIT_SWORD,
-                "",
-                0,
-                0,
-                "",
-                listOf(FightRequirements.SWORD),
-                listOf("5% chance of character dying", "5% chance of sword lose")
-            ), false
-        ),
-        MyTest(
-            "rabbit sword user with sword", User(
-                "cluo",
-                5000,
-                50000,
-                mutableListOf(
-                    Character(
-                        "001",
-                        "Tiger",
-                        1,
-                        1,
-                        1.0,
-                        0,
-                        0,
-                        0,
-                        0,
-                        0
-                    )
-                ),
-                0,
-                mutableListOf(
-                    Weapon(
-                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
-                        "Wooden sword",
-                        1,
-                        3.0,
-                        0,
-                        0,
-                        listOf(),
-                        5000
-                    )
-                ),
-                0,
-                mutableListOf(),
-                ""
-            ), Fight(
-                FightId.ID_RABBIT_SWORD,
-                "",
-                0,
-                0,
-                "",
-                listOf(FightRequirements.SWORD),
-                listOf("5% chance of character dying", "5% chance of sword lose")
+                listOf("1% chance of character dying")
             ), true
         ),
         MyTest(

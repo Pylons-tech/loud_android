@@ -2,7 +2,7 @@ package com.pylons.loud.models
 
 import android.content.Context
 import com.pylons.loud.R
-import com.pylons.loud.constants.LOUD_CBID
+import com.pylons.loud.constants.Recipe.LOUD_CBID
 import com.pylons.wallet.core.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
@@ -85,12 +85,16 @@ data class User(
 
         address = profile.credentials.address
 
+        var pylonAmount = 0L
+        var goldAmount = 0L
         profile.coins?.forEach {
             when (it.denom) {
                 "pylon" -> pylonAmount = it.amount
-                "loudcoin" -> gold = it.amount
+                "loudcoin" -> goldAmount = it.amount
             }
         }
+        this.pylonAmount = pylonAmount
+        this.gold = goldAmount
 
         val characters = mutableListOf<Character>()
         val weapons = mutableListOf<Weapon>()

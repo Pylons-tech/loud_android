@@ -15,8 +15,7 @@ import com.pylons.loud.constants.FightId.ID_FIRE_DRAGON
 import com.pylons.loud.constants.FightId.ID_GIANT
 import com.pylons.loud.constants.FightId.ID_GOBLIN
 import com.pylons.loud.constants.FightId.ID_ICE_DRAGON
-import com.pylons.loud.constants.FightId.ID_RABBIT_NO_SWORD
-import com.pylons.loud.constants.FightId.ID_RABBIT_SWORD
+import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightId.ID_TROLL
 import com.pylons.loud.constants.FightId.ID_UNDEAD_DRAGON
 import com.pylons.loud.constants.FightId.ID_WOLF
@@ -54,110 +53,126 @@ class ForestHomeFragment : Fragment() {
         val v = frag?.view as RecyclerView
         val c = context
         if (c is FightFragment.OnListFragmentInteractionListener) {
-            val fightList = mutableListOf<Fight>()
-
-            val player = model.getPlayer().value
-            if (player != null) {
-                if (player.getActiveWeapon() == null) {
-                    fightList.add(
-                        Fight(
-                            ID_RABBIT_NO_SWORD,
-                            getString(R.string.rabbit),
-                            0,
-                            0,
-                            "${getString(R.string.gold_icon)} 1-2",
-                            listOf(),
-                            listOf("5% chance of character dying")
-                        )
+            val fightList = listOf<Fight>(
+                Fight(
+                    ID_RABBIT,
+                    getString(R.string.rabbit),
+                    0,
+                    0,
+                    "${getString(R.string.gold_icon)} 1-2",
+                    listOf(),
+                    listOf("1% chance of character dying")
+                ),
+                Fight(
+                    ID_GOBLIN,
+                    getString(R.string.goblin),
+                    10,
+                    1,
+                    "${getString(R.string.gold_icon)} 50",
+                    listOf(SWORD),
+                    listOf(
+                        "2% chance of character dying",
+                        "3% chance of sword lose",
+                        "20% chance of getting Goblin ear",
+                        "20% chance of getting Goblin boots"
                     )
-                } else {
-                    fightList.add(
-                        Fight(
-                            ID_RABBIT_SWORD,
-                            getString(R.string.rabbit),
-                            0,
-                            0,
-                            "${getString(R.string.gold_icon)} 1-2",
-                            listOf(SWORD),
-                            listOf("2% chance of character dying", "3% chance of sword lose")
-                        )
+                ),
+                Fight(
+                    ID_WOLF,
+                    getString(R.string.wolf),
+                    15,
+                    3,
+                    "${getString(R.string.gold_icon)} 1",
+                    listOf(SWORD),
+                    listOf(
+                        "3% chance of character dying",
+                        "3% chance of sword lose",
+                        "40% chance of getting Wolf tail",
+                        "30% chance of Wolf fur"
                     )
-                }
-            }
-
-            fightList.addAll(
-                listOf(
-                    Fight(
-                        ID_GOBLIN,
-                        getString(R.string.goblin),
-                        10,
-                        1,
-                        "${getString(R.string.gold_icon)} 50",
-                        listOf(SWORD),
-                        listOf("2% chance of character dying", "3% chance of sword lose", "10% chance of getting Goblin ear")
-                    ),
-                    Fight(
-                        ID_WOLF,
-                        getString(R.string.wolf),
-                        15,
-                        3,
-                        "${getString(R.string.gold_icon)} 150",
-                        listOf(SWORD),
-                        listOf("3% chance of character dying", "3% chance of sword lose", "10% chance of getting Wolf tail")
-                    ),
-                    Fight(
-                        ID_TROLL,
-                        getString(R.string.troll),
-                        20,
-                        5,
-                        "${getString(R.string.gold_icon)} 300",
-                        listOf(SWORD),
-                        listOf("4% chance of character dying", "3% chance of sword lose", "10% chance of getting Troll toes")
-                    ),
-                    Fight(
-                        ID_GIANT,
-                        getString(R.string.giant),
-                        100,
-                        10,
-                        "${getString(R.string.gold_icon)} 3000",
-                        listOf(IRON_SWORD, NO_SPECIAL),
-                        listOf("5% chance of character dying", "3% chance of sword lose", "10% chance of bonus skill", "Hmm.. 4%, 3%, 3% for fire, ice, acid","GiantKiller badget on character")
-                    ),
-                    Fight(
-                        ID_FIRE_DRAGON,
-                        getString(R.string.fire_dragon),
-                        300,
-                        30,
-                        "${getString(R.string.gold_icon)} 10000",
-                        listOf(IRON_SWORD, FIRE_SPECIAL),
-                        listOf("2% chance of character dying", "3% chance of sword lose", "10% chance of getting fire scale", "FireDragonKiller badget on character")
-                    ),
-                    Fight(
-                        ID_ICE_DRAGON,
-                        getString(R.string.ice_dragon),
-                        300,
-                        30,
-                        "${getString(R.string.gold_icon)} 10000",
-                        listOf(IRON_SWORD, ICE_SPECIAL),
-                        listOf("2% chance of character dying", "3% chance of sword lose", "10% chance of getting icy shards", "nIceDragonKiller badget on character")
-                    ),
-                    Fight(
-                        ID_ACID_DRAGON,
-                        getString(R.string.acid_dragon),
-                        300,
-                        30,
-                        "${getString(R.string.gold_icon)} 10000",
-                        listOf(IRON_SWORD, ACID_SPECIAL),
-                        listOf("2% chance of character dying", "3% chance of sword lose", "10% chance of getting poison claws", "AcidDragonKiller badget on character")
-                    ),
-                    Fight(
-                        ID_UNDEAD_DRAGON,
-                        getString(R.string.undead_dragon),
-                        300,
-                        30,
-                        "${getString(R.string.gold_icon)} 50000",
-                        listOf(ANGEL_SWORD),
-                        listOf("2% chance of character dying", "3% chance of sword lose", "UndeadDragonKiller badget on character")
+                ),
+                Fight(
+                    ID_TROLL,
+                    getString(R.string.troll),
+                    20,
+                    5,
+                    "${getString(R.string.gold_icon)} 300",
+                    listOf(SWORD),
+                    listOf(
+                        "4% chance of character dying",
+                        "3% chance of sword lose",
+                        "10% chance of getting Troll toes",
+                        "30% chance of getting Troll smelly bones"
+                    )
+                ),
+                Fight(
+                    ID_GIANT,
+                    getString(R.string.giant),
+                    100,
+                    10,
+                    "${getString(R.string.gold_icon)} 3000",
+                    listOf(IRON_SWORD, NO_SPECIAL),
+                    listOf(
+                        "5% chance of character dying",
+                        "3% chance of sword lose",
+                        "10% chance of bonus skill",
+                        "Hmm.. 4%, 3%, 3% for fire, ice, acid",
+                        "\uD83D\uDDFF (GiantKiller) badge on character"
+                    )
+                ),
+                Fight(
+                    ID_FIRE_DRAGON,
+                    getString(R.string.fire_dragon),
+                    300,
+                    30,
+                    "${getString(R.string.gold_icon)} 10000",
+                    listOf(IRON_SWORD, FIRE_SPECIAL),
+                    listOf(
+                        "4% chance of character dying",
+                        "3% chance of sword lose",
+                        "10% chance of getting fire scale",
+                        "FireDragonKiller badge on character"
+                    )
+                ),
+                Fight(
+                    ID_ICE_DRAGON,
+                    getString(R.string.ice_dragon),
+                    300,
+                    30,
+                    "${getString(R.string.gold_icon)} 10000",
+                    listOf(IRON_SWORD, ICE_SPECIAL),
+                    listOf(
+                        "4% chance of character dying",
+                        "3% chance of sword lose",
+                        "10% chance of getting icy shards",
+                        "IceDragonKiller badge on character"
+                    )
+                ),
+                Fight(
+                    ID_ACID_DRAGON,
+                    getString(R.string.acid_dragon),
+                    300,
+                    30,
+                    "${getString(R.string.gold_icon)} 10000",
+                    listOf(IRON_SWORD, ACID_SPECIAL),
+                    listOf(
+                        "4% chance of character dying",
+                        "3% chance of sword lose",
+                        "10% chance of getting poison claws",
+                        "AcidDragonKiller badge on character"
+                    )
+                ),
+                Fight(
+                    ID_UNDEAD_DRAGON,
+                    getString(R.string.undead_dragon),
+                    300,
+                    30,
+                    "${getString(R.string.gold_icon)} 50000",
+                    listOf(ANGEL_SWORD),
+                    listOf(
+                        "7% chance of character dying",
+                        "3% chance of sword lose",
+                        "UndeadDragonKiller badge on character"
                     )
                 )
             )
