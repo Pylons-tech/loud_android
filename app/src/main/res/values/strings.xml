@@ -62,4 +62,17 @@
     <string name="you_sold_item_for_gold">You sold %1$s for %2$d gold</string>
     <string name="you_dont_have_enough_gold">You don\'t have enough gold</string>
     <string name="you_dont_have_enough_resources">You don\'t have enough resources</string>
+    <string name="setting_switch_account">Switch Account</string>
+    <string name="setting_get_dev_items">Get dev test items</string>
+    <string name="goblin_icon">👺</string>
+    <string name="troll_icon">👻</string>
+    <string name="wolf_icon">🐺</string>
+    <string name="giant_icon">🗿</string>
+    <string name="fire_dragon_icon">🦐</string>
+    <string name="ice_dragon_icon">🦈</string>
+    <string name="acid_dragon_icon">🐊</string>
+    <string name="undead_dragon_icon">🐉</string>
+    <string name="fire_icon">🔥</string>
+    <string name="ice_icon">🌊</string>
+    <string name="acid_icon">🥗</string>
 </resources>

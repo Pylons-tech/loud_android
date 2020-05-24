@@ -209,9 +209,7 @@ class GameScreenActivity : AppCompatActivity(),
                     nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
                 }
                 LocationConstants.SETTINGS -> {
-                    val intent = Intent(this, LoginActivity::class.java)
-                    startActivity(intent)
-                    finish()
+                    nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
                 }
                 else -> {
                     Log.warning("Not exist")

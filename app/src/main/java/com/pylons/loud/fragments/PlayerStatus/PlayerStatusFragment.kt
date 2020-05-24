@@ -5,12 +5,16 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Character.ACID_SPECIAL
+import com.pylons.loud.constants.Character.FIRE_SPECIAL
+import com.pylons.loud.constants.Character.ICE_SPECIAL
 import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
@@ -56,9 +60,55 @@ class PlayerStatusFragment : Fragment() {
                 text_active_character_name.text = activeCharacter.name
                 text_active_character_level.text = activeCharacter.level.toString()
                 text_active_character_xp.text = activeCharacter.xp.toString()
+                text_character_icon.text =
+                    when (activeCharacter.special) {
+                        FIRE_SPECIAL -> getString(R.string.fire_icon)
+                        ICE_SPECIAL -> getString(R.string.ice_icon)
+                        ACID_SPECIAL -> getString(R.string.acid_icon)
+                        else -> getString(R.string.character_icon)
+                    }
+
+                layout_active_character_badges.removeAllViews()
+                var addedBadge = false
+                if (activeCharacter.undeadDragonKill > 0) {
+                    val text = TextView(context)
+                    text.text =
+                        "${getString(R.string.undead_dragon_icon)} x${activeCharacter.undeadDragonKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (activeCharacter.specialDragonKill > 0) {
+                    val icon = when (activeCharacter.special) {
+                        FIRE_SPECIAL -> getString(R.string.fire_dragon_icon)
+                        ICE_SPECIAL -> getString(R.string.ice_dragon_icon)
+                        ACID_SPECIAL -> getString(R.string.acid_dragon_icon)
+                        else -> ""
+                    }
+                    val text = TextView(context)
+                    text.text = "$icon x${activeCharacter.specialDragonKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (activeCharacter.giantKill > 0) {
+                    val text = TextView(context)
+                    text.text = "${getString(R.string.giant_icon)} x${activeCharacter.giantKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (addedBadge) {
+                    layout_active_character_badges.visibility = View.VISIBLE
+                } else {
+                    layout_active_character_badges.visibility = View.GONE
+                }
+
                 layout_active_character_details.visibility = View.VISIBLE
             } else {
                 layout_active_character_details.visibility = View.INVISIBLE
+                layout_active_character_badges.removeAllViews()
+                layout_active_character_badges.visibility = View.GONE
             }
 
             val activeWeapon = player.getActiveWeapon()

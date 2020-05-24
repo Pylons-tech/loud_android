@@ -30,4 +30,9 @@
         android:name="com.pylons.loud.fragments.InventoryScreen.InventoryScreenFragment"
         android:label="fragment_inventory"
         tools:layout="@layout/fragment_inventory" />
+    <fragment
+        android:id="@+id/settingsScreenFragment"
+        android:name="com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment"
+        android:label="fragment_settings_screen"
+        tools:layout="@layout/fragment_settings_screen" />
 </navigation>

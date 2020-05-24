@@ -105,7 +105,7 @@ class ShopScreenFragment : Fragment() {
             text_upgrade.setOnClickListener {
                 val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
                 val adapter = MyItemRecyclerViewAdapter(
-                    player.weapons.filter { it.level == 1L },
+                    player.weapons.filter { it.level == 1L && it.getUpgradePrice() > -1 },
                     frag.getListener(),
                     4
                 )
@@ -134,7 +134,7 @@ class ShopScreenFragment : Fragment() {
                         childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
                     val adapter =
                         MyItemRecyclerViewAdapter(
-                            player.weapons.filter { it.level == 1L },
+                            player.weapons.filter { it.level == 1L && it.getUpgradePrice() > -1 },
                             frag.getListener(),
                             mode
                         )
