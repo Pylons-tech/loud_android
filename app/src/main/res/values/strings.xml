@@ -94,4 +94,6 @@
     <string name="loading_buy_shop_item">You are buying %1$s at the shop</string>
     <string name="loading_sell_shop_item">You are selling %1$s for %2$s</string>
     <string name="loading_upgrade_shop_item">You are upgrading %1$s</string>
+    <string name="loading_buy_gold_with_pylon">Spending %1$d pylons for %2$d gold</string>
+    <string name="bought_gold_with_pylons">Bought %1$d gold with %2$d pylons</string>
 </resources>

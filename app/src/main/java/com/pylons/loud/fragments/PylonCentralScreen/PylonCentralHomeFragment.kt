@@ -1,22 +1,21 @@
 package com.pylons.loud.fragments.PylonCentralScreen
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
-import com.pylons.loud.constants.Recipe.RCP_BUY_GOLD_WITH_PYLON
 import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
 
 /**
  * A simple [Fragment] subclass.
  */
 class PylonCentralHomeFragment : Fragment() {
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,11 +33,27 @@ class PylonCentralHomeFragment : Fragment() {
         }
 
         text_buy_5000_with_100_pylons.setOnClickListener {
-            val model: GameScreenActivity.SharedViewModel by activityViewModels()
-            model.setPlayerAction(RCP_BUY_GOLD_WITH_PYLON)
-            // TODO("Need to display response message")
+            listener?.onBuyGoldWithPylons()
         }
 
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onBuyGoldWithPylons()
     }
 
 }

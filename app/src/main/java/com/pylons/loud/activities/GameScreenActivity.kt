@@ -42,6 +42,7 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_ANGEL_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_BRONZE_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_CHARACTER
 import com.pylons.loud.constants.Recipe.RCP_BUY_COPPER_SWORD
+import com.pylons.loud.constants.Recipe.RCP_BUY_GOLD_WITH_PYLON
 import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
@@ -53,6 +54,7 @@ import com.pylons.loud.fragments.Fight.FightFragment
 import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
+import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
 import com.pylons.loud.models.*
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
@@ -72,7 +74,8 @@ class GameScreenActivity : AppCompatActivity(),
     FightFragment.OnListFragmentInteractionListener,
     ItemFragment.OnListFragmentInteractionListener,
     CharacterFragment.OnListFragmentInteractionListener,
-    ForestFightPreviewFragment.OnFragmentInteractionListener {
+    ForestFightPreviewFragment.OnFragmentInteractionListener,
+    PylonCentralHomeFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -619,6 +622,23 @@ class GameScreenActivity : AppCompatActivity(),
                     loading.dismiss()
                     displayMessage(this@GameScreenActivity, prompt)
                 }
+            }
+        }
+    }
+
+    override fun onBuyGoldWithPylons() {
+        val loading =
+            displayLoading(this, getString(R.string.loading_buy_gold_with_pylon, 100, 5000))
+        CoroutineScope(IO).launch {
+            val tx = executeRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    getString(R.string.bought_gold_with_pylons, 5000, 100)
+                )
             }
         }
     }
