@@ -3,7 +3,6 @@ package com.pylons.loud.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -55,6 +54,8 @@ import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.utils.UI.displayLoading
+import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
 import com.squareup.moshi.JsonAdapter
@@ -149,18 +150,14 @@ class GameScreenActivity : AppCompatActivity(),
 
             val player = model.getPlayer().value
             if (player != null) {
-                layout_loading.visibility = View.VISIBLE
+                val loading = displayLoading(this, "Loading...")
                 CoroutineScope(IO).launch {
                     val tx = executeRecipe(it, arrayOf())
                     syncProfile()
 
                     withContext(Main) {
-                        layout_loading.visibility = View.INVISIBLE
-                        Toast.makeText(
-                            this@GameScreenActivity,
-                            "Success: $it",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        loading.dismiss()
+                        displayMessage(this@GameScreenActivity, "Success: $it")
                     }
                 }
             }
@@ -320,7 +317,13 @@ class GameScreenActivity : AppCompatActivity(),
                     return@setPositiveButton
                 }
 
-                layout_loading.visibility = View.VISIBLE
+                val loading = displayLoading(
+                    this,
+                    getString(
+                        R.string.loading_buy_shop_item,
+                        item.name
+                    )
+                )
 
                 CoroutineScope(IO).launch {
                     val tx = executeRecipe(recipeId, itemIds.toTypedArray())
@@ -329,12 +332,11 @@ class GameScreenActivity : AppCompatActivity(),
                     Log.info(tx.toString())
 
                     withContext(Main) {
-                        layout_loading.visibility = View.INVISIBLE
-                        Toast.makeText(
+                        loading.dismiss()
+                        displayMessage(
                             this@GameScreenActivity,
-                            getString(R.string.you_have_bought_from_shop, name),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                            getString(R.string.you_have_bought_from_shop, name)
+                        )
                     }
                 }
             }
@@ -355,7 +357,15 @@ class GameScreenActivity : AppCompatActivity(),
             dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
                 .setCancelable(false)
                 .setPositiveButton("Sell") { _, _ ->
-                    layout_loading.visibility = View.VISIBLE
+
+                    val loading = displayLoading(
+                        this,
+                        getString(
+                            R.string.loading_sell_shop_item,
+                            item.name,
+                            "${getString(R.string.gold_icon)} ${item.getSellPriceRange()}"
+                        )
+                    )
 
                     CoroutineScope(IO).launch {
                         val tx = executeRecipe(RCP_SELL_SWORD, arrayOf(item.id))
@@ -373,12 +383,11 @@ class GameScreenActivity : AppCompatActivity(),
                         }
 
                         withContext(Main) {
-                            Toast.makeText(
+                            loading.dismiss()
+                            displayMessage(
                                 this@GameScreenActivity,
-                                getString(R.string.you_sold_item_for_gold, name, amount),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            layout_loading.visibility = View.INVISIBLE
+                                getString(R.string.you_sold_item_for_gold, name, amount)
+                            )
                         }
                     }
                 }
@@ -408,8 +417,11 @@ class GameScreenActivity : AppCompatActivity(),
                             else -> ""
                         }
 
-                        layout_loading.visibility = View.VISIBLE
-
+                        val loading =
+                            displayLoading(
+                                this,
+                                getString(R.string.loading_upgrade_shop_item, item.name)
+                            )
                         CoroutineScope(IO).launch {
                             val tx = executeRecipe(recipeId, arrayOf(item.id))
                             syncProfile()
@@ -417,12 +429,11 @@ class GameScreenActivity : AppCompatActivity(),
                             Log.info(tx.toString())
 
                             withContext(Main) {
-                                layout_loading.visibility = View.INVISIBLE
-                                Toast.makeText(
+                                loading.dismiss()
+                                displayMessage(
                                     this@GameScreenActivity,
-                                    getString(R.string.you_have_upgraded_item, name),
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    getString(R.string.you_have_upgraded_item, name)
+                                )
                             }
                         }
                     }
@@ -434,11 +445,7 @@ class GameScreenActivity : AppCompatActivity(),
                 alert.setTitle("Confirm")
                 alert.show()
             } else {
-                Toast.makeText(
-                    this,
-                    getString(R.string.you_dont_have_enough_gold_to_upgrade, name),
-                    Toast.LENGTH_SHORT
-                ).show()
+                displayMessage(this, getString(R.string.you_dont_have_enough_gold_to_upgrade, name))
             }
         }
 
@@ -524,17 +531,20 @@ class GameScreenActivity : AppCompatActivity(),
             dialogBuilder.setMessage("Buy $name for $pylonIcon $price?")
                 .setCancelable(false)
                 .setPositiveButton("Proceed") { _, _ ->
-                    layout_loading.visibility = View.VISIBLE
+                    val loading =
+                        displayLoading(this, getString(R.string.loading_buy_character, name))
                     CoroutineScope(IO).launch {
                         val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
                         syncProfile()
                         withContext(Main) {
-                            layout_loading.visibility = View.INVISIBLE
-                            Toast.makeText(
-                                this@GameScreenActivity,
-                                getString(R.string.you_have_bought_from_pylons_central, name),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            loading.dismiss()
+                            displayMessage(
+                                this@GameScreenActivity, getString(
+                                    R.string.you_have_bought_from_pylons_central,
+                                    name
+                                )
+                            )
+
                         }
                     }
 
@@ -558,8 +568,17 @@ class GameScreenActivity : AppCompatActivity(),
 
         val player = model.getPlayer().value
         if (player != null) {
-            layout_loading.visibility = View.VISIBLE
             val currentCharacterName = player.getActiveCharacter()?.name
+            val currentCharacterLevel = player.getActiveCharacter()?.level
+            val loading = displayLoading(
+                this,
+                getString(
+                    R.string.loading_fight,
+                    fight.name,
+                    currentCharacterName,
+                    currentCharacterLevel
+                )
+            )
 
             CoroutineScope(IO).launch {
                 val tx = executeRecipe(recipeId, itemIds)
@@ -570,7 +589,8 @@ class GameScreenActivity : AppCompatActivity(),
                 if (tx != null) {
                     val output = tx.txData.output
                     if (output.isEmpty()) {
-                        prompt = getString(R.string.you_were_killed, currentCharacterName, fight.name)
+                        prompt =
+                            getString(R.string.you_were_killed, currentCharacterName, fight.name)
                         nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
                     } else {
                         prompt = getString(
@@ -583,7 +603,8 @@ class GameScreenActivity : AppCompatActivity(),
                                 // Rabbit does not use weapon
                                 if (fight.id != ID_RABBIT) {
                                     prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
-                                    nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
+                                    nav_host_fragment.findNavController()
+                                        .navigate(R.id.forestScreenFragment)
                                 }
                             }
                             4 -> prompt += "\n ${getString(
@@ -595,17 +616,8 @@ class GameScreenActivity : AppCompatActivity(),
                 }
 
                 withContext(Main) {
-                    layout_loading.visibility = View.INVISIBLE
-                    val dialogBuilder =
-                        AlertDialog.Builder(this@GameScreenActivity, R.style.MyDialogTheme)
-                    dialogBuilder.setMessage(
-                        prompt
-                    )
-                        .setCancelable(false)
-                        .setPositiveButton("OK") { _, _ ->
-                        }
-                    val alert = dialogBuilder.create()
-                    alert.show()
+                    loading.dismiss()
+                    displayMessage(this@GameScreenActivity, prompt)
                 }
             }
         }

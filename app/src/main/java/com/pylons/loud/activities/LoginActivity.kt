@@ -3,12 +3,12 @@ package com.pylons.loud.activities
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.pylons.loud.R
 import com.pylons.loud.models.User
 import com.pylons.loud.utils.CoreController
+import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.wallet.core.Core
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             button_continue.isEnabled = false
-            layout_loading.visibility = View.VISIBLE
+            displayLoading(this, getString(R.string.loading_account))
             setAccount(username)
         }
     }
@@ -122,7 +122,7 @@ class LoginActivity : AppCompatActivity() {
                 profile = Core.engine.getOwnBalances()
             }
 
-            if (currentPlayer != null && profile != null) {
+            if (profile != null) {
                 currentPlayer.syncProfile(profile)
                 save(currentPlayer)
             }
