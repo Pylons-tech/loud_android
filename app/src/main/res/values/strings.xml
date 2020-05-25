@@ -95,5 +95,7 @@
     <string name="loading_sell_shop_item">You are selling %1$s for %2$s</string>
     <string name="loading_upgrade_shop_item">You are upgrading %1$s</string>
     <string name="loading_buy_gold_with_pylon">Spending %1$d pylons for %2$d gold</string>
+    <string name="loading_get_dev_items">Getting dev test items from pylon</string>
     <string name="bought_gold_with_pylons">Bought %1$d gold with %2$d pylons</string>
+    <string name="got_dev_items">Finished getting developer test items:\n\nWolf tail\nTroll toes\nGoblin ear\nFire scale\nIcy shards\nPosion claws\nRuppell\'s Fox\nGentoo penguin\nColorado River toad</string>
 </resources>

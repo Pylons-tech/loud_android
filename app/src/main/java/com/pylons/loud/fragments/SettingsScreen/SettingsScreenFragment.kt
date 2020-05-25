@@ -1,5 +1,6 @@
 package com.pylons.loud.fragments.SettingsScreen
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.fragment_settings_screen.*
  * A simple [Fragment] subclass.
  */
 class SettingsScreenFragment : Fragment() {
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +42,20 @@ class SettingsScreenFragment : Fragment() {
         }
 
         text_get_dev_items.setOnClickListener {
-            model.setPlayerAction(RCP_GET_TEST_ITEMS)
+            listener?.onGetDevItems()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onGetDevItems()
     }
 }

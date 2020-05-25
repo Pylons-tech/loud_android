@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -47,6 +46,7 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
 import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_GET_TEST_ITEMS
 import com.pylons.loud.constants.Recipe.RCP_SELL_SWORD
 import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPG
 import com.pylons.loud.fragments.Character.CharacterFragment
@@ -55,6 +55,7 @@ import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
+import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
 import com.pylons.loud.models.*
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
@@ -75,14 +76,14 @@ class GameScreenActivity : AppCompatActivity(),
     ItemFragment.OnListFragmentInteractionListener,
     CharacterFragment.OnListFragmentInteractionListener,
     ForestFightPreviewFragment.OnFragmentInteractionListener,
-    PylonCentralHomeFragment.OnFragmentInteractionListener {
+    PylonCentralHomeFragment.OnFragmentInteractionListener,
+    SettingsScreenFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
         private val playerLocation = MutableLiveData<Int>()
         lateinit var fightPreview: Fight
-        private val playerAction = MutableLiveData<String>()
         var shopAction = 0
 
         fun getPlayer(): LiveData<User> {
@@ -99,14 +100,6 @@ class GameScreenActivity : AppCompatActivity(),
 
         fun setPlayerLocation(location: Int) {
             playerLocation.value = location
-        }
-
-        fun getPlayerAction(): LiveData<String> {
-            return playerAction
-        }
-
-        fun setPlayerAction(action: String) {
-            playerAction.value = action
         }
     }
 
@@ -147,24 +140,6 @@ class GameScreenActivity : AppCompatActivity(),
             val model: SharedViewModel by viewModels()
             model.setPlayer(currentPlayer)
         }
-
-        model.getPlayerAction().observe(this, Observer<String> {
-            Log.info(it)
-
-            val player = model.getPlayer().value
-            if (player != null) {
-                val loading = displayLoading(this, "Loading...")
-                CoroutineScope(IO).launch {
-                    val tx = executeRecipe(it, arrayOf())
-                    syncProfile()
-
-                    withContext(Main) {
-                        loading.dismiss()
-                        displayMessage(this@GameScreenActivity, "Success: $it")
-                    }
-                }
-            }
-        })
     }
 
     override fun onFight(fight: Fight?) {
@@ -638,6 +613,23 @@ class GameScreenActivity : AppCompatActivity(),
                 displayMessage(
                     this@GameScreenActivity,
                     getString(R.string.bought_gold_with_pylons, 5000, 100)
+                )
+            }
+        }
+    }
+
+    override fun onGetDevItems() {
+        val loading =
+            displayLoading(this, getString(R.string.loading_get_dev_items))
+        CoroutineScope(IO).launch {
+            val tx = executeRecipe(RCP_GET_TEST_ITEMS, arrayOf())
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    getString(R.string.got_dev_items)
                 )
             }
         }
