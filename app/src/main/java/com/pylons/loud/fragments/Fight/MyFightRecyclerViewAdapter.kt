@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_fight.view.*
 /**
  * [RecyclerView.Adapter] that can display a [Fight] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyFightRecyclerViewAdapter(
     private val mValues: List<Fight>,

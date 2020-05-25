@@ -19,7 +19,6 @@ import com.pylons.loud.models.Item
  * [ItemFragment.OnListFragmentInteractionListener] interface.
  */
 class ItemFragment : Fragment() {
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
@@ -89,10 +88,8 @@ class ItemFragment : Fragment() {
 
     companion object {
 
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             ItemFragment().apply {

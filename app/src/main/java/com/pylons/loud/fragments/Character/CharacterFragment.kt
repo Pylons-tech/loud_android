@@ -19,7 +19,6 @@ import com.pylons.loud.models.Character
  * [CharacterFragment.OnListFragmentInteractionListener] interface.
  */
 class CharacterFragment : Fragment() {
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null

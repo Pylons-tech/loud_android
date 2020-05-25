@@ -19,7 +19,6 @@ import java.util.logging.Logger
 /**
  * [RecyclerView.Adapter] that can display a [Character] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyCharacterRecyclerViewAdapter(
     private val mValues: List<Character>,

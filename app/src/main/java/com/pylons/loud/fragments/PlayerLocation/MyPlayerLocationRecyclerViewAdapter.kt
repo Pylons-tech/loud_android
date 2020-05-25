@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.fragment_player_location.view.*
 /**
  * [RecyclerView.Adapter] that can display a [PlayerLocation] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyPlayerLocationRecyclerViewAdapter(
     private val mValues: List<PlayerLocation>,

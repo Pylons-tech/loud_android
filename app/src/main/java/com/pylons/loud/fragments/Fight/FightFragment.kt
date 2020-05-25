@@ -18,8 +18,6 @@ import com.pylons.loud.models.Fight
  * [FightFragment.OnListFragmentInteractionListener] interface.
  */
 class FightFragment : Fragment() {
-
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null

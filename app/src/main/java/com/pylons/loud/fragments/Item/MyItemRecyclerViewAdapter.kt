@@ -19,7 +19,6 @@ import java.util.logging.Logger
 /**
  * [RecyclerView.Adapter] that can display a [Item] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
     private val mValues: List<Item>,
