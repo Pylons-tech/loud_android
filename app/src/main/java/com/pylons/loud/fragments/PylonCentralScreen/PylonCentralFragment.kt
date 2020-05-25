@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Location.PYLONS_CENTRAL
 import java.util.logging.Logger
 
 /**
@@ -29,6 +30,6 @@ class PylonCentralFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.setPlayerLocation(3)
+        model.setPlayerLocation(PYLONS_CENTRAL)
     }
 }

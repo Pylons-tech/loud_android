@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Location.HOME
 import com.pylons.loud.models.User
 import com.pylons.loud.utils.RenderText.getHomeDesc
 import kotlinx.android.synthetic.main.fragment_home_screen.*
@@ -30,7 +31,7 @@ class HomeScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.setPlayerLocation(0)
+        model.setPlayerLocation(HOME)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_home_screen.setText(getHomeDesc(player))
         })

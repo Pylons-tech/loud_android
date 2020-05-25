@@ -6,64 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".fragments.ShopScreen.ShopScreenFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <fragment
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView
-            android:id="@+id/text_shop"
-            android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_margin="@dimen/text_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/text_buy"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/buy_items"
-            android:textAppearance="?attr/textAppearanceListItem"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_shop"></TextView>
-
-        <TextView
-            android:id="@+id/text_sell"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/sell_items"
-            android:textAppearance="?attr/textAppearanceListItem"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_buy"></TextView>
-
-        <TextView
-            android:id="@+id/text_upgrade"
-            android:layout_width="0dp"
-            android:layout_height="32dp"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/upgrade_items"
-            android:textAppearance="?attr/textAppearanceListItem"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_sell"></TextView>
-
-        <fragment
-            android:id="@+id/fragment_item"
-            android:name="com.pylons.loud.fragments.Item.ItemFragment"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginTop="32dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/text_upgrade" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
+        android:layout_height="match_parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph_shop" />
 
 </FrameLayout>

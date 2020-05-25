@@ -16,6 +16,10 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
 import com.pylons.loud.constants.FightId.ID_RABBIT
+import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
+import com.pylons.loud.constants.FightRequirements.FIRE_SPECIAL
+import com.pylons.loud.constants.FightRequirements.ICE_SPECIAL
+import com.pylons.loud.constants.FightRequirements.NO_SPECIAL
 import com.pylons.loud.constants.Item.COPPER_SWORD
 import com.pylons.loud.constants.Item.DROP_DRAGONACID
 import com.pylons.loud.constants.Item.DROP_DRAGONFIRE
@@ -30,7 +34,11 @@ import com.pylons.loud.constants.ItemID.ID_COPPER_SWORD
 import com.pylons.loud.constants.ItemID.ID_IRON_SWORD
 import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
 import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
-import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.HOME
+import com.pylons.loud.constants.Location.PYLONS_CENTRAL
+import com.pylons.loud.constants.Location.SETTINGS
+import com.pylons.loud.constants.Location.SHOP
 import com.pylons.loud.constants.Recipe.RCP_BUY_ANGEL_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_BRONZE_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_CHARACTER
@@ -69,8 +77,9 @@ class GameScreenActivity : AppCompatActivity(),
     class SharedViewModel : ViewModel() {
         private val player = MutableLiveData<User>()
         private val playerLocation = MutableLiveData<Int>()
-        private val fightPreview = MutableLiveData<Fight>()
+        lateinit var fightPreview: Fight
         private val playerAction = MutableLiveData<String>()
+        var shopAction = 0
 
         fun getPlayer(): LiveData<User> {
             return player
@@ -86,14 +95,6 @@ class GameScreenActivity : AppCompatActivity(),
 
         fun setPlayerLocation(location: Int) {
             playerLocation.value = location
-        }
-
-        fun getFightPreview(): LiveData<Fight> {
-            return fightPreview
-        }
-
-        fun setFightPreview(fight: Fight) {
-            fightPreview.value = fight
         }
 
         fun getPlayerAction(): LiveData<String> {
@@ -170,15 +171,20 @@ class GameScreenActivity : AppCompatActivity(),
         if (fight != null) {
             model.getPlayer().value?.let {
                 if (fight.meetsRequirements(it)) {
+                    model.fightPreview = fight
                     val frag =
                         supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                     frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
                         .navigate(R.id.forestFightPreviewFragment)
-                    model.setFightPreview(fight)
                 } else {
+                    var prompt = "Need ${fight.requirements.joinToString(", ")}"
+                    prompt = prompt.replace(NO_SPECIAL, "non-special character")
+                    prompt = prompt.replace(FIRE_SPECIAL, "fire character")
+                    prompt = prompt.replace(ICE_SPECIAL, "ice character")
+                    prompt = prompt.replace(ACID_SPECIAL, "acid character")
                     Toast.makeText(
                         this,
-                        "Need ${fight.requirements.toString()}",
+                        prompt,
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -189,10 +195,10 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onLocation(location: PlayerLocation?) {
         if (location != null) {
             when (location.id) {
-                LocationConstants.HOME -> {
+                HOME -> {
                     nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
                 }
-                LocationConstants.FOREST -> {
+                FOREST -> {
                     if (model.getPlayer().value?.activeCharacter == -1) {
                         Toast.makeText(
                             this,
@@ -202,13 +208,13 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                     nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
                 }
-                LocationConstants.SHOP -> {
+                SHOP -> {
                     nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
                 }
-                LocationConstants.PYLONS_CENTRAL -> {
+                PYLONS_CENTRAL -> {
                     nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
                 }
-                LocationConstants.SETTINGS -> {
+                SETTINGS -> {
                     nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
                 }
                 else -> {
@@ -256,8 +262,14 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value ?: return
 
         Log.info(item.toString())
+
+        var prompt = "Buy $name for $goldIcon $price"
+        if (item.preItem.isNotEmpty()) {
+            val preItems = item.preItem.joinToString(", ")
+            prompt += " and $preItems"
+        }
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-        dialogBuilder.setMessage("Buy $name for $goldIcon $price?")
+        dialogBuilder.setMessage("$prompt?")
             .setCancelable(false)
             .setPositiveButton("Buy") { _, _ ->
                 val itemIds = mutableListOf<String>()
@@ -340,7 +352,7 @@ class GameScreenActivity : AppCompatActivity(),
         if (player != null && item != null) {
             val name = item.name
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-            dialogBuilder.setMessage("Sell $name?")
+            dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
                 .setCancelable(false)
                 .setPositiveButton("Sell") { _, _ ->
                     layout_loading.visibility = View.VISIBLE
@@ -469,10 +481,10 @@ class GameScreenActivity : AppCompatActivity(),
             itemIds
         )
         tx.submit()
-        delay(5000)
         Log.info(tx.toString())
         Log.info(tx.id)
 
+        // TODO("Remove delay, walletcore should handle it")
         delay(5000)
         val txId = tx.id
         if (txId != null) {
@@ -547,6 +559,7 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
         if (player != null) {
             layout_loading.visibility = View.VISIBLE
+            val currentCharacterName = player.getActiveCharacter()?.name
 
             CoroutineScope(IO).launch {
                 val tx = executeRecipe(recipeId, itemIds)
@@ -557,7 +570,8 @@ class GameScreenActivity : AppCompatActivity(),
                 if (tx != null) {
                     val output = tx.txData.output
                     if (output.isEmpty()) {
-                        prompt = getString(R.string.you_were_killed, fight.name)
+                        prompt = getString(R.string.you_were_killed, currentCharacterName, fight.name)
+                        nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
                     } else {
                         prompt = getString(
                             R.string.you_did_fight_with_and_earned, fight.name,
@@ -569,6 +583,7 @@ class GameScreenActivity : AppCompatActivity(),
                                 // Rabbit does not use weapon
                                 if (fight.id != ID_RABBIT) {
                                     prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
+                                    nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
                                 }
                             }
                             4 -> prompt += "\n ${getString(

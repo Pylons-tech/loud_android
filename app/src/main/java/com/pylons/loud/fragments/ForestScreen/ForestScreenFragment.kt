@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Location.FOREST
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +27,6 @@ class ForestScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        model.setPlayerLocation(1)
+        model.setPlayerLocation(FOREST)
     }
 }

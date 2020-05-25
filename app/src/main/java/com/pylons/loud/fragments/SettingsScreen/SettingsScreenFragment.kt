@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.activities.LoginActivity
+import com.pylons.loud.constants.Location.SETTINGS
 import com.pylons.loud.constants.Recipe.RCP_GET_TEST_ITEMS
 import kotlinx.android.synthetic.main.fragment_settings_screen.*
 
@@ -29,6 +30,9 @@ class SettingsScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        model.setPlayerLocation(SETTINGS)
+
         text_switch_account.setOnClickListener {
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
@@ -36,7 +40,6 @@ class SettingsScreenFragment : Fragment() {
         }
 
         text_get_dev_items.setOnClickListener {
-            val model: GameScreenActivity.SharedViewModel by activityViewModels()
             model.setPlayerAction(RCP_GET_TEST_ITEMS)
         }
     }

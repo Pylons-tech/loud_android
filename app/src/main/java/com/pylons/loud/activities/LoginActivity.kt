@@ -117,6 +117,7 @@ class LoginActivity : AppCompatActivity() {
             if (profile != null && profile.coins.isEmpty()) {
                 val tx = Core.engine.getPylons(500)
                 tx.submit()
+                // TODO("Remove delay, walletcore should handle it")
                 delay(5000)
                 profile = Core.engine.getOwnBalances()
             }

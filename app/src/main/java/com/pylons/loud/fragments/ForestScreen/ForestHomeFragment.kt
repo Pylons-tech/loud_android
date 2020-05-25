@@ -5,11 +5,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.constants.FightId.ID_ACID_DRAGON
 import com.pylons.loud.constants.FightId.ID_FIRE_DRAGON
 import com.pylons.loud.constants.FightId.ID_GIANT
@@ -47,7 +45,6 @@ class ForestHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
         val frag = childFragmentManager.findFragmentById(R.id.fragment_fight)
         val v = frag?.view as RecyclerView

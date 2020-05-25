@@ -13,7 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
-import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.HOME
+import com.pylons.loud.constants.Location.PYLONS_CENTRAL
+import com.pylons.loud.constants.Location.SETTINGS
+import com.pylons.loud.constants.Location.SHOP
 import com.pylons.loud.models.PlayerLocation
 
 /**
@@ -61,19 +65,19 @@ class PlayerLocationFragment : Fragment() {
     private fun getLocations(): List<PlayerLocation> {
         return listOf(
             PlayerLocation(
-                LocationConstants.HOME, getString(R.string.home)
+                HOME, getString(R.string.home)
             ),
             PlayerLocation(
-                LocationConstants.FOREST, getString(R.string.forest)
+                FOREST, getString(R.string.forest)
             ),
             PlayerLocation(
-                LocationConstants.SHOP, getString(R.string.shop)
+                SHOP, getString(R.string.shop)
             ),
             PlayerLocation(
-                LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central)
+                PYLONS_CENTRAL, getString(R.string.pylons_central)
             ),
             PlayerLocation(
-                LocationConstants.SETTINGS, getString(R.string.settings)
+                SETTINGS, getString(R.string.settings)
             )
         )
     }
@@ -85,10 +89,11 @@ class PlayerLocationFragment : Fragment() {
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
             val view = getView() as RecyclerView
             val adapter = view.adapter as MyPlayerLocationRecyclerViewAdapter
-            if (adapter.selectedPos != location) {
+            val index = location - 1
+            if (adapter.selectedPos != index) {
                 adapter.notifyItemChanged(adapter.selectedPos)
-                adapter.selectedPos = location
-                adapter.notifyItemChanged(location)
+                adapter.selectedPos = index
+                adapter.notifyItemChanged(index)
             }
         })
     }
