@@ -58,6 +58,7 @@ import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
 import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
@@ -569,11 +570,16 @@ class GameScreenActivity : AppCompatActivity(),
                     val output = tx.txData.output
                     if (output.isEmpty()) {
                         prompt =
-                            getString(R.string.you_were_killed, currentCharacterName, fight.name)
+                            getString(
+                                R.string.you_were_killed,
+                                currentCharacterName,
+                                "${getString(getFightIcon(fight.id))} ${fight.name}"
+                            )
                         nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
                     } else {
                         prompt = getString(
-                            R.string.you_did_fight_with_and_earned, fight.name,
+                            R.string.you_did_fight_with_and_earned,
+                            "${getString(getFightIcon(fight.id))} ${fight.name}",
                             tx.txData.output[0].amount
                         )
 

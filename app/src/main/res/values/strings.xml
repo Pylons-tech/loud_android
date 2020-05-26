@@ -52,7 +52,7 @@
     <string name="fight">Fight</string>
     <string name="you_have_bought_from_shop">You have bought %1$s from shop</string>
     <string name="you_have_bought_from_pylons_central">You have bought %1$s from Pylons Central</string>
-    <string name="you_did_fight_with_and_earned">You did fight with %1$s and earned %2$d 💰</string>
+    <string name="you_did_fight_with_and_earned">You brave hero you! You defeated the %1$s and earned %2$d 💰</string>
     <string name="you_have_lost_your_weapon">You have lost your weapon accidentally</string>
     <string name="you_got_bonus_item">You got bonus item called %1$s</string>
     <string name="you_were_killed">Well that could have gone better. %1$s is dead. Killed by the %2$s. Go back home and pick a new character unless you’re a huge baby.</string>
@@ -64,6 +64,7 @@
     <string name="setting_switch_account">Switch Account</string>
     <string name="setting_get_dev_items">Get dev test items</string>
     <string name="setting_get_pylons">Get pylons</string>
+    <string name="rabbit_icon"></string>
     <string name="goblin_icon">👺</string>
     <string name="troll_icon">👻</string>
     <string name="wolf_icon">🐺</string>
