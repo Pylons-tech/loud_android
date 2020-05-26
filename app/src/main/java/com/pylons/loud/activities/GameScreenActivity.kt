@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
+import com.pylons.loud.constants.FightId.ID_GIANT
 import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
 import com.pylons.loud.constants.FightRequirements.FIRE_SPECIAL
@@ -583,6 +584,36 @@ class GameScreenActivity : AppCompatActivity(),
                                     prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
                                     nav_host_fragment.findNavController()
                                         .navigate(R.id.forestScreenFragment)
+                                }
+                            }
+                            3 -> {
+                                if (fight.id == ID_GIANT) {
+                                    val player = model.getPlayer().value
+                                    if (player != null) {
+                                        val character = player.getActiveCharacter()
+                                        if (character != null && character.special != NO_SPECIAL.toLong()) {
+                                            val special = when (character.special) {
+                                                1L -> getString(R.string.fire_icon)
+                                                2L -> getString(R.string.ice_icon)
+                                                3L -> getString(R.string.acid_icon)
+                                                else -> ""
+                                            }
+                                            val dragon = when (character.special) {
+                                                1L -> getString(R.string.fire_dragon)
+                                                2L -> getString(R.string.ice_dragon)
+                                                3L -> getString(R.string.acid_dragon)
+                                                else -> ""
+                                            }
+                                            prompt += "\n${getString(
+                                                R.string.fight_giant_special,
+                                                special,
+                                                dragon
+                                            )}"
+
+                                            nav_host_fragment.findNavController()
+                                                .navigate(R.id.forestScreenFragment)
+                                        }
+                                    }
                                 }
                             }
                             4 -> prompt += "\n ${getString(
