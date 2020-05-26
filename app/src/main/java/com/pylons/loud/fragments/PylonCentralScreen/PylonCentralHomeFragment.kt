@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
+import kotlinx.android.synthetic.main.fragment_settings_screen.*
 
 /**
  * A simple [Fragment] subclass.

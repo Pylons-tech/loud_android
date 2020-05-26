@@ -25,6 +25,14 @@
             android:layout_margin="@dimen/text_margin"
             android:text="@string/setting_get_dev_items"
             android:textAppearance="?attr/textAppearanceListItem" />
+
+        <TextView
+            android:id="@+id/text_get_pylons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@string/setting_get_pylons"
+            android:textAppearance="?attr/textAppearanceListItem" />
     </LinearLayout>
 
 </FrameLayout>

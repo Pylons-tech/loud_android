@@ -45,7 +45,7 @@
     <string name="weapon_icon">🗡️</string>
     <string name="character_icon">🦘</string>
     <string name="health_icon">🔶</string>
-    <string name="login_desc">Who are you?</string>
+    <string name="login_desc">Who challenges me?</string>
     <string name="login_button_text">Continue</string>
     <string name="login_no_username_text">Enter valid username</string>
     <string name="buy_character_desc">Summon a hero. We got a whole lot of chosen ones back here.</string>
@@ -63,6 +63,7 @@
     <string name="you_dont_have_enough_resources">You don\'t have enough resources</string>
     <string name="setting_switch_account">Switch Account</string>
     <string name="setting_get_dev_items">Get dev test items</string>
+    <string name="setting_get_pylons">Get pylons</string>
     <string name="goblin_icon">👺</string>
     <string name="troll_icon">👻</string>
     <string name="wolf_icon">🐺</string>
@@ -88,7 +89,7 @@
     <string name="shop_no_sell_description">No items to sell. Go fight to get some.</string>
     <string name="shop_upgrade_description">Two words. Up. Grade. Make your stuff more awesome.</string>
     <string name="shop_no_upgrade_description">No items to upgrade. Go buy some!</string>
-    <string name="loading_account">Walking into the dark</string>
+    <string name="loading_account">%1$s eh! Good luck. </string>
     <string name="loading_buy_character">You are buying %1$s at the pylons central</string>
     <string name="loading_fight">You are bravely laying into the %1$s with your %2$s level %3$d. Exciting!</string>
     <string name="loading_buy_shop_item">You are buying %1$s at the shop</string>
@@ -96,6 +97,10 @@
     <string name="loading_upgrade_shop_item">You are upgrading %1$s</string>
     <string name="loading_buy_gold_with_pylon">Spending %1$d pylons for %2$d gold</string>
     <string name="loading_get_dev_items">Getting dev test items from pylon</string>
+    <string name="loading_get_pylons">Getting pylons for you</string>
     <string name="bought_gold_with_pylons">Bought %1$d gold with %2$d pylons</string>
     <string name="got_dev_items">Finished getting developer test items:\n\nWolf tail\nTroll toes\nGoblin ear\nFire scale\nIcy shards\nPosion claws\nRuppell\'s Fox\nGentoo penguin\nColorado River toad</string>
+    <string name="got_pylons">Got you some pylons!</string>
+    <string name="not_enough_pylons">Not enough pylons</string>
+    <string name="confirm_buy_gold_with_pylons">Are you sure you want to spend %1$d pylons for %2$d gold?</string>
 </resources>

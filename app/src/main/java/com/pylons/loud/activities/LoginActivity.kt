@@ -37,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             button_continue.isEnabled = false
-            displayLoading(this, getString(R.string.loading_account))
+            displayLoading(this, getString(R.string.loading_account, username))
             setAccount(username)
         }
     }

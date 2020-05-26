@@ -602,18 +602,47 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onBuyGoldWithPylons() {
-        val loading =
-            displayLoading(this, getString(R.string.loading_buy_gold_with_pylon, 100, 5000))
-        CoroutineScope(IO).launch {
-            val tx = executeRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
-            syncProfile()
-
-            withContext(Main) {
-                loading.dismiss()
-                displayMessage(
-                    this@GameScreenActivity,
-                    getString(R.string.bought_gold_with_pylons, 5000, 100)
+        val player = model.getPlayer().value
+        if (player != null) {
+            if (player.pylonAmount < 100) {
+                Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_LONG)
+                    .show()
+            } else {
+                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                dialogBuilder.setMessage(
+                    getString(
+                        R.string.confirm_buy_gold_with_pylons,
+                        100,
+                        5000
+                    )
                 )
+                    .setCancelable(false)
+                    .setPositiveButton("Proceed") { _, _ ->
+                        val loading =
+                            displayLoading(
+                                this,
+                                getString(R.string.loading_buy_gold_with_pylon, 100, 5000)
+                            )
+                        CoroutineScope(IO).launch {
+                            val tx = executeRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
+                            syncProfile()
+
+                            withContext(Main) {
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    getString(R.string.bought_gold_with_pylons, 5000, 100)
+                                )
+                            }
+                        }
+                    }
+                    .setNegativeButton("Cancel") { dialog, _ ->
+                        dialog.cancel()
+                    }
+
+                val alert = dialogBuilder.create()
+                alert.setTitle("Confirm")
+                alert.show()
             }
         }
     }
@@ -630,6 +659,27 @@ class GameScreenActivity : AppCompatActivity(),
                 displayMessage(
                     this@GameScreenActivity,
                     getString(R.string.got_dev_items)
+                )
+            }
+        }
+    }
+
+    override fun onGetPylons() {
+        val loading =
+            displayLoading(this, getString(R.string.loading_get_pylons))
+        CoroutineScope(IO).launch {
+            val tx = Core.engine.getPylons(500)
+            tx.submit()
+            Log.info(tx.id)
+            // TODO("Remove delay, walletcore should handle it")
+            delay(5000)
+
+            syncProfile()
+            withContext(Main) {
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    getString(R.string.got_pylons)
                 )
             }
         }

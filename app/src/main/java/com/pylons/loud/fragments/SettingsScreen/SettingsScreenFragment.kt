@@ -44,6 +44,10 @@ class SettingsScreenFragment : Fragment() {
         text_get_dev_items.setOnClickListener {
             listener?.onGetDevItems()
         }
+
+        text_get_pylons.setOnClickListener {
+            listener?.onGetPylons()
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -57,5 +61,6 @@ class SettingsScreenFragment : Fragment() {
 
     interface OnFragmentInteractionListener {
         fun onGetDevItems()
+        fun onGetPylons()
     }
 }
