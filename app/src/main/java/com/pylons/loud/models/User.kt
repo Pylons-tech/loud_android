@@ -61,6 +61,25 @@ data class User(
         }?.name ?: ""
     }
 
+    fun saveSync(context: Context) {
+        val player = this
+        with(context) {
+            val sharedPref = getSharedPreferences(
+                getString(R.string.preference_file_account), Context.MODE_PRIVATE
+            )
+
+            val moshi = Moshi.Builder().build()
+            val jsonAdapter: JsonAdapter<User> =
+                moshi.adapter<User>(User::class.java)
+            val json = jsonAdapter.toJson(player)
+
+            with(sharedPref.edit()) {
+                putString(player.name, json)
+                commit()
+            }
+        }
+    }
+
     fun saveAsync(context: Context) {
         val player = this
         with(context) {

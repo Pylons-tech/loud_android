@@ -13,7 +13,7 @@ import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.activities.LoginActivity
 import com.pylons.loud.constants.Location.SETTINGS
-import com.pylons.loud.constants.Recipe.RCP_GET_TEST_ITEMS
+import com.pylons.loud.utils.Account.setCurrentAccountUserName
 import kotlinx.android.synthetic.main.fragment_settings_screen.*
 
 /**
@@ -36,6 +36,7 @@ class SettingsScreenFragment : Fragment() {
         model.setPlayerLocation(SETTINGS)
 
         text_switch_account.setOnClickListener {
+            context?.let { it1 -> setCurrentAccountUserName(it1, "") }
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.pylons.loud.R
+import com.pylons.loud.utils.Account.getCurrentUser
+import com.pylons.loud.utils.Account.initAccount
 import com.pylons.loud.utils.CoreController
 import java.util.logging.Logger
 
@@ -18,7 +20,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val sharedPref = getSharedPreferences(getString(R.string.preference_file_account), Context.MODE_PRIVATE)
+        val sharedPrefD =
+            getSharedPreferences(getString(R.string.preference_file_default), Context.MODE_PRIVATE)
+        sharedPrefD.all.forEach {
+            Log.info(it.toString())
+        }
+
+        val sharedPref =
+            getSharedPreferences(getString(R.string.preference_file_account), Context.MODE_PRIVATE)
         sharedPref.all.forEach {
             Log.info(it.toString())
         }
@@ -32,21 +41,12 @@ class MainActivity : AppCompatActivity() {
 
         CoreController.bootstrapCore() // should actually call setUserData first
 
-        val currentUsername = sharedPref.getString(getString(R.string.key_current_account), "");
-        if (currentUsername.equals("")) {
+        val user = getCurrentUser(this)
+        if (user != null) {
+            initAccount(this, user.name)
+        } else {
             goToLogin()
-            return
         }
-
-        val playerJSON = sharedPref.getString(currentUsername, "");
-        if (playerJSON.equals("")) {
-            goToLogin()
-            return
-        }
-
-        goToLogin()
-
-//        goToGameScreen()
     }
 
     private fun goToLogin() {
@@ -54,11 +54,4 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()
     }
-
-    private fun goToGameScreen() {
-        val intent = Intent(this, GameScreenActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
 }

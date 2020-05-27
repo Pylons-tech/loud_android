@@ -1,6 +1,5 @@
 package com.pylons.loud.activities
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -58,13 +57,12 @@ import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
 import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.coroutines.*
@@ -111,36 +109,15 @@ class GameScreenActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
 
-        val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_account), Context.MODE_PRIVATE
-        )
-
-        val currentUsername = sharedPref.getString(getString(R.string.key_current_account), "");
-
-        if (currentUsername.equals("")) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
-
-        val playerJSON = sharedPref.getString(currentUsername, "");
-
-        if (playerJSON.equals("")) {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
-            finish()
-            return
-        }
-
-        val moshi = Moshi.Builder().build()
-        val jsonAdapter: JsonAdapter<User> =
-            moshi.adapter<User>(User::class.java)
-
-        val currentPlayer = jsonAdapter.fromJson(playerJSON)
+        val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
             val model: SharedViewModel by viewModels()
             model.setPlayer(currentPlayer)
+        } else {
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+            finish()
+            return
         }
     }
 
@@ -642,7 +619,7 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
         if (player != null) {
             if (player.pylonAmount < 100) {
-                Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_LONG)
+                Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
             } else {
                 val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
