@@ -106,9 +106,8 @@ object Account {
             Log.info(profile.toString())
 
             // I have keys but no account on chain
-            // No coins mean no account on chain?
             // TODO("Remove this check, walletcore should handle this once done")
-            if (profile != null && profile.coins.isEmpty()) {
+            if (profile == null) {
                 val tx = Core.engine.getPylons(500)
                 tx.submit()
                 // TODO("Remove delay, walletcore should handle it")
@@ -121,6 +120,9 @@ object Account {
                 currentPlayer.saveSync(context)
                 setCurrentAccountUserName(context, currentPlayer.name)
                 goToGame(context)
+            } else {
+                // delay not enough? rerun.
+                setupWithKeys(context, username, playerKeys)
             }
         }
     }
