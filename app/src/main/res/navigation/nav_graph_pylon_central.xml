@@ -15,4 +15,9 @@
         android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralBuyCharacterFragment"
         android:label="fragment_pylon_central_buy_character"
         tools:layout="@layout/fragment_pylon_central_buy_character" />
+    <fragment
+        android:id="@+id/pylonCentralTradeFragment"
+        android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeFragment"
+        android:label="fragment_pylon_central_trade"
+        tools:layout="@layout/fragment_pylon_central_trade" />
 </navigation>

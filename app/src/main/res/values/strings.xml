@@ -28,12 +28,6 @@
     <string name="upgrade_items">Upgrade Items</string>
     <string name="buy_characters">Buy Characters</string>
     <string name="buy_5000_with_100_pylons">Buy 💰5000 with 100 pylons</string>
-    <string name="sell_gold_from_orderbook_place_order_to_buy">Sell 💰 from orderbook / place order to buy 💰</string>
-    <string name="buy_gold_from_orderbook_place_order_to_sell"> Buy 💰 from orderbook / place order to sell 💰</string>
-    <string name="sell_weapon_from_orderbook_place_order_to_buy"> Sell 🗡️  from orderbook / place order to buy 🗡️</string>
-    <string name="buy_weapon_from_orderbook_place_order_to_sell">Buy 🗡️  from orderbook / place order to sell 🗡</string>
-    <string name="sell_character_from_orderbook_place_order_to_buy">Sell 🦘 from orderbook / place order to buy 🦘</string>
-    <string name="buy_character_from_orderbook_place_order_to_sell">Buy 🦘 from orderbook / place order to sell 🦘</string>
     <string name="you_cant_go_to_forest_without_character">You can\'t go to forest without character</string>
     <string name="pylons_central_desc">Turn Pylons into useful things. Like pretend gold. Yes! This is a good use of your valuable Pylons.</string>
     <string name="shop_desc">It’s a blacksmith’s store.\nThe blacksmith sells things, buys things, and mends things.\nSometimes he regrets his choices in life.</string>
@@ -105,4 +99,8 @@
     <string name="not_enough_pylons">Not enough pylons</string>
     <string name="confirm_buy_gold_with_pylons">Are you sure you want to spend %1$d pylons for %2$d gold?</string>
     <string name="fight_giant_special">You got %1$s (special) from the giant!!\nYou can now fight with %2$s with this character!</string>
+    <string name="trade">Trade</string>
+    <string name="create_trade">Create Trade</string>
+    <string name="my_trades">My Trades</string>
+    <string name="market_trades">Market</string>
 </resources>

@@ -53,45 +53,11 @@
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView
+                    android:id="@+id/text_trade"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/text_margin"
-                    android:text="@string/sell_gold_from_orderbook_place_order_to_buy"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/buy_gold_from_orderbook_place_order_to_sell"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/sell_weapon_from_orderbook_place_order_to_buy"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/buy_weapon_from_orderbook_place_order_to_sell"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/sell_character_from_orderbook_place_order_to_buy"
-                    android:textAppearance="?attr/textAppearanceListItem" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/text_margin"
-                    android:text="@string/buy_character_from_orderbook_place_order_to_sell"
+                    android:text="@string/trade"
                     android:textAppearance="?attr/textAppearanceListItem" />
 
                 <TextView

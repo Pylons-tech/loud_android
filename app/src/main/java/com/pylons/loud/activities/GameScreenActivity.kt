@@ -55,14 +55,19 @@ import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
+import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeFragment
 import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
+import com.pylons.loud.fragments.trade.TradeFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.models.trade.Trade
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
+import com.pylons.wallet.core.types.tx.recipe.CoinInput
+import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.coroutines.*
@@ -77,7 +82,9 @@ class GameScreenActivity : AppCompatActivity(),
     CharacterFragment.OnListFragmentInteractionListener,
     ForestFightPreviewFragment.OnFragmentInteractionListener,
     PylonCentralHomeFragment.OnFragmentInteractionListener,
-    SettingsScreenFragment.OnFragmentInteractionListener {
+    SettingsScreenFragment.OnFragmentInteractionListener,
+    TradeFragment.OnListFragmentInteractionListener,
+    PylonCentralTradeFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -697,5 +704,155 @@ class GameScreenActivity : AppCompatActivity(),
                 )
             }
         }
+    }
+
+    override fun onTrade(trade: Trade) {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage(
+            "Confirm trade?"
+        )
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+                val loading =
+                    displayLoading(
+                        this,
+                        "Trading..."
+                    )
+                CoroutineScope(IO).launch {
+                    val tx = executeTrade(trade)
+                    syncProfile()
+
+                    withContext(Main) {
+                        loading.dismiss()
+                        displayMessage(
+                            this@GameScreenActivity,
+                            "traded!"
+                        )
+                    }
+
+                    refreshTrade()
+                }
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    private suspend fun executeTrade(trade: Trade): Transaction? {
+        val tx = Core.engine.fulfillTrade(trade.id)
+        tx.submit()
+        Log.info(tx.toString())
+        Log.info(tx.id)
+
+        // TODO("Remove delay, walletcore should handle it")
+        delay(5000)
+        val txId = tx.id
+        if (txId != null) {
+            val tx = Core.engine.getTransaction(txId)
+            Log.info(tx.toString())
+            return tx
+        }
+
+        return null
+    }
+
+    private suspend fun createTrade(): Transaction? {
+        val tx =
+            Core.engine.createTrade(
+                listOf(CoinInput("loudcoin", 1000)),
+                listOf(),
+                listOf(CoinOutput("pylon", 10)),
+                listOf(),
+                "created by loud game"
+            )
+        tx.submit()
+        Log.info(tx.toString())
+        Log.info(tx.id)
+
+        // TODO("Remove delay, walletcore should handle it")
+        delay(5000)
+        val txId = tx.id
+        if (txId != null) {
+            val tx = Core.engine.getTransaction(txId)
+            Log.info(tx.toString())
+            return tx
+        }
+
+        return null
+    }
+
+    override fun onCreateTrade() {
+        val loading =
+            displayLoading(
+                this,
+                "Creating trade"
+            )
+        CoroutineScope(IO).launch {
+            val tx = createTrade()
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    "trade created!"
+                )
+            }
+
+            refreshTrade()
+        }
+    }
+
+    private fun refreshTrade() {
+        val frag =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+            .popBackStack()
+        frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+            .navigate(R.id.pylonCentralTradeFragment)
+    }
+
+    override fun onCancel(trade: Trade) {
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage(
+            "Cancel trade?"
+        )
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+                val loading =
+                    displayLoading(
+                        this,
+                        "Cancelling..."
+                    )
+                CoroutineScope(IO).launch {
+                    val tx = cancelTrade(trade)
+                    syncProfile()
+
+                    withContext(Main) {
+                        loading.dismiss()
+//                        displayMessage(
+//                            this@GameScreenActivity,
+//                            "Trade canceled!"
+//                        )
+                    }
+
+                    refreshTrade()
+                }
+            }
+            .setNegativeButton("No") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.show()
+    }
+
+    private fun cancelTrade(trade: Trade) {
+        // TODO("implement")
     }
 }
