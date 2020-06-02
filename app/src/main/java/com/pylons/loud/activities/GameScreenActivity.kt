@@ -54,8 +54,8 @@ import com.pylons.loud.fragments.Fight.FightFragment
 import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
 import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
+import com.pylons.loud.fragments.PylonCentralScreen.CreateTradeFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
-import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeFragment
 import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
 import com.pylons.loud.fragments.trade.TradeFragment
 import com.pylons.loud.models.*
@@ -84,7 +84,7 @@ class GameScreenActivity : AppCompatActivity(),
     PylonCentralHomeFragment.OnFragmentInteractionListener,
     SettingsScreenFragment.OnFragmentInteractionListener,
     TradeFragment.OnListFragmentInteractionListener,
-    PylonCentralTradeFragment.OnFragmentInteractionListener {
+    CreateTradeFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
