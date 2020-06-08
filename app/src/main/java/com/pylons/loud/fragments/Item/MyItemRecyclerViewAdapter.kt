@@ -1,6 +1,5 @@
 package com.pylons.loud.fragments.Item
 
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -40,6 +39,7 @@ class MyItemRecyclerViewAdapter(
                 2 -> mListener?.onItemBuy(item)
                 3 -> mListener?.onItemSell(item)
                 4 -> mListener?.onItemUpgrade(item)
+                5 -> mListener?.onItemTradeSell(item)
             }
 
         }

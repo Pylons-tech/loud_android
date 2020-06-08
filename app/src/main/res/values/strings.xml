@@ -103,4 +103,22 @@
     <string name="create_trade">Create Trade</string>
     <string name="my_trades">My Trades</string>
     <string name="market_trades">Market</string>
+    <string name="trade_buy_desc">What do you want?</string>
+    <string name="trade_sell_desc">What do you want to offer?</string>
+    <string name="trade_pylon">Pylon 🔷️</string>
+    <string name="trade_gold">Gold 💰</string>
+    <string name="trade_character">Character 🦘</string>
+    <string name="trade_item">Item 🗡️</string>
+    <string name="trade_create_loading">You are waiting to create trade request</string>
+    <string name="trade_create_complete">Successfully created trade request</string>
+    <string name="trade_fulfill">Are you sure you want to trade?</string>
+    <string name="trade_fulfill_loading">You are waiting to complete trade</string>
+    <string name="trade_fulfill_complete">Successfully completed trade!</string>
+    <string name="trade_cancel">Are you sure you want to cancel trade?</string>
+    <string name="trade_cancel_loading">You are waiting to cancel one of your trades</string>
+    <string name="trade_cancel_complete">Successfully cancelled trade request</string>
+    <string name="trade_gold_buy">How many gold do you want?</string>
+    <string name="trade_gold_sell">How many gold can you give?</string>
+    <string name="trade_pylon_buy">How many pylons to you want?</string>
+    <string name="trade_pylon_offer">"How many pylons do you offer?"</string>
 </resources>

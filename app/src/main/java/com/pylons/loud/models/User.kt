@@ -2,6 +2,7 @@ package com.pylons.loud.models
 
 import android.content.Context
 import com.pylons.loud.R
+import com.pylons.loud.constants.Coin
 import com.pylons.loud.constants.Recipe.LOUD_CBID
 import com.pylons.wallet.core.types.Profile
 import com.squareup.moshi.JsonAdapter
@@ -108,8 +109,8 @@ data class User(
         var goldAmount = 0L
         profile.coins?.forEach {
             when (it.denom) {
-                "pylon" -> pylonAmount = it.amount
-                "loudcoin" -> goldAmount = it.amount
+                Coin.PYLON -> pylonAmount = it.amount
+                Coin.LOUD -> goldAmount = it.amount
             }
         }
         this.pylonAmount = pylonAmount

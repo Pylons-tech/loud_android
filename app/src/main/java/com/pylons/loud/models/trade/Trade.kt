@@ -34,3 +34,9 @@ data class BuyItemTrade(
     override val output: CoinOutput,
     override val isMyTrade: Boolean
 ) : Trade()
+
+class Spec<T>(val min: T, val max: T)
+open class ItemSpec(val name: String, val level: Spec<Int>)
+class CharacterSpec(name: String, level: Spec<Int>, val xp: Spec<Double>) : ItemSpec(name, level)
+class WeaponSpec(name: String, level: Spec<Int>, val attack: Spec<Int>) : ItemSpec(name, level)
+class MaterialSpec(name: String, level: Spec<Int>) : ItemSpec(name, level)

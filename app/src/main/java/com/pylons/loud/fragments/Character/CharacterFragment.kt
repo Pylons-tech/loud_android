@@ -79,6 +79,7 @@ class CharacterFragment : Fragment() {
     interface OnListFragmentInteractionListener {
         fun onCharacter(item: Character?)
         fun onBuyCharacter(item: Character?)
+        fun onCharacterTradeSell(character: Character)
     }
 
 }

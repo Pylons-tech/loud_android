@@ -39,6 +39,7 @@ class MyCharacterRecyclerViewAdapter(
             when(mode) {
                 1-> mListener?.onCharacter(item)
                 2-> mListener?.onBuyCharacter(item)
+                3 -> mListener?.onCharacterTradeSell(item)
             }
 
         }

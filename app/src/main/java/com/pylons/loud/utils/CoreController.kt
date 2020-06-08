@@ -40,4 +40,9 @@ object CoreController {
     fun setUserData(json: String) {
         userJson = json
     }
+
+    fun getItemById(id: String): com.pylons.wallet.core.types.tx.item.Item? {
+        val profile = Core.engine.getOwnBalances()
+        return profile?.items?.find { it.id == id }
+    }
 }

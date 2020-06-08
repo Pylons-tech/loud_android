@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
@@ -57,10 +56,12 @@ import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
 import com.pylons.loud.fragments.PylonCentralScreen.CreateTradeFragment
 import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
 import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
+import com.pylons.loud.fragments.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.trade.TradeFragment
 import com.pylons.loud.models.*
-import com.pylons.loud.models.trade.Trade
+import com.pylons.loud.models.trade.*
 import com.pylons.loud.utils.Account.getCurrentUser
+import com.pylons.loud.utils.CoreController.getItemById
 import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
@@ -68,6 +69,7 @@ import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.recipe.CoinOutput
+import com.pylons.wallet.core.types.tx.recipe.ItemInput
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.coroutines.*
@@ -84,7 +86,8 @@ class GameScreenActivity : AppCompatActivity(),
     PylonCentralHomeFragment.OnFragmentInteractionListener,
     SettingsScreenFragment.OnFragmentInteractionListener,
     TradeFragment.OnListFragmentInteractionListener,
-    CreateTradeFragment.OnFragmentInteractionListener {
+    CreateTradeFragment.OnFragmentInteractionListener,
+    ItemSpecFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -92,8 +95,10 @@ class GameScreenActivity : AppCompatActivity(),
         private val playerLocation = MutableLiveData<Int>()
         lateinit var fightPreview: Fight
         var shopAction = 0
+        private val tradeInput = MutableLiveData<ItemSpec>()
+        private val tradeOutput = MutableLiveData<com.pylons.wallet.core.types.tx.item.Item>()
 
-        fun getPlayer(): LiveData<User> {
+        fun getPlayer(): MutableLiveData<User> {
             return player
         }
 
@@ -101,12 +106,28 @@ class GameScreenActivity : AppCompatActivity(),
             player.value = user
         }
 
-        fun getPlayerLocation(): LiveData<Int> {
+        fun getPlayerLocation(): MutableLiveData<Int> {
             return playerLocation
         }
 
         fun setPlayerLocation(location: Int) {
             playerLocation.value = location
+        }
+
+        fun getTradeInput(): MutableLiveData<ItemSpec> {
+            return tradeInput
+        }
+
+        fun setTradeInput(item: ItemSpec?) {
+            tradeInput.value = item
+        }
+
+        fun getTradeOutput(): MutableLiveData<com.pylons.wallet.core.types.tx.item.Item> {
+            return tradeOutput
+        }
+
+        fun setTradeOutput(item: com.pylons.wallet.core.types.tx.item.Item?) {
+            tradeOutput.value = item
         }
     }
 
@@ -709,14 +730,14 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onTrade(trade: Trade) {
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage(
-            "Confirm trade?"
+            getString(R.string.trade_fulfill)
         )
             .setCancelable(false)
             .setPositiveButton("Proceed") { _, _ ->
                 val loading =
                     displayLoading(
                         this,
-                        "Trading..."
+                        getString(R.string.trade_fulfill_loading)
                     )
                 CoroutineScope(IO).launch {
                     val tx = executeTrade(trade)
@@ -726,7 +747,7 @@ class GameScreenActivity : AppCompatActivity(),
                         loading.dismiss()
                         displayMessage(
                             this@GameScreenActivity,
-                            "traded!"
+                            getString(R.string.trade_fulfill_complete)
                         )
                     }
 
@@ -760,14 +781,21 @@ class GameScreenActivity : AppCompatActivity(),
         return null
     }
 
-    private suspend fun createTrade(): Transaction? {
+    private suspend fun createTrade(
+        coinInput: List<CoinInput>,
+        itemInput: List<ItemInput>,
+        coinOutput: List<CoinOutput>,
+        itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
+        extraInfo: String
+    ): Transaction? {
+        Log.info(itemOutput.toString())
         val tx =
             Core.engine.createTrade(
-                listOf(CoinInput("loudcoin", 1000)),
-                listOf(),
-                listOf(CoinOutput("pylon", 10)),
-                listOf(),
-                "created by loud game"
+                coinInput,
+                itemInput,
+                coinOutput,
+                itemOutput,
+                extraInfo
             )
         tx.submit()
         Log.info(tx.toString())
@@ -785,21 +813,27 @@ class GameScreenActivity : AppCompatActivity(),
         return null
     }
 
-    override fun onCreateTrade() {
+    override fun onCreateTrade(
+        coinInput: List<CoinInput>,
+        itemInput: List<ItemInput>,
+        coinOutput: List<CoinOutput>,
+        itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
+        extraInfo: String
+    ) {
         val loading =
             displayLoading(
                 this,
-                "Creating trade"
+                getString(R.string.trade_create_loading)
             )
         CoroutineScope(IO).launch {
-            val tx = createTrade()
+            val tx = createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
             syncProfile()
 
             withContext(Main) {
                 loading.dismiss()
                 displayMessage(
                     this@GameScreenActivity,
-                    "trade created!"
+                    getString(R.string.trade_create_complete)
                 )
             }
 
@@ -816,17 +850,45 @@ class GameScreenActivity : AppCompatActivity(),
             .navigate(R.id.pylonCentralTradeFragment)
     }
 
+    override fun onItemTradeBuy(item: ItemSpec) {
+        model.setTradeInput(item)
+    }
+
+    override fun onItemTradeSell(item: Item) {
+        onTradeSell(item.id)
+    }
+
+    override fun onCharacterTradeSell(character: Character) {
+        onTradeSell(character.id)
+    }
+
+    private fun onTradeSell(id: String) {
+        CoroutineScope(IO).launch {
+            val coreItem = getItemById(id)
+            if (coreItem != null) {
+                Log.info(coreItem.toString())
+                withContext(Main) {
+                    model.setTradeOutput(
+                        coreItem
+                    )
+                }
+            } else {
+                // TODO("handle error")
+            }
+        }
+    }
+
     override fun onCancel(trade: Trade) {
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage(
-            "Cancel trade?"
+            getString(R.string.trade_cancel)
         )
             .setCancelable(false)
             .setPositiveButton("Proceed") { _, _ ->
                 val loading =
                     displayLoading(
                         this,
-                        "Cancelling..."
+                        getString(R.string.trade_cancel_loading)
                     )
                 CoroutineScope(IO).launch {
                     val tx = cancelTrade(trade)
@@ -834,10 +896,10 @@ class GameScreenActivity : AppCompatActivity(),
 
                     withContext(Main) {
                         loading.dismiss()
-//                        displayMessage(
-//                            this@GameScreenActivity,
-//                            "Trade canceled!"
-//                        )
+                        displayMessage(
+                            this@GameScreenActivity,
+                            getString(R.string.trade_cancel_complete)
+                        )
                     }
 
                     refreshTrade()
@@ -852,7 +914,22 @@ class GameScreenActivity : AppCompatActivity(),
         alert.show()
     }
 
-    private fun cancelTrade(trade: Trade) {
-        // TODO("implement")
+
+    private suspend fun cancelTrade(trade: Trade): Transaction? {
+        val tx = Core.engine.cancelTrade(trade.id)
+        tx.submit()
+        Log.info(tx.toString())
+        Log.info(tx.id)
+
+        // TODO("Remove delay, walletcore should handle it")
+        delay(5000)
+        val txId = tx.id
+        if (txId != null) {
+            val tx = Core.engine.getTransaction(txId)
+            Log.info(tx.toString())
+            return tx
+        }
+
+        return null
     }
 }
