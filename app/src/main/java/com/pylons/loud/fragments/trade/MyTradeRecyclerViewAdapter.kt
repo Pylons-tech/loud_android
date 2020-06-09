@@ -48,18 +48,31 @@ class MyTradeRecyclerViewAdapter(
         val item = mValues[position]
 
         when (item) {
-            is LoudTrade -> holder.mContentView.text =
-                ("${item.output.amount} ${item.output.coin}\nWant: ${item.input.amount} ${item.input.coin}")
-            is SellItemTrade -> holder.mContentView.text =
-                ("${item.output.name} Lv${item.output.level}\nWant: ${item.input.amount} ${item.input.coin}")
-            is BuyItemTrade -> holder.mContentView.text =
-                ("${item.output.amount} ${item.output.coin}\nWant: ${item.input.name} Lv${item.input.level}")
+            is LoudTrade -> {
+                holder.mTextOutput.text ="${item.output.amount} ${item.output.coin}"
+                holder.mTextInput.text = "${item.input.amount} ${item.input.coin}"
+            }
+            is SellItemTrade -> {
+                holder.mTextOutput.text = "${item.output.name} Lv${item.output.level}"
+                holder.mTextInput.text = "${item.input.amount} ${item.input.coin}"
+            }
+            is BuyItemTrade -> {
+                holder.mTextOutput.text ="${item.output.amount} ${item.output.coin}"
+                holder.mTextInput.text = "${item.input.name} Lv${item.input.level}"
+            }
+        }
+
+        with(holder.itemView.context) {
+            holder.mTextInput.append(" ${getString(R.string.trade_wanted)}")
         }
 
         if (item.isMyTrade) {
             holder.mAction.text = "Cancel"
+            holder.mTextSender.visibility = View.GONE
         } else {
             holder.mAction.text = "Trade"
+            holder.mTextSender.text = item.sender
+            holder.mTextSender.visibility = View.VISIBLE
         }
 
         with(holder.mAction) {
@@ -70,12 +83,15 @@ class MyTradeRecyclerViewAdapter(
 
     override fun getItemCount(): Int = mValues.size
 
-    inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
-        val mContentView: TextView = mView.content
+    inner class ViewHolder(private val mView: View) : RecyclerView.ViewHolder(mView) {
+        val mTextSender: TextView = mView.text_sender
+        val mTextOutput: TextView = mView.text_output
+        val mTextInput: TextView = mView.text_input
         val mAction: Button = mView.action
 
         override fun toString(): String {
-            return super.toString() + " '" + mContentView.text + "'"
+            return "ViewHolder(mView=$mView, mTextOutput=$mTextOutput, mTextInput=$mTextInput, mAction=$mAction)"
         }
+
     }
 }

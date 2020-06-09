@@ -17,21 +17,27 @@
             android:id="@+id/text_trade_output"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:padding="@dimen/text_margin"
+            android:layout_weight="1"
+            android:drawableBottom="@drawable/ic_arrow_downward_red_64dp"
+            android:gravity="bottom|center_horizontal"
             android:textColor="@color/colorDanger"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:textSize="32sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBorder" />
 
         <TextView
             android:id="@+id/text_trade_input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/text_margin"
-            android:textSize="32sp"
+            android:layout_weight="1"
+            android:drawableTop="@drawable/ic_arrow_upward_green_64dp"
+            android:gravity="center_horizontal"
             android:textColor="@color/colorSuccess"
-            android:gravity="center"
-            android:layout_weight="1"/>
+            android:textSize="32sp" />
+
     </LinearLayout>
 
     <Button

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Trade
 import com.pylons.loud.fragments.trade.MyTradeRecyclerViewAdapter
 import com.pylons.loud.fragments.trade.TradeFragment
 import com.pylons.loud.models.trade.*
@@ -18,6 +19,7 @@ import com.pylons.wallet.core.Core
 import kotlinx.android.synthetic.main.fragment_pylon_central_trade_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.logging.Logger
@@ -59,7 +61,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             val tradesResponse = Core.engine.listTrades()
             val trades = tradesResponse.filter {
-                !it.completed && !it.disabled && it.extraInfo.contains("created by loud game")
+                !it.completed && !it.disabled && it.extraInfo.contains(Trade.DEFAULT)
             }
             Log.info(trades.toString())
 
@@ -78,7 +80,8 @@ class PylonCentralTradeHomeFragment : Fragment() {
                             it.itemOutputs[0].strings["Name"] ?: "",
                             it.itemOutputs[0].longs["level"] ?: 0
                         ),
-                        it.sender == player?.address
+                        it.sender == player?.address,
+                        it.sender
                     )
                 } else if (it.itemInputs.isNotEmpty()) {
                     BuyItemTrade(
@@ -88,14 +91,16 @@ class PylonCentralTradeHomeFragment : Fragment() {
                             it.itemInputs[0].longs.find { it2 -> it2.key == "level" }?.maxValue ?: 0
                         ),
                         CoinOutput(it.coinOutputs[0].denom, it.coinOutputs[0].amount),
-                        it.sender == player?.address
+                        it.sender == player?.address,
+                        it.sender
                     )
                 } else {
                     LoudTrade(
                         it.id,
                         CoinInput(it.coinInputs[0].coin, it.coinInputs[0].count),
                         CoinOutput(it.coinOutputs[0].denom, it.coinOutputs[0].amount),
-                        it.sender == player?.address
+                        it.sender == player?.address,
+                        it.sender
                     )
                 }
             }
@@ -105,19 +110,34 @@ class PylonCentralTradeHomeFragment : Fragment() {
             val c = context
 
             if (c is TradeFragment.OnListFragmentInteractionListener) {
-                withContext(Dispatchers.Main) {
+                withContext(Main) {
                     view.adapter = MyTradeRecyclerViewAdapter(list, c)
                 }
             }
 
+            withContext(Main) {
+                if (type == MY_TRADES) {
+                    text_market.visibility = View.VISIBLE
+                    text_my_trades.visibility = View.GONE
+
+                    if (list.isEmpty()) {
+                        text_trade_situation.text = getString(R.string.trade_situation_no_my_trades)
+                    } else {
+                        text_trade_situation.text = resources.getQuantityString(R.plurals.trade_situation_my_trades, list.size, list.size)
+                    }
+                } else {
+                    text_my_trades.visibility = View.VISIBLE
+                    text_market.visibility = View.GONE
+
+                    if (list.isEmpty()) {
+                        text_trade_situation.text = getString(R.string.trade_situation_no_market)
+                    } else {
+                        text_trade_situation.text = resources.getQuantityString(R.plurals.trade_situation_market, list.size, list.size)
+                    }
+                }
+            }
         }
 
-        if (type == MY_TRADES) {
-            text_market.visibility = View.VISIBLE
-            text_my_trades.visibility = View.GONE
-        } else {
-            text_my_trades.visibility = View.VISIBLE
-            text_market.visibility = View.GONE
-        }
+
     }
 }

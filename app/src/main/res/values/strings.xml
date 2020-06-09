@@ -121,4 +121,16 @@
     <string name="trade_gold_sell">How many gold can you give?</string>
     <string name="trade_pylon_buy">How many pylons to you want?</string>
     <string name="trade_pylon_offer">"How many pylons do you offer?"</string>
+    <string name="trade_situation_no_my_trades">You have no trades, go make one!</string>
+    <string name="trade_situation_no_market">There are no trades on the market</string>
+    <plurals name="trade_situation_my_trades">
+        <item quantity="one">You have %d trade available</item>
+        <item quantity="other">You have %d trades available</item>
+    </plurals>
+    <plurals name="trade_situation_market">
+        <item quantity="one">There is %d trade on the market</item>
+        <item quantity="other">There are %d trades on the market</item>
+    </plurals>
+    <string name="enter_valid_amount">Enter valid amount</string>
+    <string name="trade_wanted">(want)</string>
 </resources>

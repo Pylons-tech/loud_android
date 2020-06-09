@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -33,6 +34,7 @@ import com.pylons.loud.fragments.Item.ItemFragment
 import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
 import com.pylons.loud.fragments.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.itemspec.MyItemSpecRecyclerViewAdapter
+import com.pylons.loud.models.Character
 import com.pylons.loud.models.Item
 import com.pylons.loud.models.trade.CharacterSpec
 import com.pylons.loud.models.trade.MaterialSpec
@@ -230,14 +232,6 @@ class CreateTradeFragment : Fragment() {
                 )
                     .setCancelable(false)
                     .setPositiveButton("Proceed") { _, _ ->
-                        coinInput = listOf(
-                            CoinInput(
-                                Coin.PYLON,
-                                mDialogView.edit_text_amount.text.toString().toLong()
-                            )
-                        )
-
-                        displaySellTrade()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.cancel()
@@ -247,6 +241,28 @@ class CreateTradeFragment : Fragment() {
                 alert.setTitle("Confirm")
                 alert.setView(mDialogView)
                 alert.show()
+
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
+                            .toLong() > 0
+                    ) {
+                        coinInput = listOf(
+                            CoinInput(
+                                Coin.PYLON,
+                                mDialogView.edit_text_amount.text.toString().toLong()
+                            )
+                        )
+
+                        displaySellTrade()
+                        alert.dismiss()
+                    } else {
+                        Toast.makeText(
+                            c,
+                            getString(R.string.enter_valid_amount),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
@@ -265,14 +281,6 @@ class CreateTradeFragment : Fragment() {
                 )
                     .setCancelable(false)
                     .setPositiveButton("Proceed") { _, _ ->
-                        coinInput = listOf(
-                            CoinInput(
-                                Coin.LOUD,
-                                mDialogView.edit_text_amount.text.toString().toLong()
-                            )
-                        )
-                        extraInfo = Trade.DEFAULT
-                        promptBuyOrderStep2()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.cancel()
@@ -282,6 +290,28 @@ class CreateTradeFragment : Fragment() {
                 alert.setTitle("Confirm")
                 alert.setView(mDialogView)
                 alert.show()
+
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
+                            .toLong() > 0
+                    ) {
+                        coinInput = listOf(
+                            CoinInput(
+                                Coin.LOUD,
+                                mDialogView.edit_text_amount.text.toString().toLong()
+                            )
+                        )
+                        extraInfo = Trade.DEFAULT
+                        promptBuyOrderStep2()
+                        alert.dismiss()
+                    } else {
+                        Toast.makeText(
+                            c,
+                            getString(R.string.enter_valid_amount),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
@@ -391,13 +421,6 @@ class CreateTradeFragment : Fragment() {
             )
                 .setCancelable(false)
                 .setPositiveButton("Proceed") { _, _ ->
-                    coinOutput = listOf(
-                        CoinOutput(
-                            Coin.PYLON,
-                            mDialogView.edit_text_amount.text.toString().toLong()
-                        )
-                    )
-                    displayConfirmTrade()
                 }
                 .setNegativeButton("Cancel") { dialog, _ ->
                     dialog.cancel()
@@ -407,6 +430,24 @@ class CreateTradeFragment : Fragment() {
             alert.setTitle("Confirm")
             alert.setView(mDialogView)
             alert.show()
+
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
+                        .toLong() > 0
+                ) {
+                    coinOutput = listOf(
+                        CoinOutput(
+                            Coin.PYLON,
+                            mDialogView.edit_text_amount.text.toString().toLong()
+                        )
+                    )
+                    displayConfirmTrade()
+                    alert.dismiss()
+                } else {
+                    Toast.makeText(c, getString(R.string.enter_valid_amount), Toast.LENGTH_SHORT)
+                        .show()
+                }
+            }
         }
     }
 
@@ -433,14 +474,6 @@ class CreateTradeFragment : Fragment() {
                 )
                     .setCancelable(false)
                     .setPositiveButton("Proceed") { _, _ ->
-                        coinOutput = listOf(
-                            CoinOutput(
-                                Coin.LOUD,
-                                mDialogView.edit_text_amount.text.toString().toLong()
-                            )
-                        )
-                        extraInfo = Trade.DEFAULT
-                        displayConfirmTrade()
                     }
                     .setNegativeButton("Cancel") { dialog, _ ->
                         dialog.cancel()
@@ -450,44 +483,85 @@ class CreateTradeFragment : Fragment() {
                 alert.setTitle("Confirm")
                 alert.setView(mDialogView)
                 alert.show()
+
+                alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
+                            .toLong() > 0
+                    ) {
+                        coinOutput = listOf(
+                            CoinOutput(
+                                Coin.LOUD,
+                                mDialogView.edit_text_amount.text.toString().toLong()
+                            )
+                        )
+                        extraInfo = Trade.DEFAULT
+                        displayConfirmTrade()
+                        alert.dismiss()
+                    } else {
+                        Toast.makeText(
+                            c,
+                            getString(R.string.enter_valid_amount),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
 
     private fun initCharacterSell() {
-        text_character_sell.setOnClickListener {
-            val model: GameScreenActivity.SharedViewModel by activityViewModels()
-            val player = model.getPlayer().value
-            val adapter = MyCharacterRecyclerViewAdapter(
-                player?.characters ?: listOf(),
-                characterSellFragment.getListener(),
-                3
-            )
-            val view1 = characterSellFragment.view as RecyclerView
-            view1.adapter = adapter
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        val player = model.getPlayer().value
+        val list = player?.characters ?: listOf<Character>()
+        text_character_sell.text = "${getString(R.string.trade_character)} (${list.size})"
 
-            with(childFragmentManager) {
-                beginTransaction().hide(itemSellFragment).commit()
-                beginTransaction().show(characterSellFragment).commit()
+        text_character_sell.setOnClickListener {
+            val player = model.getPlayer().value
+            val list = player?.characters ?: listOf<Character>()
+
+            if (list.isNotEmpty()) {
+                val adapter = MyCharacterRecyclerViewAdapter(
+                    list,
+                    characterSellFragment.getListener(),
+                    3
+                )
+                val view1 = characterSellFragment.view as RecyclerView
+                view1.adapter = adapter
+
+                with(childFragmentManager) {
+                    beginTransaction().hide(itemSellFragment).commit()
+                    beginTransaction().show(characterSellFragment).commit()
+                }
             }
         }
     }
 
     private fun initItemSell() {
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+        val player = model.getPlayer().value
+        if (player != null) {
+            val items = mutableListOf<Item>()
+            items.addAll(player.weapons)
+            items.addAll(player.materials)
+            text_item_sell.text = "${getString(R.string.trade_item)} (${items.size})"
+        }
+
         text_item_sell.setOnClickListener {
-            val model: GameScreenActivity.SharedViewModel by activityViewModels()
             val player = model.getPlayer().value
             if (player != null) {
                 val items = mutableListOf<Item>()
                 items.addAll(player.weapons)
                 items.addAll(player.materials)
-                val adapter = MyItemRecyclerViewAdapter(items, itemSellFragment.getListener(), 5)
-                val myView = itemSellFragment.view as RecyclerView
-                myView.adapter = adapter
 
-                with(childFragmentManager) {
-                    beginTransaction().hide(characterSellFragment).commit()
-                    beginTransaction().show(itemSellFragment).commit()
+                if (items.isNotEmpty()) {
+                    val adapter = MyItemRecyclerViewAdapter(items, itemSellFragment.getListener(), 5)
+                    val myView = itemSellFragment.view as RecyclerView
+                    myView.adapter = adapter
+
+                    with(childFragmentManager) {
+                        beginTransaction().hide(characterSellFragment).commit()
+                        beginTransaction().show(itemSellFragment).commit()
+                    }
                 }
             }
         }

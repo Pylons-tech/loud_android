@@ -8,4 +8,5 @@
     <color name="colorText">#FFFFFF</color>
     <color name="colorBackgroundPrimary">#000000</color>
     <color name="colorBackgroundSecondary">#1D1D1D</color>
+    <color name="colorBorder">#FFFFFF</color>
 </resources>

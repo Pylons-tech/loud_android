@@ -7,6 +7,7 @@ abstract class Trade {
     abstract val input: TradeInput
     abstract val output: TradeOutput
     abstract val isMyTrade: Boolean
+    abstract val sender: String
 }
 
 class CoinInput(val coin: String, val amount: Long) : TradeInput()
@@ -15,7 +16,8 @@ data class LoudTrade(
     override val id: String,
     override val input: CoinInput,
     override val output: CoinOutput,
-    override val isMyTrade: Boolean
+    override val isMyTrade: Boolean,
+    override val sender: String
 ) : Trade()
 
 
@@ -24,7 +26,8 @@ data class SellItemTrade(
     override val id: String,
     override val input: CoinInput,
     override val output: ItemOutput,
-    override val isMyTrade: Boolean
+    override val isMyTrade: Boolean,
+    override val sender: String
 ) : Trade()
 
 class ItemInput(val name: String, val level: Long) : TradeInput()
@@ -32,7 +35,8 @@ data class BuyItemTrade(
     override val id: String,
     override val input: ItemInput,
     override val output: CoinOutput,
-    override val isMyTrade: Boolean
+    override val isMyTrade: Boolean,
+    override val sender: String
 ) : Trade()
 
 class Spec<T>(val min: T, val max: T)

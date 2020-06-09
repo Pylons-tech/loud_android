@@ -43,6 +43,11 @@
             android:layout_margin="@dimen/text_margin"
             android:text="@string/trade_item"
             android:textAppearance="?attr/textAppearanceListItem" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBorder" />
     </LinearLayout>
 
 

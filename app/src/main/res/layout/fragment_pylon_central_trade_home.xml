@@ -31,14 +31,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
-                android:text="@string/my_trades" />
+                android:text="@string/my_trades"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/text_market"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/text_margin"
-                android:text="@string/market_trades" />
+                android:text="@string/market_trades"
+                android:visibility="gone" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorBorder" />
+
+            <TextView
+                android:id="@+id/text_trade_situation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin" />
         </LinearLayout>
 
         <fragment
