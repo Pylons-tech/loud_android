@@ -80,6 +80,7 @@ class CharacterFragment : Fragment() {
         fun onCharacter(item: Character?)
         fun onBuyCharacter(item: Character?)
         fun onCharacterTradeSell(character: Character)
+        fun onCharacterUpdate(character: Character)
     }
 
 }

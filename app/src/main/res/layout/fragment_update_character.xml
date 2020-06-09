@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PylonCentralScreen.PylonCentralBuyCharacterFragment">
+    tools:context=".fragments.PylonCentralScreen.UpdateCharacterFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/text_update_character_desc"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:layout_margin="@dimen/text_margin"
-            android:text="@string/buy_character_desc"
+            android:text="@string/update_character_desc"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -28,8 +28,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/text_update_character_desc" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 </FrameLayout>

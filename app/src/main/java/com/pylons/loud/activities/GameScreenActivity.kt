@@ -2,6 +2,7 @@ package com.pylons.loud.activities
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
@@ -72,6 +73,7 @@ import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 import com.pylons.wallet.core.types.tx.recipe.ItemInput
 
 import kotlinx.android.synthetic.main.content_game_screen.*
+import kotlinx.android.synthetic.main.dialog_input_text.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -931,5 +933,57 @@ class GameScreenActivity : AppCompatActivity(),
         }
 
         return null
+    }
+
+    override fun onCharacterUpdate(character: Character) {
+        val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null)
+        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        dialogBuilder.setMessage(
+            getString(R.string.update_character_prompt)
+        )
+            .setCancelable(false)
+            .setPositiveButton("Proceed") { _, _ ->
+            }
+            .setNegativeButton("Cancel") { dialog, _ ->
+                dialog.cancel()
+            }
+
+        val alert = dialogBuilder.create()
+        alert.setTitle("Confirm")
+        alert.setView(mDialogView)
+        alert.show()
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val name = mDialogView.edit_text.text.toString()
+            if (name != "") {
+                onRenameCharacter(character, name)
+                alert.dismiss()
+            } else {
+                Toast.makeText(this, getString(R.string.enter_valid_name), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
+    private fun onRenameCharacter(character: Character, name: String) {
+        val loading =
+            displayLoading(
+                this,
+                getString(R.string.update_character_loading, character.name, name)
+            )
+        CoroutineScope(IO).launch {
+            val tx = character.rename(name)
+            Log.info(tx.toString())
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    getString(R.string.update_character_complete, name)
+                )
+            }
+        }
+
     }
 }

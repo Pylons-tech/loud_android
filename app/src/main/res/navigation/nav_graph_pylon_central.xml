@@ -20,4 +20,9 @@
         android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeFragment"
         android:label="fragment_pylon_central_trade"
         tools:layout="@layout/fragment_pylon_central_trade" />
+    <fragment
+        android:id="@+id/updateCharacterFragment"
+        android:name="com.pylons.loud.fragments.PylonCentralScreen.UpdateCharacterFragment"
+        android:label="fragment_update_character"
+        tools:layout="@layout/fragment_update_character" />
 </navigation>

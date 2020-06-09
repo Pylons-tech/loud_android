@@ -39,6 +39,10 @@ class PylonCentralHomeFragment : Fragment() {
         text_trade.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralTradeFragment)
         }
+
+        text_update_character.setOnClickListener {
+            findNavController().navigate(R.id.updateCharacterFragment)
+        }
     }
 
     override fun onAttach(context: Context) {

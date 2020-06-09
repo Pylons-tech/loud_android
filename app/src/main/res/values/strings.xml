@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">LOUD</string>
     <string name="title_activity_game_screen">GameScreenActivity</string>
-
     <string name="home">Home</string>
     <string name="forest">Forest</string>
     <string name="shop">Shop</string>
@@ -13,7 +12,7 @@
     <string name="select_active_character">Select active character</string>
     <string name="select_active_weapon">Select active weapon</string>
     <string name="restore_character_health">Restore character health</string>
-    <string name="update_character_name">Update character name</string>
+    <string name="update_character_name">Change your character\'s name</string>
     <string name="rabbit">Rabbit</string>
     <string name="goblin">Goblin</string>
     <string name="wolf">Wolf </string>
@@ -133,4 +132,10 @@
     </plurals>
     <string name="enter_valid_amount">Enter valid amount</string>
     <string name="trade_wanted">(want)</string>
+    <string name="update_character_desc">Select the character to rename, then show us how clever you are with the new name</string>
+    <string name="update_character_desc_no_character">You have no characters, go find one!</string>
+    <string name="update_character_prompt">Write the new name below. We won\'t judge you. It\'s probably fine. Note. You spend Pylons to rename your character.</string>
+    <string name="update_character_loading">You are waiting to rename character from %1$s to %2$s.</string>
+    <string name="update_character_complete">You have successfully updated character\'s name to %1$s!</string>
+    <string name="enter_valid_name">Enter valid name</string>
 </resources>
