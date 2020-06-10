@@ -156,7 +156,7 @@ class CreateTradeFragment : Fragment() {
                             ItemInput(
                                 listOf(
                                     DoubleInputParam(
-                                        "XP",
+                                        "attack",
                                         item.attack.min.toString(),
                                         item.attack.max.toString()
                                     )
