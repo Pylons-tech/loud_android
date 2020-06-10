@@ -138,4 +138,5 @@
     <string name="update_character_loading">You are waiting to rename character from %1$s to %2$s.</string>
     <string name="update_character_complete">You have successfully updated character\'s name to %1$s!</string>
     <string name="enter_valid_name">Enter valid name</string>
+    <string name="insufficient_funds">Insufficient funds</string>
 </resources>
