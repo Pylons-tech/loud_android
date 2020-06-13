@@ -14,6 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Character.ACID_SPECIAL
+import com.pylons.loud.constants.Character.FIRE_SPECIAL
+import com.pylons.loud.constants.Character.ICE_SPECIAL
+import com.pylons.loud.constants.Character.NO_SPECIAL
 import com.pylons.loud.constants.Coin
 import com.pylons.loud.constants.Item.ANGEL_SWORD
 import com.pylons.loud.constants.Item.BRONZE_SWORD
@@ -143,8 +147,13 @@ class CreateTradeFragment : Fragment() {
                                 listOf(
                                     LongInputParam(
                                         "level",
-                                        item.level.min.toLong(),
-                                        item.level.max.toLong()
+                                        item.level.min,
+                                        item.level.max
+                                    ),
+                                    LongInputParam(
+                                        "Special",
+                                        item.special,
+                                        item.special
                                     )
                                 ),
                                 listOf(StringInputParam("Name", item.name))
@@ -154,18 +163,12 @@ class CreateTradeFragment : Fragment() {
                     is WeaponSpec ->
                         listOf(
                             ItemInput(
-                                listOf(
-                                    DoubleInputParam(
-                                        "attack",
-                                        item.attack.min.toString(),
-                                        item.attack.max.toString()
-                                    )
-                                ),
+                                listOf(),
                                 listOf(
                                     LongInputParam(
                                         "level",
-                                        item.level.min.toLong(),
-                                        item.level.max.toLong()
+                                        item.level.min,
+                                        item.level.max
                                     )
                                 ),
                                 listOf(StringInputParam("Name", item.name))
@@ -179,8 +182,8 @@ class CreateTradeFragment : Fragment() {
                                 listOf(
                                     LongInputParam(
                                         "level",
-                                        item.level.min.toLong(),
-                                        item.level.max.toLong()
+                                        item.level.min,
+                                        item.level.max
                                     )
                                 ),
                                 listOf(StringInputParam("Name", item.name))
@@ -320,8 +323,10 @@ class CreateTradeFragment : Fragment() {
         text_character_buy.setOnClickListener {
             val adapter = MyItemSpecRecyclerViewAdapter(
                 listOf(
-                    CharacterSpec("Lion", Spec(1, 2), Spec(1.0, 1000.0)),
-                    CharacterSpec("Liger", Spec(2, 1000), Spec(1.0, 1000.0))
+                    CharacterSpec("LionBaby", Spec(1, 2), Spec(1.0, 1000000.0), NO_SPECIAL),
+                    CharacterSpec("FireBaby", Spec(1, 1000), Spec(1.0, 1000000.0), FIRE_SPECIAL),
+                    CharacterSpec("IceBaby", Spec(1, 1000), Spec(1.0, 1000000.0), ICE_SPECIAL),
+                    CharacterSpec("AcidBaby", Spec(1, 1000), Spec(1.0, 1000000.0), ACID_SPECIAL)
                 ),
                 itemBuyFragment.getListener()
             )
@@ -554,7 +559,8 @@ class CreateTradeFragment : Fragment() {
                 items.addAll(player.materials)
 
                 if (items.isNotEmpty()) {
-                    val adapter = MyItemRecyclerViewAdapter(items, itemSellFragment.getListener(), 5)
+                    val adapter =
+                        MyItemRecyclerViewAdapter(items, itemSellFragment.getListener(), 5)
                     val myView = itemSellFragment.view as RecyclerView
                     myView.adapter = adapter
 

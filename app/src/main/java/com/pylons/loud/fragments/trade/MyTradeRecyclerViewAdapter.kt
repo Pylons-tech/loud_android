@@ -49,7 +49,7 @@ class MyTradeRecyclerViewAdapter(
 
         when (item) {
             is LoudTrade -> {
-                holder.mTextOutput.text ="${item.output.amount} ${item.output.coin}"
+                holder.mTextOutput.text = "${item.output.amount} ${item.output.coin}"
                 holder.mTextInput.text = "${item.input.amount} ${item.input.coin}"
             }
             is SellItemTrade -> {
@@ -57,8 +57,12 @@ class MyTradeRecyclerViewAdapter(
                 holder.mTextInput.text = "${item.input.amount} ${item.input.coin}"
             }
             is BuyItemTrade -> {
-                holder.mTextOutput.text ="${item.output.amount} ${item.output.coin}"
-                holder.mTextInput.text = "${item.input.name} Lv${item.input.level}"
+                holder.mTextOutput.text = "${item.output.amount} ${item.output.coin}"
+                holder.mTextInput.text =
+                    when (item.input) {
+                        is CharacterSpec -> "${item.input.name} Lv${item.input.level.min} - ${item.input.level.max} XP=${item.input.xp.min} - ${item.input.xp.max}"
+                        else -> "${item.input.name} Lv${item.input.level.max}"
+                    }
             }
         }
 

@@ -30,17 +30,17 @@ data class SellItemTrade(
     override val sender: String
 ) : Trade()
 
-class ItemInput(val name: String, val level: Long) : TradeInput()
+//class ItemInput(val name: String, val level: Long) : TradeInput()
 data class BuyItemTrade(
     override val id: String,
-    override val input: ItemInput,
+    override val input: ItemSpec,
     override val output: CoinOutput,
     override val isMyTrade: Boolean,
     override val sender: String
 ) : Trade()
 
 class Spec<T>(val min: T, val max: T)
-open class ItemSpec(val name: String, val level: Spec<Int>)
-class CharacterSpec(name: String, level: Spec<Int>, val xp: Spec<Double>) : ItemSpec(name, level)
-class WeaponSpec(name: String, level: Spec<Int>, val attack: Spec<Int>) : ItemSpec(name, level)
-class MaterialSpec(name: String, level: Spec<Int>) : ItemSpec(name, level)
+open class ItemSpec(val name: String, val level: Spec<Long>): TradeInput()
+class CharacterSpec(name: String, level: Spec<Long>, val xp: Spec<Double>, val special: Long) : ItemSpec(name, level)
+class WeaponSpec(name: String, level: Spec<Long>, val attack: Spec<Int>) : ItemSpec(name, level)
+class MaterialSpec(name: String, level: Spec<Long>) : ItemSpec(name, level)

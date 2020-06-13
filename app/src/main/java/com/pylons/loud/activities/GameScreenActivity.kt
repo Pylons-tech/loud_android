@@ -750,17 +750,15 @@ class GameScreenActivity : AppCompatActivity(),
             }
             is SellItemTrade -> {
                 when (trade.input.coin) {
-                    Coin.LOUD -> {
-                        if (player.gold < trade.input.amount) {
-                            return false
-                        }
-                    }
                     Coin.PYLON -> {
                         if (player.pylonAmount < trade.input.amount) {
                             return false
                         }
                     }
                 }
+            }
+            is BuyItemTrade -> {
+
             }
         }
 

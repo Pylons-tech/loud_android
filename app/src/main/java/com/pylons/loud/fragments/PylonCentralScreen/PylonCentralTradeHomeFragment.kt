@@ -16,6 +16,7 @@ import com.pylons.loud.fragments.trade.MyTradeRecyclerViewAdapter
 import com.pylons.loud.fragments.trade.TradeFragment
 import com.pylons.loud.models.trade.*
 import com.pylons.wallet.core.Core
+import com.pylons.wallet.core.types.tx.recipe.ItemInput
 import kotlinx.android.synthetic.main.fragment_pylon_central_trade_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -86,10 +87,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
                 } else if (it.itemInputs.isNotEmpty()) {
                     BuyItemTrade(
                         it.id,
-                        ItemInput(
-                            it.itemInputs[0].strings.find { it2 -> it2.key == "Name" }?.value ?: "",
-                            it.itemInputs[0].longs.find { it2 -> it2.key == "level" }?.maxValue ?: 0
-                        ),
+                        getItemSpec(it.itemInputs[0]),
                         CoinOutput(it.coinOutputs[0].denom, it.coinOutputs[0].amount),
                         it.sender == player?.address,
                         it.sender
@@ -123,7 +121,11 @@ class PylonCentralTradeHomeFragment : Fragment() {
                     if (list.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_my_trades)
                     } else {
-                        text_trade_situation.text = resources.getQuantityString(R.plurals.trade_situation_my_trades, list.size, list.size)
+                        text_trade_situation.text = resources.getQuantityString(
+                            R.plurals.trade_situation_my_trades,
+                            list.size,
+                            list.size
+                        )
                     }
                 } else {
                     text_my_trades.visibility = View.VISIBLE
@@ -132,12 +134,54 @@ class PylonCentralTradeHomeFragment : Fragment() {
                     if (list.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_market)
                     } else {
-                        text_trade_situation.text = resources.getQuantityString(R.plurals.trade_situation_market, list.size, list.size)
+                        text_trade_situation.text = resources.getQuantityString(
+                            R.plurals.trade_situation_market,
+                            list.size,
+                            list.size
+                        )
                     }
                 }
             }
         }
 
+
+    }
+
+    private fun getItemSpec(itemInput: ItemInput): ItemSpec {
+        val name = itemInput.strings.find { it.key == "Name" }?.value ?: ""
+        val level = itemInput.longs.find { it.key == "level" }
+
+        return when {
+            itemInput.longs.any {
+                it.key == "Special"
+            } -> CharacterSpec(
+                name,
+                Spec(
+                    level?.minValue ?: 0,
+                    level?.maxValue ?: 0
+                ),
+                Spec(
+                    itemInput.doubles.find { it.key == "XP" }?.minValue?.toDouble() ?: 0.0,
+                    itemInput.doubles.find { it.key == "XP" }?.maxValue?.toDouble() ?: 0.0
+                ),
+                itemInput.longs.find { it.key == "Special" }?.minValue ?: 0
+            )
+            name.contains("sword", true) -> WeaponSpec(
+                name, Spec(
+                    level?.minValue ?: 0,
+                    level?.maxValue ?: 0
+                ), Spec(
+                    0,
+                    0
+                )
+            )
+            else -> MaterialSpec(
+                name, Spec(
+                    level?.minValue ?: 0,
+                    level?.maxValue ?: 0
+                )
+            )
+        }
 
     }
 }
