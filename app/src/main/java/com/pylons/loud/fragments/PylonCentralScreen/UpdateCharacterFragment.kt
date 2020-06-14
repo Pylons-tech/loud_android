@@ -6,13 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Character.MyCharacterRecyclerViewAdapter
-import com.pylons.loud.models.Character
 import kotlinx.android.synthetic.main.fragment_update_character.*
 
 /**
@@ -36,24 +36,27 @@ class UpdateCharacterFragment : Fragment() {
         childFragmentManager.beginTransaction().hide(frag).commit()
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
-        val player = model.getPlayer().value
 
-        val list = player?.characters ?: listOf<Character>()
+        model.getPlayer().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                val list = it.characters
+                if (list.isNotEmpty()) {
+                    val adapter = MyCharacterRecyclerViewAdapter(
+                        list,
+                        frag.getListener(),
+                        4
+                    )
+                    val view1 = frag.view as RecyclerView
+                    view1.adapter = adapter
 
-        if (list.isNotEmpty()) {
-            val adapter = MyCharacterRecyclerViewAdapter(
-                list,
-                frag.getListener(),
-                4
-            )
-            val view1 = frag.view as RecyclerView
-            view1.adapter = adapter
-
-            text_update_character_desc.text = getString(R.string.update_character_desc)
-            childFragmentManager.beginTransaction().show(frag).commit()
-        } else {
-            text_update_character_desc.text = getString(R.string.update_character_desc_no_character)
-        }
+                    text_update_character_desc.text = getString(R.string.update_character_desc)
+                    childFragmentManager.beginTransaction().show(frag).commit()
+                } else {
+                    text_update_character_desc.text =
+                        getString(R.string.update_character_desc_no_character)
+                }
+            }
+        })
     }
 
 }
