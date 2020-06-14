@@ -316,14 +316,22 @@ class GameScreenActivity : AppCompatActivity(),
                     val tx = executeRecipe(recipeId, itemIds.toTypedArray())
                     syncProfile()
 
-                    Log.info(tx.toString())
-
-                    withContext(Main) {
-                        loading.dismiss()
-                        displayMessage(
-                            this@GameScreenActivity,
-                            getString(R.string.you_have_bought_from_shop, name)
-                        )
+                    if (tx?.txError != null) {
+                        withContext(Main) {
+                            loading.dismiss()
+                            displayMessage(
+                                this@GameScreenActivity,
+                                getString(R.string.execute_recipe_error)
+                            )
+                        }
+                    } else {
+                        withContext(Main) {
+                            loading.dismiss()
+                            displayMessage(
+                                this@GameScreenActivity,
+                                getString(R.string.you_have_bought_from_shop, name)
+                            )
+                        }
                     }
                 }
             }
@@ -358,23 +366,31 @@ class GameScreenActivity : AppCompatActivity(),
                         val tx = executeRecipe(RCP_SELL_SWORD, arrayOf(item.id))
                         syncProfile()
 
-                        Log.info(tx.toString())
-
-                        var amount = 0L
-
-                        if (tx != null) {
-                            val output = tx.txData.output
-                            if (output.isNotEmpty()) {
-                                amount = output[0].amount
+                        if (tx?.txError != null) {
+                            withContext(Main) {
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    getString(R.string.execute_recipe_error)
+                                )
                             }
-                        }
+                        } else {
+                            var amount = 0L
 
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity,
-                                getString(R.string.you_sold_item_for_gold, name, amount)
-                            )
+                            if (tx != null) {
+                                val output = tx.txData.output
+                                if (output.isNotEmpty()) {
+                                    amount = output[0].amount
+                                }
+                            }
+
+                            withContext(Main) {
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    getString(R.string.you_sold_item_for_gold, name, amount)
+                                )
+                            }
                         }
                     }
                 }
@@ -413,14 +429,22 @@ class GameScreenActivity : AppCompatActivity(),
                             val tx = executeRecipe(recipeId, arrayOf(item.id))
                             syncProfile()
 
-                            Log.info(tx.toString())
-
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity,
-                                    getString(R.string.you_have_upgraded_item, name)
-                                )
+                            if (tx?.txError != null) {
+                                withContext(Main) {
+                                    loading.dismiss()
+                                    displayMessage(
+                                        this@GameScreenActivity,
+                                        getString(R.string.execute_recipe_error)
+                                    )
+                                }
+                            } else {
+                                withContext(Main) {
+                                    loading.dismiss()
+                                    displayMessage(
+                                        this@GameScreenActivity,
+                                        getString(R.string.you_have_upgraded_item, name)
+                                    )
+                                }
                             }
                         }
                     }
@@ -523,15 +547,25 @@ class GameScreenActivity : AppCompatActivity(),
                     CoroutineScope(IO).launch {
                         val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
                         syncProfile()
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity, getString(
-                                    R.string.you_have_bought_from_pylons_central,
-                                    name
-                                )
-                            )
 
+                        if (tx?.txError != null) {
+                            withContext(Main) {
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    getString(R.string.execute_recipe_error)
+                                )
+                            }
+                        } else {
+                            withContext(Main) {
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity, getString(
+                                        R.string.you_have_bought_from_pylons_central,
+                                        name
+                                    )
+                                )
+                            }
                         }
                     }
 
@@ -570,76 +604,86 @@ class GameScreenActivity : AppCompatActivity(),
             CoroutineScope(IO).launch {
                 val tx = executeRecipe(recipeId, itemIds)
                 syncProfile()
-                Log.info(tx?.txData.toString())
 
-                var prompt = ""
-                if (tx != null) {
-                    val output = tx.txData.output
-                    if (output.isEmpty()) {
-                        prompt =
-                            getString(
-                                R.string.you_were_killed,
-                                currentCharacterName,
-                                "${getString(getFightIcon(fight.id))} ${fight.name}"
-                            )
-                        nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
-                    } else {
-                        prompt = getString(
-                            R.string.you_did_fight_with_and_earned,
-                            "${getString(getFightIcon(fight.id))} ${fight.name}",
-                            tx.txData.output[0].amount
+                if (tx?.txError != null) {
+                    withContext(Main) {
+                        loading.dismiss()
+                        displayMessage(
+                            this@GameScreenActivity,
+                            getString(R.string.execute_recipe_error)
                         )
+                    }
+                } else {
+                    Log.info(tx?.txData.toString())
+                    var prompt = ""
+                    if (tx != null) {
+                        val output = tx.txData.output
+                        if (output.isEmpty()) {
+                            prompt =
+                                getString(
+                                    R.string.you_were_killed,
+                                    currentCharacterName,
+                                    "${getString(getFightIcon(fight.id))} ${fight.name}"
+                                )
+                            nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
+                        } else {
+                            prompt = getString(
+                                R.string.you_did_fight_with_and_earned,
+                                "${getString(getFightIcon(fight.id))} ${fight.name}",
+                                tx.txData.output[0].amount
+                            )
 
-                        when (output.size) {
-                            2 -> {
-                                // Rabbit does not use weapon
-                                if (fight.id != ID_RABBIT) {
-                                    prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
-                                    nav_host_fragment.findNavController()
-                                        .navigate(R.id.forestScreenFragment)
+                            when (output.size) {
+                                2 -> {
+                                    // Rabbit does not use weapon
+                                    if (fight.id != ID_RABBIT) {
+                                        prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
+                                        nav_host_fragment.findNavController()
+                                            .navigate(R.id.forestScreenFragment)
+                                    }
                                 }
-                            }
-                            3 -> {
-                                if (fight.id == ID_GIANT) {
-                                    val player = model.getPlayer().value
-                                    if (player != null) {
-                                        val character = player.getActiveCharacter()
-                                        if (character != null && character.special != NO_SPECIAL.toLong()) {
-                                            val special = when (character.special) {
-                                                1L -> getString(R.string.fire_icon)
-                                                2L -> getString(R.string.ice_icon)
-                                                3L -> getString(R.string.acid_icon)
-                                                else -> ""
-                                            }
-                                            val dragon = when (character.special) {
-                                                1L -> getString(R.string.fire_dragon)
-                                                2L -> getString(R.string.ice_dragon)
-                                                3L -> getString(R.string.acid_dragon)
-                                                else -> ""
-                                            }
-                                            prompt += "\n${getString(
-                                                R.string.fight_giant_special,
-                                                special,
-                                                dragon
-                                            )}"
+                                3 -> {
+                                    if (fight.id == ID_GIANT) {
+                                        val player = model.getPlayer().value
+                                        if (player != null) {
+                                            val character = player.getActiveCharacter()
+                                            if (character != null && character.special != NO_SPECIAL.toLong()) {
+                                                val special = when (character.special) {
+                                                    1L -> getString(R.string.fire_icon)
+                                                    2L -> getString(R.string.ice_icon)
+                                                    3L -> getString(R.string.acid_icon)
+                                                    else -> ""
+                                                }
+                                                val dragon = when (character.special) {
+                                                    1L -> getString(R.string.fire_dragon)
+                                                    2L -> getString(R.string.ice_dragon)
+                                                    3L -> getString(R.string.acid_dragon)
+                                                    else -> ""
+                                                }
+                                                prompt += "\n${getString(
+                                                    R.string.fight_giant_special,
+                                                    special,
+                                                    dragon
+                                                )}"
 
-                                            nav_host_fragment.findNavController()
-                                                .navigate(R.id.forestScreenFragment)
+                                                nav_host_fragment.findNavController()
+                                                    .navigate(R.id.forestScreenFragment)
+                                            }
                                         }
                                     }
                                 }
+                                4 -> prompt += "\n ${getString(
+                                    R.string.you_got_bonus_item,
+                                    player.getItemNameByItemId(tx.txData.output[3].itemId)
+                                )}"
                             }
-                            4 -> prompt += "\n ${getString(
-                                R.string.you_got_bonus_item,
-                                player.getItemNameByItemId(tx.txData.output[3].itemId)
-                            )}"
                         }
                     }
-                }
 
-                withContext(Main) {
-                    loading.dismiss()
-                    displayMessage(this@GameScreenActivity, prompt)
+                    withContext(Main) {
+                        loading.dismiss()
+                        displayMessage(this@GameScreenActivity, prompt)
+                    }
                 }
             }
         }
@@ -671,12 +715,22 @@ class GameScreenActivity : AppCompatActivity(),
                             val tx = executeRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
                             syncProfile()
 
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity,
-                                    getString(R.string.bought_gold_with_pylons, 5000, 100)
-                                )
+                            if (tx?.txError != null) {
+                                withContext(Main) {
+                                    loading.dismiss()
+                                    displayMessage(
+                                        this@GameScreenActivity,
+                                        getString(R.string.execute_recipe_error)
+                                    )
+                                }
+                            } else {
+                                withContext(Main) {
+                                    loading.dismiss()
+                                    displayMessage(
+                                        this@GameScreenActivity,
+                                        getString(R.string.bought_gold_with_pylons, 5000, 100)
+                                    )
+                                }
                             }
                         }
                     }
@@ -698,12 +752,22 @@ class GameScreenActivity : AppCompatActivity(),
             val tx = executeRecipe(RCP_GET_TEST_ITEMS, arrayOf())
             syncProfile()
 
-            withContext(Main) {
-                loading.dismiss()
-                displayMessage(
-                    this@GameScreenActivity,
-                    getString(R.string.got_dev_items)
-                )
+            if (tx?.txError != null) {
+                withContext(Main) {
+                    loading.dismiss()
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.execute_recipe_error)
+                    )
+                }
+            } else {
+                withContext(Main) {
+                    loading.dismiss()
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.got_dev_items)
+                    )
+                }
             }
         }
     }
@@ -733,7 +797,8 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value ?: return
 
         if (!player.canFulfillTrade(trade)) {
-            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT)
+                .show()
             return
         }
 

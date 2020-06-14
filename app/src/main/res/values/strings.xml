@@ -140,4 +140,5 @@
     <string name="update_character_complete">You have successfully updated character\'s name to %1$s!</string>
     <string name="enter_valid_name">Enter valid name</string>
     <string name="trade_cannot_fulfill">Not enough resources to fulfill trade</string>
+    <string name="execute_recipe_error">Error executing recipe</string>
 </resources>
