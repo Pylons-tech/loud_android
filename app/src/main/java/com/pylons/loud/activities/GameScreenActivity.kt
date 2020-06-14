@@ -332,6 +332,7 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.you_have_bought_from_shop, name)
                             )
                         }
+                        nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
                     }
                 }
             }
@@ -566,6 +567,7 @@ class GameScreenActivity : AppCompatActivity(),
                                     )
                                 )
                             }
+                            nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
                         }
                     }
 
@@ -768,6 +770,7 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.got_dev_items)
                     )
                 }
+                nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
             }
         }
     }
