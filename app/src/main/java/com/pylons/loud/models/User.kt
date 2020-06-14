@@ -4,6 +4,7 @@ import android.content.Context
 import com.pylons.loud.R
 import com.pylons.loud.constants.Coin
 import com.pylons.loud.constants.Recipe.LOUD_CBID
+import com.pylons.loud.models.trade.*
 import com.pylons.wallet.core.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
@@ -127,14 +128,14 @@ data class User(
                 "Character" -> {
                     val character = Character(
                         it.id,
-                        it.strings["Name"]!!,
-                        it.longs["level"]!!,
+                        it.strings["Name"] ?: "",
+                        it.longs["level"] ?: 0,
                         0,
-                        it.doubles["XP"]!!,
-                        it.longs["GiantKill"]!!,
-                        it.longs["Special"]!!,
-                        it.longs["SpecialDragonKill"]!!,
-                        it.longs["UndeadDragonKill"]!!,
+                        it.doubles["XP"] ?: 0.0,
+                        it.longs["GiantKill"] ?: 0,
+                        it.longs["Special"] ?: 0,
+                        it.longs["SpecialDragonKill"] ?: 0,
+                        it.longs["UndeadDragonKill"] ?: 0,
                         it.lastUpdate
                     )
                     characters.add(character)
@@ -143,9 +144,9 @@ data class User(
                     if (it.strings["Name"]?.contains("sword")!!) {
                         val weapon = Weapon(
                             it.id,
-                            it.strings["Name"]!!,
-                            it.longs["level"]!!,
-                            it.doubles["attack"]!!,
+                            it.strings["Name"] ?: "",
+                            it.longs["level"] ?: 0,
+                            it.doubles["attack"] ?: 0.0,
                             it.longs["value"] ?: 0,
                             0,
                             listOf(),
@@ -155,9 +156,9 @@ data class User(
                     } else {
                         val material = Material(
                             it.id,
-                            it.strings["Name"]!!,
-                            it.longs["level"]!!,
-                            it.doubles["attack"]!!,
+                            it.strings["Name"] ?: "",
+                            it.longs["level"] ?: 0,
+                            it.doubles["attack"] ?: 0.0,
                             it.longs["value"] ?: 0,
                             it.lastUpdate
                         )
@@ -178,5 +179,45 @@ data class User(
         if (getActiveWeapon()?.id != prevActiveWeaponId) {
             activeWeapon = -1
         }
+    }
+
+    fun canFulfillTrade(trade: Trade): Boolean {
+        when (trade) {
+            is LoudTrade -> {
+                when (trade.input.coin) {
+                    Coin.LOUD -> return gold >= trade.input.amount
+                    Coin.PYLON -> return pylonAmount >= trade.input.amount
+                }
+            }
+            is SellItemTrade -> {
+                when (trade.input.coin) {
+                    Coin.PYLON -> return pylonAmount >= trade.input.amount
+                }
+            }
+            is BuyItemTrade -> {
+                return when (trade.input) {
+                    is CharacterSpec -> characters.any {
+                        it.special == trade.input.special &&
+                                it.name == trade.input.name &&
+                                it.xp >= trade.input.xp.min &&
+                                it.xp <= trade.input.xp.max &&
+                                it.level >= trade.input.level.min &&
+                                it.level <= trade.input.level.max
+                    }
+                    else -> {
+                        val items = mutableListOf<Item>()
+                        items.addAll(weapons)
+                        items.addAll(materials)
+                        return items.any {
+                            it.name == trade.input.name &&
+                                    it.level >= trade.input.level.min &&
+                                    it.level <= trade.input.level.max
+                        }
+                    }
+                }
+            }
+        }
+
+        return false
     }
 }

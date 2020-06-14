@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
-import com.pylons.loud.constants.Coin
 import com.pylons.loud.constants.FightId.ID_GIANT
 import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
@@ -730,44 +729,11 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    private fun isValidTrade(trade: Trade): Boolean {
-        val player = model.getPlayer().value ?: return false
-
-        when (trade) {
-            is LoudTrade -> {
-                when (trade.input.coin) {
-                    Coin.LOUD -> {
-                        if (player.gold < trade.input.amount) {
-                            return false
-                        }
-                    }
-                    Coin.PYLON -> {
-                        if (player.pylonAmount < trade.input.amount) {
-                            return false
-                        }
-                    }
-                }
-            }
-            is SellItemTrade -> {
-                when (trade.input.coin) {
-                    Coin.PYLON -> {
-                        if (player.pylonAmount < trade.input.amount) {
-                            return false
-                        }
-                    }
-                }
-            }
-            is BuyItemTrade -> {
-
-            }
-        }
-
-        return true
-    }
-
     override fun onTrade(trade: Trade) {
-        if (!isValidTrade(trade)) {
-            Toast.makeText(this, getString(R.string.insufficient_funds), Toast.LENGTH_SHORT).show()
+        val player = model.getPlayer().value ?: return
+
+        if (!player.canFulfillTrade(trade)) {
+            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -790,7 +756,7 @@ class GameScreenActivity : AppCompatActivity(),
                             loading.dismiss()
                             displayMessage(
                                 this@GameScreenActivity,
-                                tx?.txError!![0].msg
+                                getString(R.string.trade_error)
                             )
                         }
                     } else {

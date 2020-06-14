@@ -30,7 +30,6 @@ data class SellItemTrade(
     override val sender: String
 ) : Trade()
 
-//class ItemInput(val name: String, val level: Long) : TradeInput()
 data class BuyItemTrade(
     override val id: String,
     override val input: ItemSpec,

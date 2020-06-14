@@ -132,11 +132,12 @@
     </plurals>
     <string name="enter_valid_amount">Enter valid amount</string>
     <string name="trade_wanted">(want)</string>
+    <string name="trade_error">Something went wrong with your trade</string>
     <string name="update_character_desc">Select the character to rename, then show us how clever you are with the new name</string>
     <string name="update_character_desc_no_character">You have no characters, go find one!</string>
     <string name="update_character_prompt">Write the new name below. We won\'t judge you. It\'s probably fine. Note. You spend Pylons to rename your character.</string>
     <string name="update_character_loading">You are waiting to rename character from %1$s to %2$s.</string>
     <string name="update_character_complete">You have successfully updated character\'s name to %1$s!</string>
     <string name="enter_valid_name">Enter valid name</string>
-    <string name="insufficient_funds">Insufficient funds</string>
+    <string name="trade_cannot_fulfill">Not enough resources to fulfill trade</string>
 </resources>
