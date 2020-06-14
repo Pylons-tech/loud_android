@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/pylonCentralTradeHomeFragment">
+
+    <fragment
+        android:id="@+id/pylonCentralTradeHomeFragment"
+        android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeHomeFragment"
+        android:label="fragment_pylon_central_trade_home"
+        tools:layout="@layout/fragment_pylon_central_trade_home" />
+    <fragment
+        android:id="@+id/createTradeFragment"
+        android:name="com.pylons.loud.fragments.PylonCentralScreen.CreateTradeFragment"
+        android:label="fragment_create_trade"
+        tools:layout="@layout/fragment_create_trade" />
+</navigation>

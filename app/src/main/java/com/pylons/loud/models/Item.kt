@@ -1,12 +1,16 @@
 package com.pylons.loud.models
 
-abstract class Item(
-    val id: String,
-    val name: String,
-    val level: Int,
-    val attack: Int,
-    val price: Int,
-    val preItem: String,
-    var lastUpdate: Int
-) {
+abstract class Item {
+    abstract val id: String
+    abstract val name: String
+    abstract val level: Long
+    abstract val attack: Double
+    abstract val value: Long
+    abstract val lastUpdate: Long
+
+    fun getSellPriceRange(): String {
+        val minPrice = value * .8
+        val maxPrice = minPrice + 20
+        return "${minPrice.toInt()}-${maxPrice.toInt()}"
+    }
 }

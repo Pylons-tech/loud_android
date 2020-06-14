@@ -14,20 +14,21 @@ import com.pylons.loud.fragments.Character.CharacterFragment.OnListFragmentInter
 
 import com.pylons.loud.models.Character
 import kotlinx.android.synthetic.main.fragment_character.view.*
+import java.util.logging.Logger
 
 /**
  * [RecyclerView.Adapter] that can display a [Character] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyCharacterRecyclerViewAdapter(
     private val mValues: List<Character>,
     private val mListener: OnListFragmentInteractionListener?,
     private val mode: Int
 ) : RecyclerView.Adapter<MyCharacterRecyclerViewAdapter.ViewHolder>() {
+    private val Log = Logger.getLogger(MyCharacterRecyclerViewAdapter::class.java.name)
 
     private val mOnClickListener: View.OnClickListener
-    var selectedCharacterPostion = RecyclerView.NO_POSITION
+    var selectedPos = RecyclerView.NO_POSITION
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -38,6 +39,8 @@ class MyCharacterRecyclerViewAdapter(
             when(mode) {
                 1-> mListener?.onCharacter(item)
                 2-> mListener?.onBuyCharacter(item)
+                3 -> mListener?.onCharacterTradeSell(item)
+                4 -> mListener?.onCharacterUpdate(item)
             }
 
         }
@@ -52,10 +55,7 @@ class MyCharacterRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
-
-        if (selectedCharacterPostion == position) {
-            holder.itemView.content.setTextColor( Color.GREEN)
-        }
+        holder.itemView.isSelected = selectedPos == position;
 
         when (mode) {
             2 -> {

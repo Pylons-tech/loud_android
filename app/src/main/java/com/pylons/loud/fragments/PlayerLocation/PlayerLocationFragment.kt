@@ -13,7 +13,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
-import com.pylons.loud.constants.LocationConstants
+import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.HOME
+import com.pylons.loud.constants.Location.PYLONS_CENTRAL
+import com.pylons.loud.constants.Location.SETTINGS
+import com.pylons.loud.constants.Location.SHOP
 import com.pylons.loud.models.PlayerLocation
 
 /**
@@ -22,9 +26,6 @@ import com.pylons.loud.models.PlayerLocation
  * [PlayerLocationFragment.OnListFragmentInteractionListener] interface.
  */
 class PlayerLocationFragment : Fragment() {
-    private lateinit var myview: RecyclerView
-
-    // TODO: Customize parameters
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
@@ -46,7 +47,6 @@ class PlayerLocationFragment : Fragment() {
         // Set the adapter
         if (view is RecyclerView) {
             with(view) {
-                myview = view
                 layoutManager = when {
                     columnCount <= 1 -> LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                     else -> GridLayoutManager(context, columnCount)
@@ -61,22 +61,22 @@ class PlayerLocationFragment : Fragment() {
         return view
     }
 
-    fun getLocations(): List<PlayerLocation> {
+    private fun getLocations(): List<PlayerLocation> {
         return listOf(
             PlayerLocation(
-                LocationConstants.HOME, getString(R.string.home)
+                HOME, getString(R.string.home)
             ),
             PlayerLocation(
-                LocationConstants.FOREST, getString(R.string.forest)
+                FOREST, getString(R.string.forest)
             ),
             PlayerLocation(
-                LocationConstants.SHOP, getString(R.string.shop)
+                SHOP, getString(R.string.shop)
             ),
             PlayerLocation(
-                LocationConstants.PYLONS_CENTRAL, getString(R.string.pylons_central)
+                PYLONS_CENTRAL, getString(R.string.pylons_central)
             ),
             PlayerLocation(
-                LocationConstants.SETTINGS, getString(R.string.settings)
+                SETTINGS, getString(R.string.settings)
             )
         )
     }
@@ -86,11 +86,13 @@ class PlayerLocationFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
-            val adapter = myview.adapter as MyPlayerLocationRecyclerViewAdapter
-            if (adapter.selectedPos != location) {
+            val view = getView() as RecyclerView
+            val adapter = view.adapter as MyPlayerLocationRecyclerViewAdapter
+            val index = location - 1
+            if (adapter.selectedPos != index) {
                 adapter.notifyItemChanged(adapter.selectedPos)
-                adapter.selectedPos = location
-                adapter.notifyItemChanged(location)
+                adapter.selectedPos = index
+                adapter.notifyItemChanged(index)
             }
         })
     }
@@ -126,10 +128,8 @@ class PlayerLocationFragment : Fragment() {
 
     companion object {
 
-        // TODO: Customize parameter argument names
         const val ARG_COLUMN_COUNT = "column-count"
 
-        // TODO: Customize parameter initialization
         @JvmStatic
         fun newInstance(columnCount: Int) =
             PlayerLocationFragment().apply {

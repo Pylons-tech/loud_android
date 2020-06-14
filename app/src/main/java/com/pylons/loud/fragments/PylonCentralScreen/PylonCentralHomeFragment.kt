@@ -1,5 +1,6 @@
 package com.pylons.loud.fragments.PylonCentralScreen
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
  * A simple [Fragment] subclass.
  */
 class PylonCentralHomeFragment : Fragment() {
+    private var listener: OnFragmentInteractionListener? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,6 +31,36 @@ class PylonCentralHomeFragment : Fragment() {
         text_buy_character.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralBuyCharacterFragment)
         }
+
+        text_buy_5000_with_100_pylons.setOnClickListener {
+            listener?.onBuyGoldWithPylons()
+        }
+
+        text_trade.setOnClickListener {
+            findNavController().navigate(R.id.pylonCentralTradeFragment)
+        }
+
+        text_update_character.setOnClickListener {
+            findNavController().navigate(R.id.updateCharacterFragment)
+        }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onBuyGoldWithPylons()
     }
 
 }

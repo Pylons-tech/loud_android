@@ -23,10 +23,19 @@
             android:id="@+id/fragment_character"
             android:name="com.pylons.loud.fragments.Character.CharacterFragment"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/text_inventory_character" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/colorBorder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_character" />
 
         <TextView
             android:id="@+id/text_inventory_item"
@@ -35,7 +44,7 @@
             android:layout_margin="@dimen/text_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_character" />
+            app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <fragment
             android:id="@+id/fragment_item"

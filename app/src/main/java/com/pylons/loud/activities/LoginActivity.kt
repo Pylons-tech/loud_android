@@ -1,20 +1,18 @@
 package com.pylons.loud.activities
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.pylons.loud.R
-import com.pylons.loud.models.User
-import com.squareup.moshi.JsonAdapter
-import com.squareup.moshi.Moshi
+import com.pylons.loud.utils.Account.initAccount
+import com.pylons.loud.utils.UI.displayLoading
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.logging.Logger
 
-
 class LoginActivity : AppCompatActivity() {
     private val Log = Logger.getLogger(LoginActivity::class.java.name)
+    private var loading: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,51 +26,13 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            setAccount(username)
+            loading = displayLoading(this, getString(R.string.loading_account, username))
+            initAccount(this, username)
         }
     }
 
-    private fun setAccount(username: String) {
-        val sharedPref = getSharedPreferences(
-            getString(R.string.preference_file_account), Context.MODE_PRIVATE
-        )
-
-        val playerJSON = sharedPref.getString(username, "");
-
-        if (playerJSON.equals("")) {
-            val player = User(
-                username,
-                5000,
-                50000,
-                mutableListOf(),
-                -1,
-                mutableListOf(),
-                -1
-            )
-
-            val moshi = Moshi.Builder().build()
-            val jsonAdapter: JsonAdapter<User> =
-                moshi.adapter<User>(User::class.java)
-            val json = jsonAdapter.toJson(player)
-
-            with(sharedPref.edit()) {
-                putString(username, json)
-                putString(getString(R.string.key_current_account), username)
-                commit()
-                goToGame()
-            }
-        } else {
-            with(sharedPref.edit()) {
-                putString(getString(R.string.key_current_account), username)
-                commit()
-                goToGame()
-            }
-        }
-    }
-
-    private fun goToGame() {
-        val intent = Intent(this, GameScreenActivity::class.java)
-        startActivity(intent)
-        finish()
+    override fun onDestroy() {
+        super.onDestroy()
+        loading?.dismiss()
     }
 }

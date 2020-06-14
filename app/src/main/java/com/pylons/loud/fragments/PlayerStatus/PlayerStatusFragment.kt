@@ -12,35 +12,18 @@ import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
+import com.pylons.loud.constants.Character.ACID_SPECIAL
+import com.pylons.loud.constants.Character.FIRE_SPECIAL
+import com.pylons.loud.constants.Character.ICE_SPECIAL
 import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
-import kotlin.math.ceil
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [PlayerStatusFragment.newInstance] factory method to
- * create an instance of this fragment.
  */
 class PlayerStatusFragment : Fragment() {
     private val Log = Logger.getLogger(PlayerStatusFragment::class.java.name)
-
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -77,22 +60,55 @@ class PlayerStatusFragment : Fragment() {
                 text_active_character_name.text = activeCharacter.name
                 text_active_character_level.text = activeCharacter.level.toString()
                 text_active_character_xp.text = activeCharacter.xp.toString()
-                text_active_character_hp.text =
-                    activeCharacter.hp.toString() + "/" + activeCharacter.maxHP.toString()
+                text_character_icon.text =
+                    when (activeCharacter.special) {
+                        FIRE_SPECIAL -> getString(R.string.fire_icon)
+                        ICE_SPECIAL -> getString(R.string.ice_icon)
+                        ACID_SPECIAL -> getString(R.string.acid_icon)
+                        else -> getString(R.string.character_icon)
+                    }
 
-                layout_character_health_bar.removeAllViews()
-                for (x in 0 until ceil(activeCharacter.hp.toDouble() / 10).toInt()){
-                    val textHealth = TextView(context)
-                    textHealth.textSize = 12f
-                    textHealth.text = getString(R.string.health_icon)
-                    layout_character_health_bar.addView(textHealth)
+                layout_active_character_badges.removeAllViews()
+                var addedBadge = false
+                if (activeCharacter.undeadDragonKill > 0) {
+                    val text = TextView(context)
+                    text.text =
+                        "${getString(R.string.undead_dragon_icon)} x${activeCharacter.undeadDragonKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (activeCharacter.specialDragonKill > 0) {
+                    val icon = when (activeCharacter.special) {
+                        FIRE_SPECIAL -> getString(R.string.fire_dragon_icon)
+                        ICE_SPECIAL -> getString(R.string.ice_dragon_icon)
+                        ACID_SPECIAL -> getString(R.string.acid_dragon_icon)
+                        else -> ""
+                    }
+                    val text = TextView(context)
+                    text.text = "$icon x${activeCharacter.specialDragonKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (activeCharacter.giantKill > 0) {
+                    val text = TextView(context)
+                    text.text = "${getString(R.string.giant_icon)} x${activeCharacter.giantKill}"
+                    layout_active_character_badges.addView(text)
+                    addedBadge = true
+                }
+
+                if (addedBadge) {
+                    layout_active_character_badges.visibility = View.VISIBLE
+                } else {
+                    layout_active_character_badges.visibility = View.GONE
                 }
 
                 layout_active_character_details.visibility = View.VISIBLE
-                layout_character_health.visibility = View.VISIBLE
             } else {
                 layout_active_character_details.visibility = View.INVISIBLE
-                layout_character_health.visibility = View.GONE
+                layout_active_character_badges.removeAllViews()
+                layout_active_character_badges.visibility = View.GONE
             }
 
             val activeWeapon = player.getActiveWeapon()
@@ -105,25 +121,5 @@ class PlayerStatusFragment : Fragment() {
                 layout_active_weapon_details.visibility = View.INVISIBLE
             }
         })
-    }
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment PlayerStatusFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlayerStatusFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
     }
 }

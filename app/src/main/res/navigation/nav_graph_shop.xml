@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/shopHomeFragment">
+
+    <fragment
+        android:id="@+id/shopHomeFragment"
+        android:name="com.pylons.loud.fragments.ShopScreen.ShopHomeFragment"
+        android:label="fragment_shop_home"
+        tools:layout="@layout/fragment_shop_home" />
+    <fragment
+        android:id="@+id/shopActionFragment"
+        android:name="com.pylons.loud.fragments.ShopScreen.ShopActionFragment"
+        android:label="fragment_shop_action"
+        tools:layout="@layout/fragment_shop_action" />
+</navigation>

@@ -1,6 +1,5 @@
 package com.pylons.loud.fragments.Item
 
-import android.graphics.Color
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +10,7 @@ import com.pylons.loud.R
 
 import com.pylons.loud.fragments.Item.ItemFragment.OnListFragmentInteractionListener
 import com.pylons.loud.models.Item
+import com.pylons.loud.models.Weapon
 
 import kotlinx.android.synthetic.main.fragment_item.view.*
 import java.util.logging.Logger
@@ -18,7 +18,6 @@ import java.util.logging.Logger
 /**
  * [RecyclerView.Adapter] that can display a [Item] and makes a call to the
  * specified [OnListFragmentInteractionListener].
- * TODO: Replace the implementation with code for your data type.
  */
 class MyItemRecyclerViewAdapter(
     private val mValues: List<Item>,
@@ -28,7 +27,7 @@ class MyItemRecyclerViewAdapter(
     private val Log = Logger.getLogger(MyItemRecyclerViewAdapter::class.java.name)
 
     private val mOnClickListener: View.OnClickListener
-    var selectedItemPostion = RecyclerView.NO_POSITION
+    var selectedPos = RecyclerView.NO_POSITION
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -40,6 +39,7 @@ class MyItemRecyclerViewAdapter(
                 2 -> mListener?.onItemBuy(item)
                 3 -> mListener?.onItemSell(item)
                 4 -> mListener?.onItemUpgrade(item)
+                5 -> mListener?.onItemTradeSell(item)
             }
 
         }
@@ -54,15 +54,24 @@ class MyItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
-
-        if (selectedItemPostion == position) {
-            holder.itemView.content.setTextColor(Color.GREEN)
-        }
+        holder.itemView.isSelected = selectedPos == position;
 
         when (mode) {
             2 -> {
                 holder.mPriceLayout.visibility = View.VISIBLE
-                holder.mPriceView.text = item.price.toString()
+                if (item is Weapon) {
+                    holder.mPriceView.text = item.price.toString()
+                }
+            }
+            3 -> {
+                holder.mPriceLayout.visibility = View.VISIBLE
+                holder.mPriceView.text = item.getSellPriceRange()
+            }
+            4 -> {
+                holder.mPriceLayout.visibility = View.VISIBLE
+                if (item is Weapon) {
+                    holder.mPriceView.text = item.getUpgradePrice().toString()
+                }
             }
             else -> {
                 holder.mPriceLayout.visibility = View.INVISIBLE

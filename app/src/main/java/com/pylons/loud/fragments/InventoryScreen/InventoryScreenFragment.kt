@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.RecyclerView
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
@@ -42,14 +43,16 @@ class InventoryScreenFragment : Fragment() {
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
             val adapter = MyItemRecyclerViewAdapter(player.weapons, frag.getListener(), 1)
 
-            adapter.selectedItemPostion = player.activeWeapon
-            frag.myview.adapter = adapter
+            adapter.selectedPos = player.activeWeapon
+            val view1 = frag.view as RecyclerView
+            view1.adapter = adapter
 
             val frag2 =
                 childFragmentManager.findFragmentById(R.id.fragment_character) as CharacterFragment
             val adapter2 = MyCharacterRecyclerViewAdapter(player.characters, frag2.getListener(), 1)
-            adapter2.selectedCharacterPostion = player.activeCharacter
-            frag2.myview.adapter = adapter2
+            adapter2.selectedPos = player.activeCharacter
+            val view2 = frag2.view as RecyclerView
+            view2.adapter = adapter2
         })
     }
 

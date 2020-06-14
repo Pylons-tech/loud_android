@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.pylons.loud.R
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Character.MyCharacterRecyclerViewAdapter
-import com.pylons.loud.fragments.Item.MyItemRecyclerViewAdapter
 import com.pylons.loud.models.Character
 
 /**
@@ -40,8 +39,9 @@ class PylonCentralBuyCharacterFragment : Fragment() {
                         1,
                         1,
                         1.0,
-                        100,
-                        100,
+                        0,
+                        0,
+                        0,
                         0,
                         0
                     )

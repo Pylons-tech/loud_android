@@ -16,6 +16,7 @@
             android:layout_height="60dp"
             android:layout_margin="@dimen/text_margin"
             android:text="@string/buy_character_desc"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 

@@ -19,15 +19,18 @@ class HomeDesc {
                 1,
                 1,
                 1.0,
-                100,
-                100,
+                0,
+                0,
+                0,
                 0,
                 0
             )
         ),
         0,
         mutableListOf(),
-        -1
+        -1,
+        mutableListOf(),
+        ""
     )
 
     private val playerNoCharacter = User(
@@ -37,7 +40,9 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        -1
+        -1,
+        mutableListOf(),
+        ""
     )
 
     private val playerNoPylon = User(
@@ -47,7 +52,9 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        -1
+        -1,
+        mutableListOf(),
+        ""
     )
 
     private val playerNoPylon2 = User(
@@ -61,15 +68,18 @@ class HomeDesc {
                 1,
                 1,
                 1.0,
-                100,
-                100,
+                0,
+                0,
+                0,
                 0,
                 0
             )
         ),
         0,
         mutableListOf(),
-        -1
+        -1,
+        mutableListOf(),
+        ""
     )
 
     private val playerNoPylon3 = User(
@@ -83,37 +93,18 @@ class HomeDesc {
                 1,
                 1,
                 1.0,
-                100,
-                100,
+                0,
+                0,
+                0,
                 0,
                 0
             )
         ),
         -1,
         mutableListOf(),
-        -1
-    )
-
-    private val playerLowHP = User(
-        "cluo",
-        5000,
-        50000,
-        mutableListOf(
-            Character(
-                "001",
-                "Tiger",
-                1,
-                1,
-                1.0,
-                24,
-                100,
-                0,
-                0
-            )
-        ),
-        0,
+        -1,
         mutableListOf(),
-        -1
+        ""
     )
 
     @Test
@@ -126,11 +117,6 @@ class HomeDesc {
         assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon))
         assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon2))
         assertEquals(R.string.home_desc_without_pylon, getHomeDesc(playerNoPylon3))
-    }
-
-    @Test
-    fun homeDescLowHp() {
-        assertEquals(R.string.home_desc_with_low_hp, getHomeDesc(playerLowHP))
     }
 
     @Test
