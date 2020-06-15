@@ -86,8 +86,7 @@ class PlayerLocationFragment : Fragment() {
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
-            val view = getView() as RecyclerView
-            val adapter = view.adapter as MyPlayerLocationRecyclerViewAdapter
+            val adapter = (view as RecyclerView).adapter as MyPlayerLocationRecyclerViewAdapter
             val index = location - 1
             if (adapter.selectedPos != index) {
                 adapter.notifyItemChanged(adapter.selectedPos)
@@ -123,7 +122,7 @@ class PlayerLocationFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onLocation(location: PlayerLocation?)
+        fun onLocation(location: PlayerLocation)
     }
 
     companion object {

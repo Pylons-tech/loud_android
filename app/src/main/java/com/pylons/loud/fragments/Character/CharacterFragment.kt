@@ -77,8 +77,8 @@ class CharacterFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onCharacter(item: Character?)
-        fun onBuyCharacter(item: Character?)
+        fun onCharacter(item: Character)
+        fun onBuyCharacter(item: Character)
         fun onCharacterTradeSell(character: Character)
         fun onCharacterUpdate(character: Character)
     }

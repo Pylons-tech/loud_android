@@ -67,7 +67,7 @@ class FightFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onFight(fight: Fight?)
+        fun onFight(fight: Fight)
     }
 
 }

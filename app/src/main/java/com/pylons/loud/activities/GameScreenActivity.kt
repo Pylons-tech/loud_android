@@ -151,65 +151,62 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onFight(fight: Fight?) {
-        if (fight != null) {
-            model.getPlayer().value?.let {
-                if (fight.meetsRequirements(it)) {
-                    model.fightPreview = fight
-                    val frag =
-                        supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                    frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
-                        .navigate(R.id.forestFightPreviewFragment)
-                } else {
-                    var prompt = "Need ${fight.requirements.joinToString(", ")}"
-                    prompt = prompt.replace(NO_SPECIAL, "non-special character")
-                    prompt = prompt.replace(FIRE_SPECIAL, "fire character")
-                    prompt = prompt.replace(ICE_SPECIAL, "ice character")
-                    prompt = prompt.replace(ACID_SPECIAL, "acid character")
+    override fun onFight(fight: Fight) {
+        model.getPlayer().value?.let {
+            if (fight.meetsRequirements(it)) {
+                model.fightPreview = fight
+                val frag =
+                    supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+                    .navigate(R.id.forestFightPreviewFragment)
+            } else {
+                var prompt = "Need ${fight.requirements.joinToString(", ")}"
+                prompt = prompt.replace(NO_SPECIAL, "non-special character")
+                prompt = prompt.replace(FIRE_SPECIAL, "fire character")
+                prompt = prompt.replace(ICE_SPECIAL, "ice character")
+                prompt = prompt.replace(ACID_SPECIAL, "acid character")
+                Toast.makeText(
+                    this,
+                    prompt,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+    }
+
+    override fun onLocation(location: PlayerLocation) {
+        when (location.id) {
+            HOME -> {
+                nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
+            }
+            FOREST -> {
+                if (model.getPlayer().value?.activeCharacter == -1) {
                     Toast.makeText(
                         this,
-                        prompt,
-                        Toast.LENGTH_SHORT
+                        R.string.you_cant_go_to_forest_without_character, Toast.LENGTH_SHORT
                     ).show()
+                    return
                 }
+                nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
+            }
+            SHOP -> {
+                nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
+            }
+            PYLONS_CENTRAL -> {
+                nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
+            }
+            SETTINGS -> {
+                nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
+            }
+            else -> {
+                Log.warning("Not exist")
             }
         }
     }
 
-    override fun onLocation(location: PlayerLocation?) {
-        if (location != null) {
-            when (location.id) {
-                HOME -> {
-                    nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
-                }
-                FOREST -> {
-                    if (model.getPlayer().value?.activeCharacter == -1) {
-                        Toast.makeText(
-                            this,
-                            R.string.you_cant_go_to_forest_without_character, Toast.LENGTH_SHORT
-                        ).show()
-                        return
-                    }
-                    nav_host_fragment.findNavController().navigate(R.id.forestScreenFragment)
-                }
-                SHOP -> {
-                    nav_host_fragment.findNavController().navigate(R.id.shopScreenFragment)
-                }
-                PYLONS_CENTRAL -> {
-                    nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
-                }
-                SETTINGS -> {
-                    nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
-                }
-                else -> {
-                    Log.warning("Not exist")
-                }
-            }
-        }
-    }
-
-    override fun onItemSelect(item: Item?) {
-        val name = item?.name
+    override fun onItemSelect(item: Item) {
+        val name = item.name
         val player = model.getPlayer().value
 
         if (player != null) {
@@ -239,8 +236,8 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onItemBuy(item: Item?) {
-        val name = item?.name
+    override fun onItemBuy(item: Item) {
+        val name = item.name
         val price = (item as Weapon).price
         val goldIcon = getString(R.string.gold_icon)
         val player = model.getPlayer().value ?: return
@@ -259,7 +256,7 @@ class GameScreenActivity : AppCompatActivity(),
                 val itemIds = mutableListOf<String>()
                 var recipeId = ""
 
-                when (item?.id) {
+                when (item.id) {
                     ID_WOODEN_SWORD -> {
                         recipeId = RCP_BUY_WOODEN_SWORD
                     }
@@ -345,9 +342,9 @@ class GameScreenActivity : AppCompatActivity(),
         alert.show()
     }
 
-    override fun onItemSell(item: Item?) {
+    override fun onItemSell(item: Item) {
         val player = model.getPlayer().value
-        if (player != null && item != null) {
+        if (player != null) {
             val name = item.name
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
@@ -405,8 +402,8 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onItemUpgrade(item: Item?) {
-        val name = item?.name
+    override fun onItemUpgrade(item: Item) {
+        val name = item.name
         val player = model.getPlayer().value
 
         if (item is Weapon && player != null) {
@@ -464,8 +461,8 @@ class GameScreenActivity : AppCompatActivity(),
 
     }
 
-    override fun onCharacter(item: Character?) {
-        val name = item?.name
+    override fun onCharacter(item: Character) {
+        val name = item.name
         val player = model.getPlayer().value
         if (player != null) {
             var prompt = "Set ${name} as active character?"
@@ -479,7 +476,7 @@ class GameScreenActivity : AppCompatActivity(),
                     if (player.getActiveCharacter() == item) {
                         player.activeCharacter = -1
                     } else {
-                        player.setActiveCharacter(item as Character)
+                        player.setActiveCharacter(item)
                     }
                     model.setPlayer(player)
                     player.saveAsync(this)
@@ -532,7 +529,7 @@ class GameScreenActivity : AppCompatActivity(),
         Log.info("Done syncProfile")
     }
 
-    override fun onBuyCharacter(item: Character?) {
+    override fun onBuyCharacter(item: Character) {
         val name = item?.name
         val price = item?.price
         val pylonIcon = getString(R.string.pylon_icon)
@@ -646,32 +643,30 @@ class GameScreenActivity : AppCompatActivity(),
                                 }
                                 3 -> {
                                     if (fight.id == ID_GIANT) {
-                                        val player = model.getPlayer().value
-                                        if (player != null) {
-                                            val character = player.getActiveCharacter()
-                                            if (character != null && character.special != NO_SPECIAL.toLong()) {
-                                                val special = when (character.special) {
-                                                    1L -> getString(R.string.fire_icon)
-                                                    2L -> getString(R.string.ice_icon)
-                                                    3L -> getString(R.string.acid_icon)
-                                                    else -> ""
-                                                }
-                                                val dragon = when (character.special) {
-                                                    1L -> getString(R.string.fire_dragon)
-                                                    2L -> getString(R.string.ice_dragon)
-                                                    3L -> getString(R.string.acid_dragon)
-                                                    else -> ""
-                                                }
-                                                prompt += "\n${getString(
-                                                    R.string.fight_giant_special,
-                                                    special,
-                                                    dragon
-                                                )}"
-
-                                                nav_host_fragment.findNavController()
-                                                    .navigate(R.id.forestScreenFragment)
+                                        val character = player.getActiveCharacter()
+                                        if (character != null && character.special != NO_SPECIAL.toLong()) {
+                                            val special = when (character.special) {
+                                                1L -> getString(R.string.fire_icon)
+                                                2L -> getString(R.string.ice_icon)
+                                                3L -> getString(R.string.acid_icon)
+                                                else -> ""
                                             }
+                                            val dragon = when (character.special) {
+                                                1L -> getString(R.string.fire_dragon)
+                                                2L -> getString(R.string.ice_dragon)
+                                                3L -> getString(R.string.acid_dragon)
+                                                else -> ""
+                                            }
+                                            prompt += "\n${getString(
+                                                R.string.fight_giant_special,
+                                                special,
+                                                dragon
+                                            )}"
+
+                                            nav_host_fragment.findNavController()
+                                                .navigate(R.id.forestScreenFragment)
                                         }
+
                                     }
                                 }
                                 4 -> prompt += "\n ${getString(

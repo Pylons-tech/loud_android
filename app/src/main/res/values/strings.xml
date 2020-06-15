@@ -141,4 +141,11 @@
     <string name="enter_valid_name">Enter valid name</string>
     <string name="trade_cannot_fulfill">Not enough resources to fulfill trade</string>
     <string name="execute_recipe_error">Error executing recipe</string>
+    <string name="level">Level</string>
+    <string name="attack">Attack</string>
+    <string name="xp">XP</string>
+    <string name="no_active_character">No active character, tap here for inventory</string>
+    <string name="no_active_weapon">No active weapon, tap here for inventory</string>
+    <string name="hint_enter_number">Enter number value</string>
+    <string name="hint_enter_text">Enter some text</string>
 </resources>

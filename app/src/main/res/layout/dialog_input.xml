@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
+        android:hint="@string/hint_enter_number"
+        android:importantForAutofill="no"
         android:inputType="number"
         android:textColor="@color/colorText"
         android:textCursorDrawable="@drawable/cursor_color"

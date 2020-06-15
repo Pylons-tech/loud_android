@@ -80,10 +80,10 @@ class ItemFragment : Fragment() {
      * for more information.
      */
     interface OnListFragmentInteractionListener {
-        fun onItemSelect(item: Item?)
-        fun onItemBuy(item: Item?)
-        fun onItemSell(item: Item?)
-        fun onItemUpgrade(item: Item?)
+        fun onItemSelect(item: Item)
+        fun onItemBuy(item: Item)
+        fun onItemSell(item: Item)
+        fun onItemUpgrade(item: Item)
         fun onItemTradeSell(item: Item)
     }
 

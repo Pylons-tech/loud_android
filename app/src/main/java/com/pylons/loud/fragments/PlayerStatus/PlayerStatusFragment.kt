@@ -1,15 +1,16 @@
 package com.pylons.loud.fragments.PlayerStatus
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.constants.Character.ACID_SPECIAL
@@ -18,6 +19,7 @@ import com.pylons.loud.constants.Character.ICE_SPECIAL
 import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
+
 
 /**
  * A simple [Fragment] subclass.
@@ -43,10 +45,10 @@ class PlayerStatusFragment : Fragment() {
         layout_gold_count.setOnClickListener {
             findNavController().navigate(R.id.shopScreenFragment)
         }
-        text_character_icon.setOnClickListener {
+        layout_active_character.setOnClickListener {
             findNavController().navigate(R.id.inventoryFragment)
         }
-        text_weapon_icon.setOnClickListener {
+        layout_active_weapon.setOnClickListener {
             findNavController().navigate(R.id.inventoryFragment)
         }
 
@@ -74,7 +76,7 @@ class PlayerStatusFragment : Fragment() {
                     val text = TextView(context)
                     text.text =
                         "${getString(R.string.undead_dragon_icon)} x${activeCharacter.undeadDragonKill}"
-                    layout_active_character_badges.addView(text)
+                    addBadge(text)
                     addedBadge = true
                 }
 
@@ -87,14 +89,14 @@ class PlayerStatusFragment : Fragment() {
                     }
                     val text = TextView(context)
                     text.text = "$icon x${activeCharacter.specialDragonKill}"
-                    layout_active_character_badges.addView(text)
+                    addBadge(text)
                     addedBadge = true
                 }
 
                 if (activeCharacter.giantKill > 0) {
                     val text = TextView(context)
                     text.text = "${getString(R.string.giant_icon)} x${activeCharacter.giantKill}"
-                    layout_active_character_badges.addView(text)
+                    addBadge(text)
                     addedBadge = true
                 }
 
@@ -105,10 +107,13 @@ class PlayerStatusFragment : Fragment() {
                 }
 
                 layout_active_character_details.visibility = View.VISIBLE
+                text_no_active_character.visibility = View.GONE
             } else {
-                layout_active_character_details.visibility = View.INVISIBLE
+                text_character_icon.text = getString(R.string.character_icon)
+                layout_active_character_details.visibility = View.GONE
                 layout_active_character_badges.removeAllViews()
                 layout_active_character_badges.visibility = View.GONE
+                text_no_active_character.visibility = View.VISIBLE
             }
 
             val activeWeapon = player.getActiveWeapon()
@@ -117,9 +122,26 @@ class PlayerStatusFragment : Fragment() {
                 text_active_weapon_level.text = activeWeapon.level.toString()
                 text_active_weapon_attack.text = activeWeapon.attack.toString()
                 layout_active_weapon_details.visibility = View.VISIBLE
+                text_no_active_weapon.visibility = View.GONE
             } else {
-                layout_active_weapon_details.visibility = View.INVISIBLE
+                layout_active_weapon_details.visibility = View.GONE
+                text_no_active_weapon.visibility = View.VISIBLE
             }
         })
+    }
+
+    private fun addBadge(text: TextView) {
+        val params: LinearLayout.LayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        params.setMargins(
+            0, 0, TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP, 16F, resources
+                    .displayMetrics
+            ).toInt(), 0
+        )
+        text.layoutParams = params
+        layout_active_character_badges.addView(text)
     }
 }
