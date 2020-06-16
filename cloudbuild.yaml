@@ -155,7 +155,7 @@ steps:
   args:
   - '-c'
   - |
-    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../keystore.properties -storepass PM5GLYr7f3zy -keypass PM5GLYr7f3zy app/build/outputs/apk/release/app-release-unsigned.apk wallet
+    jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore keystore.properties -storepass PM5GLYr7f3zy -keypass PM5GLYr7f3zy app/build/outputs/apk/release/app-release-unsigned.apk wallet
 
 #
 # align the APK
