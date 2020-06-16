@@ -169,7 +169,7 @@ steps:
   args:
   - '-c'
   - |
-    /opt/android/sdk/build-tools/28.0.3/zipalign -f -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release-signed-aligned.apk 
+    /opt/android/sdk/build-tools/28.0.3/zipalign -f -v 4 app/build/outputs/apk/dev/release/app-dev-release-unsigned.apk app/build/outputs/apk/release/app-release-signed-aligned.apk 
 
 #
 # Save the APKs
