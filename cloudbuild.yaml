@@ -1,0 +1,240 @@
+steps:
+
+    #
+    # Get a build number
+    #
+    # Cloud build doesn't use incrementing build numbers, by default, but they're often
+    # useful for Android builds, so these steps will read/increment/store a build number.
+    #
+    # Download the config bucket, which stores the build number.
+    - name: 'gcr.io/cloud-builders/gsutil'
+      id: copy_config
+      waitFor: ['-']  # The '-' indicates that this step begins immediately.
+      # we use rsync and not cp so that this step doesn't fail the first time it's run
+      args: ['rsync', 'gs://gradle_cache_$PROJECT_ID/', '/config']
+      volumes:
+      - name: 'config'
+        path: '/config'
+    
+    # Compound bash command to:
+    #   1. read a version
+    #   2. increment it
+    #   3. write it back to the version file
+    #   4. write it to the `build_env` file for use later
+    - name: 'gcr.io/$PROJECT_ID/tar'
+      id: setup_env
+      entrypoint: 'bash'
+      args: 
+      - '-c'
+      - |
+        cat /config/buildnum | awk '{print $1"+1"}' | bc | tee /config/buildnum | awk '{print "BUILD_NUM="$1 }' | tee .buildnum
+      waitFor: ['copy_config']
+      volumes:
+      - name: 'config'
+        path: '/config'
+    
+    # Save the updated build number to cloud storage
+    - name: 'gcr.io/cloud-builders/gsutil'
+      id: save_env
+      args: ['cp', '/config/buildnum', 'gs://config_$PROJECT_ID/buildnum']
+      waitFor: ['setup_env']
+      volumes:
+      - name: 'config'
+        path: '/config'
+    
+    #
+    # Extract the cache
+    #
+    # The gradle build cache is stored as a tarball in Google Cloud Storage to
+    # make builds faster.
+    #
+    # After extracting the cache to the /build_cache directory, we need to supply
+    # that to gradle, and include the volume in steps that require the cache.
+    #
+    - name: 'gcr.io/cloud-builders/gsutil'
+      id: copy_build_cache
+      waitFor: ['-']  # The '-' indicates that this step begins immediately.
+      # we use rsync and not cp so that this step doesn't fail the first time it's run
+      args: ['rsync', 'gs://gradle_cache_$PROJECT_ID/', '/build_cache']
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    - name: 'gcr.io/$PROJECT_ID/tar'
+      id: extract_build_cache
+      waitFor: ['copy_build_cache']
+      # This might fail the first time, but that's okay
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+        tar xpzf /build_cache/cache.tgz -C / || echo "No cache found."
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    #
+    # Decrypt secret files
+    #
+    # Secret files, like keystores and service account files, are stored in the repository
+    # as encrypted files and decrypted using Google Cloud's Key Management Service.
+    # https://cloud.google.com/kms/
+    #
+    - name: 'gcr.io/cloud-builders/gcloud'
+      id: decrypt_secrets
+      waitFor: ['-']  # The '-' indicates that this step begins immediately.
+      entrypoint: 'bash'
+      args:
+      - '-c'
+      - |
+              gcloud kms decrypt --ciphertext-file=keystore.properties.enc --plaintext-file=keystore.properties --location=global --keyring=pylons --key=android-builder
+              #gcloud kms decrypt --ciphertext-file=signing/google-service-account.json.enc --plaintext-file=signing/google-service-account.json --location=global --keyring=my-app --key=android-builder
+    
+    #
+    # Build the project
+    #
+    # In order to get the build number that we calculated earlier, we need to source the 
+    # build_environment.sh file *in each step it's needed* before running our build.
+    #
+    - name: 'gcr.io/$PROJECT_ID/android:28'
+      id: build
+      dir: './wallet'
+      args: ["./gradlew", ":app:assembleRelease", ":app:assembleDebug", "assembleAndroidTest"]
+      <<: &env
+        env:
+        - 'TERM=dumb'
+        - 'JAVA_TOOL_OPTIONS="-Xmx4g"'
+        - 'GRADLE_USER_HOME=/build_cache/.gradle'
+        - 'GRADLE_OPTS="-Dorg.gradle.daemon=false -Dorg.gradle.parallel=true -Dorg.gradle.workers.max=8 -Dkotlin.incremental=false"'
+        - 'BRANCH_NAME=$BRANCH_NAME'
+      waitFor:
+        - decrypt_secrets
+        - extract_build_cache
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    #
+    # Unit Tests
+    #
+    # Run the unit tests using the same type of step as the build.
+    #
+    - name: 'gcr.io/$PROJECT_ID/android:28'
+      id: unit_tests
+      dir: './wallet'
+      args: ["./gradlew", "check"]
+      <<: *env
+      waitFor: ['build']
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    #
+    # Store the unit test reports
+    #
+    - name: 'gcr.io/cloud-builders/gsutil'
+      id: store_unit_test_reports
+      dir: './wallet'
+      args: ['-q', 'cp', '-r', 'app/build/reports/', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
+      waitFor: ['unit_tests']
+    
+    #
+    # Store the unit test results
+    #
+    - name: 'gcr.io/cloud-builders/gsutil'
+      id: store_unit_test_results
+      dir: './wallet'
+      args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
+      waitFor: ['unit_tests']
+    
+    #
+    # sign the APK
+    #
+    # Using jarsigner
+    #
+    - name: 'gcr.io/$PROJECT_ID/android:28'
+      id: sign_apk
+      waitFor: ['store_unit_test_results']  # The '-' indicates that this step begins immediately.
+      entrypoint: 'bash'
+      dir: './wallet'
+      args:
+      - '-c'
+      - |
+        jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore ../keystore.properties -storepass PM5GLYr7f3zy -keypass PM5GLYr7f3zy app/build/outputs/apk/release/app-release-unsigned.apk wallet
+    
+    #
+    # align the APK
+    #
+    # Using zipalign
+    #
+    - name: 'gcr.io/$PROJECT_ID/android:28'
+      id: align_apk
+      waitFor: ['sign_apk']  # The '-' indicates that this step begins immediately.
+      entrypoint: 'bash'
+      dir: './wallet'
+      args:
+      - '-c'
+      - |
+        /opt/android/sdk/build-tools/28.0.3/zipalign -f -v 4 app/build/outputs/apk/release/app-release-unsigned.apk app/build/outputs/apk/release/app-release-signed-aligned.apk 
+    
+    #
+    # Save the APKs
+    #
+    - name: 'gcr.io/cloud-builders/gsutil'
+      dir: './wallet'
+      args: ['-q', 'cp', '-r', 'app/build/outputs/apk', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
+      waitFor: ['align_apk']
+    
+    
+    
+    #
+    # Deployment
+    #
+    # Deploy to Google Play if this is the master branch.
+    #
+    - name: 'gcr.io/cloud-builders/curl'
+      id: create_edit
+      dir: './wallet'
+      args: ['-d', '"{\"id\":\"$BUILD_ID\"}"', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits']
+      waitFor: ['align_apk']
+    
+    - name: 'gcr.io/cloud-builders/curl'
+      id: upload_to_edit
+      dir: './wallet'
+      args: ['-d', '@data=app/build/outputs/apk', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits/$BUILD_ID/apks?uploadType=media']
+      waitFor: ['create_edit']
+    
+    
+      #
+    # Cleanup
+    #
+    
+    # Compress the gradle build cache
+    - name: 'gcr.io/$PROJECT_ID/tar'
+      id: compress_cache
+      args: ['cpvzf', '/build_cache/cache.tgz', '-C', '/build_cache', '/build_cache/.gradle']
+      waitFor: ['upload_to_edit']
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    # Store the build cache
+    - name: gcr.io/cloud-builders/gsutil
+      args: ['cp', '/build_cache/cache.tgz', 'gs://gradle_cache_$PROJECT_ID/cache.tgz']
+      waitFor: ['compress_cache']
+      volumes:
+      - name: 'build_cache'
+        path: '/build_cache'
+    
+    timeout: 1800s
+    
+    # This build requires more than 3.75 GB of memory, so I have to use a HIGHCPU machine
+    # which has 30 GB of memory.  This means I can give Gradle lots of processes to run
+    # highly parallelized.
+    #
+    # A standard machine is $0.003 per build minute, but these high cpu machines are
+    # $0.016 per build minute. That means that a 15 minute build will cost $0.045 on
+    # a standard machine, but $0.24 on the larger machine.  A machine half that size
+    # from CircleCI would cost $0.024 per build minute, so that saves 1/3 the cost.
+    options:
+      machineType: 'N1_HIGHCPU_8'
