@@ -98,7 +98,6 @@ steps:
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: build
-  dir: './wallet'
   args: ["./gradlew", ":app:assembleRelease", ":app:assembleDebug", "assembleAndroidTest"]
   <<: &env
     env:
@@ -121,7 +120,6 @@ steps:
 #
 - name: 'gcr.io/$PROJECT_ID/android:28'
   id: unit_tests
-  dir: './wallet'
   args: ["./gradlew", "check"]
   <<: *env
   waitFor: ['build']
@@ -134,7 +132,6 @@ steps:
 #
 - name: 'gcr.io/cloud-builders/gsutil'
   id: store_unit_test_reports
-  dir: './wallet'
   args: ['-q', 'cp', '-r', 'app/build/reports/', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
@@ -143,7 +140,6 @@ steps:
 #
 - name: 'gcr.io/cloud-builders/gsutil'
   id: store_unit_test_results
-  dir: './wallet'
   args: ['-q', 'cp', '-r', 'app/build/test-results/', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['unit_tests']
 
@@ -156,7 +152,6 @@ steps:
   id: sign_apk
   waitFor: ['store_unit_test_results']  # The '-' indicates that this step begins immediately.
   entrypoint: 'bash'
-  dir: './wallet'
   args:
   - '-c'
   - |
@@ -171,7 +166,6 @@ steps:
   id: align_apk
   waitFor: ['sign_apk']  # The '-' indicates that this step begins immediately.
   entrypoint: 'bash'
-  dir: './wallet'
   args:
   - '-c'
   - |
@@ -181,7 +175,6 @@ steps:
 # Save the APKs
 #
 - name: 'gcr.io/cloud-builders/gsutil'
-  dir: './wallet'
   args: ['-q', 'cp', '-r', 'app/build/outputs/apk', 'gs://artifacts.$PROJECT_ID.appspot.com/$BRANCH_NAME-$BUILD_ID/']
   waitFor: ['align_apk']
 
@@ -194,13 +187,11 @@ steps:
 #
 - name: 'gcr.io/cloud-builders/curl'
   id: create_edit
-  dir: './wallet'
   args: ['-d', '"{\"id\":\"$BUILD_ID\"}"', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits']
   waitFor: ['align_apk']
 
 - name: 'gcr.io/cloud-builders/curl'
   id: upload_to_edit
-  dir: './wallet'
   args: ['-d', '@data=app/build/outputs/apk', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits/$BUILD_ID/apks?uploadType=media']
   waitFor: ['create_edit']
 
