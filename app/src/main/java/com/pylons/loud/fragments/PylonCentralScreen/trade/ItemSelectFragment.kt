@@ -32,8 +32,8 @@ class ItemSelectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val frag = childFragmentManager.findFragmentById(R.id.fragment_item_select) as ItemFragment
-        val view = frag.view as RecyclerView
+        val fragView = frag.view as RecyclerView
         val c = context as ItemFragment.OnListFragmentInteractionListener
-        view.adapter = MyItemRecyclerViewAdapter(model.tradeBuyMatchingItems, c, 6)
+        fragView.adapter = MyItemRecyclerViewAdapter(model.tradeBuyMatchingItems, c, 6)
     }
 }

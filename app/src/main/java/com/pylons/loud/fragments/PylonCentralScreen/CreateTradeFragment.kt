@@ -71,6 +71,7 @@ class CreateTradeFragment : Fragment() {
     private lateinit var itemBuyFragment: ItemSpecFragment
     private lateinit var characterSellFragment: CharacterFragment
     private lateinit var itemSellFragment: ItemFragment
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -132,7 +133,6 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initModel() {
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getTradeInput().observe(viewLifecycleOwner, Observer { item ->
             if (item != null) {
                 Log.info(item.toString())
@@ -246,14 +246,14 @@ class CreateTradeFragment : Fragment() {
                     getString(R.string.trade_pylon_buy, MINIMUM_TRADE_PRICE)
                 )
                     .setCancelable(false)
-                    .setPositiveButton("Proceed") { _, _ ->
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.setView(mDialogView)
                 alert.show()
 
@@ -294,14 +294,14 @@ class CreateTradeFragment : Fragment() {
                     getString(R.string.trade_gold_buy)
                 )
                     .setCancelable(false)
-                    .setPositiveButton("Proceed") { _, _ ->
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.setView(mDialogView)
                 alert.show()
 
@@ -435,20 +435,19 @@ class CreateTradeFragment : Fragment() {
                 getString(R.string.trade_pylon_offer, MINIMUM_TRADE_PRICE)
             )
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.setView(mDialogView)
             alert.show()
 
             alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val amount = mDialogView.edit_text_amount.text.toString()
-                val model: GameScreenActivity.SharedViewModel by activityViewModels()
                 val player = model.getPlayer().value
                 if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() < player?.pylonAmount ?: -1
                 ) {
@@ -475,8 +474,6 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initTextGoldSell() {
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
-
         text_gold_sell.setOnClickListener {
             with(childFragmentManager) {
                 beginTransaction().hide(characterSellFragment).commit()
@@ -492,14 +489,14 @@ class CreateTradeFragment : Fragment() {
                     getString(R.string.trade_gold_sell)
                 )
                     .setCancelable(false)
-                    .setPositiveButton("Proceed") { _, _ ->
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.setView(mDialogView)
                 alert.show()
 
@@ -529,7 +526,6 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initCharacterSell() {
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         val player = model.getPlayer().value
         val list = player?.characters ?: listOf<Character>()
         text_character_sell.text = "${getString(R.string.trade_character)} (${list.size})"
@@ -556,7 +552,6 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initItemSell() {
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         val player = model.getPlayer().value
         if (player != null) {
             val items = mutableListOf<Item>()

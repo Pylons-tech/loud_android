@@ -108,7 +108,7 @@ data class User(
 
         var pylonAmount = 0L
         var goldAmount = 0L
-        profile.coins?.forEach {
+        profile.coins.forEach {
             when (it.denom) {
                 Coin.PYLON -> pylonAmount = it.amount
                 Coin.LOUD -> goldAmount = it.amount

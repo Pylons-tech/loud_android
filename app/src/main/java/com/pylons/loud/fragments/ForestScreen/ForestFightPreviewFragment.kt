@@ -110,7 +110,7 @@ class ForestFightPreviewFragment : Fragment() {
 
             val player = model.getPlayer().value
 
-            if (player != null && recipeId != "") {
+            if (player != null && recipeId.isNotBlank()) {
                 val itemIds = mutableListOf<String>()
                 val activeCharacter = player.getActiveCharacter()
                 if (activeCharacter != null) {

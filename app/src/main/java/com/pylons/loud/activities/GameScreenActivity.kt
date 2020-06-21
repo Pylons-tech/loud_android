@@ -70,7 +70,6 @@ import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.recipe.CoinOutput
-import com.pylons.wallet.core.types.tx.recipe.ItemInput
 import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 
 import kotlinx.android.synthetic.main.content_game_screen.*
@@ -220,7 +219,7 @@ class GameScreenActivity : AppCompatActivity(),
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     if (player.getActiveWeapon() == item) {
                         player.activeWeapon = -1
                     } else {
@@ -229,12 +228,12 @@ class GameScreenActivity : AppCompatActivity(),
                     model.setPlayer(player)
                     player.saveAsync(this)
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -255,7 +254,7 @@ class GameScreenActivity : AppCompatActivity(),
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage("$prompt?")
             .setCancelable(false)
-            .setPositiveButton("Buy") { _, _ ->
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 val itemIds = mutableListOf<String>()
                 var recipeId = ""
 
@@ -336,12 +335,12 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                 }
             }
-            .setNegativeButton("No") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
@@ -352,7 +351,7 @@ class GameScreenActivity : AppCompatActivity(),
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
                 .setCancelable(false)
-                .setPositiveButton("Sell") { _, _ ->
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
 
                     val loading = displayLoading(
                         this,
@@ -395,12 +394,12 @@ class GameScreenActivity : AppCompatActivity(),
                         }
                     }
                 }
-                .setNegativeButton("No") { dialog, _ ->
+                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -449,12 +448,12 @@ class GameScreenActivity : AppCompatActivity(),
                             }
                         }
                     }
-                    .setNegativeButton("No") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.show()
             } else {
                 displayMessage(this, getString(R.string.you_dont_have_enough_gold_to_upgrade, name))
@@ -475,7 +474,7 @@ class GameScreenActivity : AppCompatActivity(),
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     if (player.getActiveCharacter() == item) {
                         player.activeCharacter = -1
                     } else {
@@ -484,12 +483,12 @@ class GameScreenActivity : AppCompatActivity(),
                     model.setPlayer(player)
                     player.saveAsync(this)
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -533,8 +532,8 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onBuyCharacter(item: Character) {
-        val name = item?.name
-        val price = item?.price
+        val name = item.name
+        val price = item.price
         val pylonIcon = getString(R.string.pylon_icon)
         val player = model.getPlayer().value
 
@@ -542,7 +541,7 @@ class GameScreenActivity : AppCompatActivity(),
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
             dialogBuilder.setMessage("Buy $name for $pylonIcon $price?")
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val loading =
                         displayLoading(this, getString(R.string.loading_buy_character, name))
                     CoroutineScope(IO).launch {
@@ -572,12 +571,12 @@ class GameScreenActivity : AppCompatActivity(),
                     }
 
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -705,7 +704,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 )
                     .setCancelable(false)
-                    .setPositiveButton("Proceed") { _, _ ->
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                         val loading =
                             displayLoading(
                                 this,
@@ -734,12 +733,12 @@ class GameScreenActivity : AppCompatActivity(),
                             }
                         }
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.show()
             }
         }
@@ -800,7 +799,7 @@ class GameScreenActivity : AppCompatActivity(),
             getString(R.string.trade_fulfill)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                 val loading =
                     displayLoading(
                         this,
@@ -830,12 +829,12 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                 }
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
@@ -924,7 +923,7 @@ class GameScreenActivity : AppCompatActivity(),
                 getString(R.string.trade_create_loading)
             )
         CoroutineScope(IO).launch {
-            val tx = createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
+            createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
             syncProfile()
 
             withContext(Main) {
@@ -982,14 +981,14 @@ class GameScreenActivity : AppCompatActivity(),
             getString(R.string.trade_cancel)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                 val loading =
                     displayLoading(
                         this,
                         getString(R.string.trade_cancel_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = cancelTrade(trade)
+                    cancelTrade(trade)
                     syncProfile()
 
                     withContext(Main) {
@@ -1003,12 +1002,12 @@ class GameScreenActivity : AppCompatActivity(),
                     refreshTrade()
                 }
             }
-            .setNegativeButton("No") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
@@ -1038,20 +1037,20 @@ class GameScreenActivity : AppCompatActivity(),
             getString(R.string.update_character_prompt)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.setView(mDialogView)
         alert.show()
 
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val name = mDialogView.edit_text.text.toString()
-            if (name != "") {
+            if (name.isNotBlank()) {
                 onRenameCharacter(character, name)
                 alert.dismiss()
             } else {

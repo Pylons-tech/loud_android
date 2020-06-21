@@ -149,4 +149,9 @@
     <string name="hint_enter_number">Enter number value</string>
     <string name="hint_enter_text">Enter some text</string>
     <string name="select_trade_item">Select item to trade</string>
+    <string name="confirm">Confirm</string>
+    <string name="proceed">Proceed</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
