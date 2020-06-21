@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PylonCentralScreen.PylonCentralTradeHomeFragment">
+    tools:context=".fragments.screens.pyloncentral.PylonCentralTradeHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
 
         <fragment
             android:id="@+id/fragment_trade_list"
-            android:name="com.pylons.loud.fragments.trade.TradeFragment"
+            android:name="com.pylons.loud.fragments.lists.trade.TradeFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

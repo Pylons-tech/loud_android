@@ -9,5 +9,5 @@
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".fragments.PlayerLocation.PlayerLocationFragment"
+    tools:context=".fragments.lists.playerlocation.PlayerLocationFragment"
     tools:listitem="@layout/fragment_player_location" />

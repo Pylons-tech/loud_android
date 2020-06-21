@@ -11,5 +11,5 @@
     android:scrollbarThumbVertical="@color/colorText"
     android:scrollbars="vertical"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".fragments.Character.CharacterFragment"
+    tools:context=".fragments.lists.character.CharacterFragment"
     tools:listitem="@layout/fragment_character" />

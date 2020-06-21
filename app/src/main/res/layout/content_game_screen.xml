@@ -9,7 +9,7 @@
 
     <fragment
         android:id="@+id/fragment_player_status"
-        android:name="com.pylons.loud.fragments.PlayerStatus.PlayerStatusFragment"
+        android:name="com.pylons.loud.fragments.lists.playerstatus.PlayerStatusFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +43,7 @@
 
         <fragment
             android:id="@+id/fragment_player_location"
-            android:name="com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment"
+            android:name="com.pylons.loud.fragments.lists.playerlocation.PlayerLocationFragment"
             android:layout_width="0dp"
             android:layout_height="60dp"
             app:layout_constraintBottom_toBottomOf="parent"

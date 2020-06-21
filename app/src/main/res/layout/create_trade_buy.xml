@@ -60,7 +60,7 @@
 
     <fragment
         android:id="@+id/fragment_item_buy"
-        android:name="com.pylons.loud.fragments.itemspec.ItemSpecFragment"
+        android:name="com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

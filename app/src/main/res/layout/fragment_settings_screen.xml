@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.SettingsScreen.SettingsScreenFragment">
+    tools:context=".fragments.screens.setting.SettingsScreenFragment">
 
     <TextView
         android:id="@+id/text_switch_account"

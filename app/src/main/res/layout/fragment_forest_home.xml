@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.ForestScreen.ForestHomeFragment">
+    tools:context=".fragments.screens.forest.ForestHomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
 
         <fragment
             android:id="@+id/fragment_fight"
-            android:name="com.pylons.loud.fragments.Fight.FightFragment"
+            android:name="com.pylons.loud.fragments.lists.fight.FightFragment"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
