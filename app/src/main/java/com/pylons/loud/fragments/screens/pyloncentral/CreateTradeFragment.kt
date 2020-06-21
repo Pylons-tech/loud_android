@@ -439,6 +439,8 @@ class CreateTradeFragment : Fragment() {
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
+                    itemInput = listOf()
+                    coinInput = listOf()
                 }
 
             val alert = dialogBuilder.create()
@@ -601,8 +603,17 @@ class CreateTradeFragment : Fragment() {
         }
 
         if (itemInput.isNotEmpty()) {
-            text_trade_input.text =
-                "${itemInput[0].itemInput.strings.find { it.key == "Name" }?.value} Lv${itemInput[0].itemInput.longs.find { it.key == "level" }?.maxValue}"
+            val specLevel = itemInput[0].itemInput.longs.find { it.key == "level" }
+            text_trade_input.text = if (specLevel != null) {
+                val range = if (specLevel.maxValue == specLevel.minValue) {
+                    specLevel.maxValue
+                } else {
+                    "${specLevel.minValue}-${specLevel.maxValue}"
+                }
+                "${itemInput[0].itemInput.strings.find { it.key == "Name" }?.value} Lv$range"
+            } else {
+                "${itemInput[0].itemInput.strings.find { it.key == "Name" }?.value}"
+            }
         }
 
     }
