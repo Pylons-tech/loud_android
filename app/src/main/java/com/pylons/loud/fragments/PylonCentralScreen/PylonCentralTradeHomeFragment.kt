@@ -87,7 +87,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
                 } else if (it.itemInputs.isNotEmpty()) {
                     BuyItemTrade(
                         it.id,
-                        getItemSpec(it.itemInputs[0]),
+                        getItemSpec(it.itemInputs[0].itemInput),
                         CoinOutput(it.coinOutputs[0].denom, it.coinOutputs[0].amount),
                         it.sender == player?.address,
                         it.sender
@@ -152,8 +152,8 @@ class PylonCentralTradeHomeFragment : Fragment() {
         val level = itemInput.longs.find { it.key == "level" }
 
         return when {
-            itemInput.longs.any {
-                it.key == "Special"
+            itemInput.doubles.any {
+                it.key == "XP"
             } -> CharacterSpec(
                 name,
                 Spec(

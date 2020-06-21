@@ -15,4 +15,9 @@
         android:name="com.pylons.loud.fragments.PylonCentralScreen.CreateTradeFragment"
         android:label="fragment_create_trade"
         tools:layout="@layout/fragment_create_trade" />
+    <fragment
+        android:id="@+id/itemSelectFragment"
+        android:name="com.pylons.loud.fragments.PylonCentralScreen.trade.ItemSelectFragment"
+        android:label="fragment_item_select"
+        tools:layout="@layout/fragment_item_select" />
 </navigation>

@@ -71,6 +71,7 @@ import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 import com.pylons.wallet.core.types.tx.recipe.ItemInput
+import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.android.synthetic.main.dialog_input_text.view.*
@@ -99,6 +100,8 @@ class GameScreenActivity : AppCompatActivity(),
         var shopAction = 0
         private val tradeInput = MutableLiveData<ItemSpec>()
         private val tradeOutput = MutableLiveData<com.pylons.wallet.core.types.tx.item.Item>()
+        lateinit var trade: Trade
+        lateinit var tradeBuyMatchingItems: List<Item>
 
         fun getPlayer(): MutableLiveData<User> {
             return player
@@ -791,15 +794,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onTrade(trade: Trade) {
-        val player = model.getPlayer().value ?: return
-
-        if (!player.canFulfillTrade(trade)) {
-            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
-
+    private fun promptTrade(trade: Trade, itemIds: List<String>) {
         val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
         dialogBuilder.setMessage(
             getString(R.string.trade_fulfill)
@@ -812,7 +807,7 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.trade_fulfill_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = executeTrade(trade)
+                    val tx = executeTrade(trade, itemIds)
                     syncProfile()
                     if (tx?.txError != null) {
                         withContext(Main) {
@@ -844,8 +839,30 @@ class GameScreenActivity : AppCompatActivity(),
         alert.show()
     }
 
-    private suspend fun executeTrade(trade: Trade): Transaction? {
-        val tx = Core.engine.fulfillTrade(trade.id)
+    override fun onTrade(trade: Trade) {
+        val player = model.getPlayer().value ?: return
+
+        if (!player.canFulfillTrade(trade)) {
+            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        if (trade is BuyItemTrade) {
+            model.trade = trade
+            model.tradeBuyMatchingItems = player.getMatchingTradeItems(trade)
+            val frag =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+                .navigate(R.id.itemSelectFragment)
+            return
+        }
+
+        promptTrade(trade, listOf())
+    }
+
+    private suspend fun executeTrade(trade: Trade, itemIds: List<String>): Transaction? {
+        val tx = Core.engine.fulfillTrade(trade.id, itemIds)
         tx.submit()
         Log.info(tx.toString())
         Log.info(tx.id)
@@ -864,7 +881,7 @@ class GameScreenActivity : AppCompatActivity(),
 
     private suspend fun createTrade(
         coinInput: List<CoinInput>,
-        itemInput: List<ItemInput>,
+        itemInput: List<TradeItemInput>,
         coinOutput: List<CoinOutput>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
@@ -896,7 +913,7 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
-        itemInput: List<ItemInput>,
+        itemInput: List<TradeItemInput>,
         coinOutput: List<CoinOutput>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
@@ -1064,5 +1081,9 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    override fun onItemTradeBuy(item: Item) {
+        promptTrade(model.trade, listOf(item.id))
     }
 }

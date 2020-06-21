@@ -118,8 +118,8 @@
     <string name="trade_cancel_complete">Successfully cancelled trade request</string>
     <string name="trade_gold_buy">How many gold do you want?</string>
     <string name="trade_gold_sell">How many gold can you give?</string>
-    <string name="trade_pylon_buy">How many pylons to you want?</string>
-    <string name="trade_pylon_offer">"How many pylons do you offer?"</string>
+    <string name="trade_pylon_buy">How many pylons to you want?\n(minimum %1$d)</string>
+    <string name="trade_pylon_offer">How many pylons do you offer?\n(minimum %1$d)</string>
     <string name="trade_situation_no_my_trades">You have no trades, go make one!</string>
     <string name="trade_situation_no_market">There are no trades on the market</string>
     <plurals name="trade_situation_my_trades">
@@ -130,7 +130,7 @@
         <item quantity="one">There is %d trade on the market</item>
         <item quantity="other">There are %d trades on the market</item>
     </plurals>
-    <string name="enter_valid_amount">Enter valid amount</string>
+    <string name="enter_valid_amount">I cannot accept that!</string>
     <string name="trade_wanted">(want)</string>
     <string name="trade_error">Something went wrong with your trade</string>
     <string name="update_character_desc">Select the character to rename, then show us how clever you are with the new name</string>
@@ -148,4 +148,5 @@
     <string name="no_active_weapon">No active weapon, tap here for inventory</string>
     <string name="hint_enter_number">Enter number value</string>
     <string name="hint_enter_text">Enter some text</string>
+    <string name="select_trade_item">Select item to trade</string>
 </resources>

@@ -31,7 +31,9 @@ import com.pylons.loud.constants.Item.SILVER_SWORD
 import com.pylons.loud.constants.Item.TROLL_TOES
 import com.pylons.loud.constants.Item.WOLF_TAIL
 import com.pylons.loud.constants.Item.WOODEN_SWORD
+import com.pylons.loud.constants.Recipe.LOUD_CBID
 import com.pylons.loud.constants.Trade
+import com.pylons.loud.constants.Trade.MINIMUM_TRADE_PRICE
 import com.pylons.loud.fragments.Character.CharacterFragment
 import com.pylons.loud.fragments.Character.MyCharacterRecyclerViewAdapter
 import com.pylons.loud.fragments.Item.ItemFragment
@@ -45,6 +47,7 @@ import com.pylons.loud.models.trade.MaterialSpec
 import com.pylons.loud.models.trade.Spec
 import com.pylons.loud.models.trade.WeaponSpec
 import com.pylons.wallet.core.types.tx.recipe.*
+import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.create_trade_buy.*
 import kotlinx.android.synthetic.main.create_trade_confirm.*
 import kotlinx.android.synthetic.main.create_trade_sell.*
@@ -61,7 +64,7 @@ class CreateTradeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
 
     private var coinInput = listOf<CoinInput>()
-    private var itemInput = listOf<ItemInput>()
+    private var itemInput = listOf<TradeItemInput>()
     private var coinOutput = listOf<CoinOutput>()
     private var itemOutput = listOf<com.pylons.wallet.core.types.tx.item.Item>()
     private var extraInfo = Trade.DEFAULT
@@ -109,7 +112,7 @@ class CreateTradeFragment : Fragment() {
     interface OnFragmentInteractionListener {
         fun onCreateTrade(
             coinInput: List<CoinInput>,
-            itemInput: List<ItemInput>,
+            itemInput: List<TradeItemInput>,
             coinOutput: List<CoinOutput>,
             itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
             extraInfo: String
@@ -136,57 +139,66 @@ class CreateTradeFragment : Fragment() {
                 itemInput = when (item) {
                     is CharacterSpec ->
                         listOf(
-                            ItemInput(
-                                listOf(
-                                    DoubleInputParam(
-                                        "XP",
-                                        item.xp.min.toString(),
-                                        item.xp.max.toString()
-                                    )
-                                ),
-                                listOf(
-                                    LongInputParam(
-                                        "level",
-                                        item.level.min,
-                                        item.level.max
+                            TradeItemInput(
+                                LOUD_CBID,
+                                ItemInput(
+                                    listOf(
+                                        DoubleInputParam(
+                                            "XP",
+                                            item.xp.min.toString(),
+                                            item.xp.max.toString()
+                                        )
                                     ),
-                                    LongInputParam(
-                                        "Special",
-                                        item.special,
-                                        item.special
-                                    )
-                                ),
-                                listOf(StringInputParam("Name", item.name))
+                                    listOf(
+                                        LongInputParam(
+                                            "level",
+                                            item.level.min,
+                                            item.level.max
+                                        ),
+                                        LongInputParam(
+                                            "Special",
+                                            item.special,
+                                            item.special
+                                        )
+                                    ),
+                                    listOf(StringInputParam("Name", item.name))
+                                )
                             )
                         )
 
                     is WeaponSpec ->
                         listOf(
-                            ItemInput(
-                                listOf(),
-                                listOf(
-                                    LongInputParam(
-                                        "level",
-                                        item.level.min,
-                                        item.level.max
-                                    )
-                                ),
-                                listOf(StringInputParam("Name", item.name))
+                            TradeItemInput(
+                                LOUD_CBID,
+                                ItemInput(
+                                    listOf(),
+                                    listOf(
+                                        LongInputParam(
+                                            "level",
+                                            item.level.min,
+                                            item.level.max
+                                        )
+                                    ),
+                                    listOf(StringInputParam("Name", item.name))
+                                )
                             )
                         )
 
                     is MaterialSpec ->
                         listOf(
-                            ItemInput(
-                                listOf(),
-                                listOf(
-                                    LongInputParam(
-                                        "level",
-                                        item.level.min,
-                                        item.level.max
-                                    )
-                                ),
-                                listOf(StringInputParam("Name", item.name))
+                            TradeItemInput(
+                                LOUD_CBID,
+                                ItemInput(
+                                    listOf(),
+                                    listOf(
+                                        LongInputParam(
+                                            "level",
+                                            item.level.min,
+                                            item.level.max
+                                        )
+                                    ),
+                                    listOf(StringInputParam("Name", item.name))
+                                )
                             )
                         )
                     else -> listOf()
@@ -231,7 +243,7 @@ class CreateTradeFragment : Fragment() {
 
                 val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
                 dialogBuilder.setMessage(
-                    getString(R.string.trade_pylon_buy)
+                    getString(R.string.trade_pylon_buy, MINIMUM_TRADE_PRICE)
                 )
                     .setCancelable(false)
                     .setPositiveButton("Proceed") { _, _ ->
@@ -246,13 +258,12 @@ class CreateTradeFragment : Fragment() {
                 alert.show()
 
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
-                            .toLong() > 0
-                    ) {
+                    val amount = mDialogView.edit_text_amount.text.toString()
+                    if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE) {
                         coinInput = listOf(
                             CoinInput(
                                 Coin.PYLON,
-                                mDialogView.edit_text_amount.text.toString().toLong()
+                                amount.toLong()
                             )
                         )
 
@@ -295,13 +306,12 @@ class CreateTradeFragment : Fragment() {
                 alert.show()
 
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
-                            .toLong() > 0
-                    ) {
+                    val amount = mDialogView.edit_text_amount.text.toString()
+                    if (amount.isNotBlank() && amount.toLong() > 0) {
                         coinInput = listOf(
                             CoinInput(
                                 Coin.LOUD,
-                                mDialogView.edit_text_amount.text.toString().toLong()
+                                amount.toLong()
                             )
                         )
                         extraInfo = Trade.DEFAULT
@@ -422,7 +432,7 @@ class CreateTradeFragment : Fragment() {
             val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_input, null)
             val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
             dialogBuilder.setMessage(
-                getString(R.string.trade_pylon_offer)
+                getString(R.string.trade_pylon_offer, MINIMUM_TRADE_PRICE)
             )
                 .setCancelable(false)
                 .setPositiveButton("Proceed") { _, _ ->
@@ -437,13 +447,15 @@ class CreateTradeFragment : Fragment() {
             alert.show()
 
             alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
-                        .toLong() > 0
+                val amount = mDialogView.edit_text_amount.text.toString()
+                val model: GameScreenActivity.SharedViewModel by activityViewModels()
+                val player = model.getPlayer().value
+                if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() < player?.pylonAmount ?: -1
                 ) {
                     coinOutput = listOf(
                         CoinOutput(
                             Coin.PYLON,
-                            mDialogView.edit_text_amount.text.toString().toLong()
+                            amount.toLong()
                         )
                     )
                     displayConfirmTrade()
@@ -463,6 +475,8 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initTextGoldSell() {
+        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+
         text_gold_sell.setOnClickListener {
             with(childFragmentManager) {
                 beginTransaction().hide(characterSellFragment).commit()
@@ -490,13 +504,13 @@ class CreateTradeFragment : Fragment() {
                 alert.show()
 
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                    if (mDialogView.edit_text_amount.text.toString() != "" && mDialogView.edit_text_amount.text.toString()
-                            .toLong() > 0
-                    ) {
+                    val amount = mDialogView.edit_text_amount.text.toString()
+                    val player = model.getPlayer().value
+                    if (amount.isNotBlank() && amount.toLong() > 0 && amount.toLong() < player?.gold ?: -1) {
                         coinOutput = listOf(
                             CoinOutput(
                                 Coin.LOUD,
-                                mDialogView.edit_text_amount.text.toString().toLong()
+                                amount.toLong()
                             )
                         )
                         extraInfo = Trade.DEFAULT
@@ -593,7 +607,7 @@ class CreateTradeFragment : Fragment() {
 
         if (itemInput.isNotEmpty()) {
             text_trade_input.text =
-                "${itemInput[0].strings.find { it.key == "Name" }?.value} Lv${itemInput[0].longs.find { it.key == "level" }?.maxValue}"
+                "${itemInput[0].itemInput.strings.find { it.key == "Name" }?.value} Lv${itemInput[0].itemInput.longs.find { it.key == "level" }?.maxValue}"
         }
 
     }

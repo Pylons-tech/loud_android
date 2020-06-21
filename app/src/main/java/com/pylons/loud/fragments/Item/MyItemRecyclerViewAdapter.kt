@@ -40,6 +40,7 @@ class MyItemRecyclerViewAdapter(
                 3 -> mListener?.onItemSell(item)
                 4 -> mListener?.onItemUpgrade(item)
                 5 -> mListener?.onItemTradeSell(item)
+                6 -> mListener?.onItemTradeBuy(item)
             }
 
         }
