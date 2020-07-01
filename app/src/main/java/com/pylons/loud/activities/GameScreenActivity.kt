@@ -45,10 +45,10 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_GOLD_WITH_PYLON
 import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
-import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPGRADE
 import com.pylons.loud.constants.Recipe.RCP_GET_TEST_ITEMS
 import com.pylons.loud.constants.Recipe.RCP_SELL_SWORD
-import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPGRADE
 import com.pylons.loud.fragments.lists.character.CharacterFragment
 import com.pylons.loud.fragments.lists.fight.FightFragment
 import com.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
@@ -415,8 +415,8 @@ class GameScreenActivity : AppCompatActivity(),
                     .setCancelable(false)
                     .setPositiveButton("Upgrade") { _, _ ->
                         val recipeId = when (item.name) {
-                            WOODEN_SWORD -> RCP_WOODEN_SWORD_UPG
-                            COPPER_SWORD -> RCP_COPPER_SWORD_UPG
+                            WOODEN_SWORD -> RCP_WOODEN_SWORD_UPGRADE
+                            COPPER_SWORD -> RCP_COPPER_SWORD_UPGRADE
                             else -> ""
                         }
 

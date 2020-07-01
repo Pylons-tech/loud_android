@@ -20,10 +20,10 @@ import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightId.ID_TROLL
 import com.pylons.loud.constants.FightId.ID_UNDEAD_DRAGON
 import com.pylons.loud.constants.FightId.ID_WOLF
-import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGONACID
-import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGONFIRE
-import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGONICE
-import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGONUNDEAD
+import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGON_ACID
+import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGON_FIRE
+import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGON_ICE
+import com.pylons.loud.constants.Recipe.RCP_FIGHT_DRAGON_UNDEAD
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_GIANT
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_GOBLIN
 import com.pylons.loud.constants.Recipe.RCP_FIGHT_TROLL
@@ -101,10 +101,10 @@ class ForestFightPreviewFragment : Fragment() {
                 ID_WOLF -> RCP_FIGHT_WOLF
                 ID_TROLL -> RCP_FIGHT_TROLL
                 ID_GIANT -> RCP_FIGHT_GIANT
-                ID_FIRE_DRAGON -> RCP_FIGHT_DRAGONFIRE
-                ID_ICE_DRAGON -> RCP_FIGHT_DRAGONICE
-                ID_ACID_DRAGON -> RCP_FIGHT_DRAGONACID
-                ID_UNDEAD_DRAGON -> RCP_FIGHT_DRAGONUNDEAD
+                ID_FIRE_DRAGON -> RCP_FIGHT_DRAGON_FIRE
+                ID_ICE_DRAGON -> RCP_FIGHT_DRAGON_ICE
+                ID_ACID_DRAGON -> RCP_FIGHT_DRAGON_ACID
+                ID_UNDEAD_DRAGON -> RCP_FIGHT_DRAGON_UNDEAD
                 else -> ""
             }
 
