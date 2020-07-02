@@ -9,4 +9,5 @@
     <color name="colorBackgroundPrimary">#000000</color>
     <color name="colorBackgroundSecondary">#1D1D1D</color>
     <color name="colorBorder">#FFFFFF</color>
+    <color name="ic_launcher_background">#000000</color>
 </resources>
