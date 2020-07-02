@@ -35,4 +35,9 @@
         android:name="com.pylons.loud.fragments.screens.setting.SettingsScreenFragment"
         android:label="fragment_settings_screen"
         tools:layout="@layout/fragment_settings_screen" />
+    <fragment
+        android:id="@+id/buyCharacterFragment"
+        android:name="com.pylons.loud.fragments.screens.home.BuyCharacterFragment"
+        android:label="fragment_buy_character"
+        tools:layout="@layout/fragment_buy_character" />
 </navigation>

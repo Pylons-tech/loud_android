@@ -4,19 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.screens.home.HomeScreenFragment">
+    tools:context=".fragments.screens.home.BuyCharacterFragment">
 
     <TextView
-        android:id="@+id/text_home_screen"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
-
-    <TextView
-        android:id="@+id/text_buy_characters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/buy_characters" />
+        android:text="@string/buy_character_desc" />
+
+    <fragment
+        android:id="@+id/fragment_character_list"
+        android:name="com.pylons.loud.fragments.lists.character.CharacterFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>

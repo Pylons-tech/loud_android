@@ -26,6 +26,7 @@ import java.util.logging.Logger
  */
 class PlayerStatusFragment : Fragment() {
     private val Log = Logger.getLogger(PlayerStatusFragment::class.java.name)
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,7 +38,6 @@ class PlayerStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
         layout_pylon_count.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralFragment)

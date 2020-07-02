@@ -532,18 +532,15 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onBuyCharacter(item: Character) {
-        val name = item.name
-        val price = item.price
-        val pylonIcon = getString(R.string.pylon_icon)
         val player = model.getPlayer().value
 
         if (player != null) {
             val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-            dialogBuilder.setMessage("Buy $name for $pylonIcon $price?")
+            dialogBuilder.setMessage(getString(R.string.buy_character_prompt, item.name))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val loading =
-                        displayLoading(this, getString(R.string.loading_buy_character, name))
+                        displayLoading(this, getString(R.string.loading_buy_character, item.name))
                     CoroutineScope(IO).launch {
                         val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
                         syncProfile()
@@ -561,8 +558,8 @@ class GameScreenActivity : AppCompatActivity(),
                                 loading.dismiss()
                                 displayMessage(
                                     this@GameScreenActivity, getString(
-                                        R.string.you_have_bought_from_pylons_central,
-                                        name
+                                        R.string.buy_character_complete,
+                                        item.name
                                     )
                                 )
                             }

@@ -4,7 +4,6 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import com.pylons.loud.R
 
@@ -56,16 +55,6 @@ class MyCharacterRecyclerViewAdapter(
         holder.mContentView.text = "${item.name} Lv${item.level}"
         holder.itemView.isSelected = selectedPos == position;
 
-        when (mode) {
-            2 -> {
-                holder.mPriceLayout.visibility = View.VISIBLE
-                holder.mPriceView.text = item.price.toString()
-            }
-            else -> {
-                holder.mPriceLayout.visibility = View.INVISIBLE
-            }
-        }
-
         with(holder.mView) {
             tag = item
             setOnClickListener(mOnClickListener)
@@ -76,8 +65,6 @@ class MyCharacterRecyclerViewAdapter(
 
     inner class ViewHolder(val mView: View) : RecyclerView.ViewHolder(mView) {
         val mContentView: TextView = mView.content
-        val mPriceView: TextView = mView.price
-        val mPriceLayout: LinearLayout = mView.layout_price
 
         override fun toString(): String {
             return super.toString() + " '" + mContentView.text + "'"

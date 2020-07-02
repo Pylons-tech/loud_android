@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
@@ -19,6 +20,8 @@ import kotlinx.android.synthetic.main.fragment_home_screen.*
  * A simple [Fragment] subclass.
  */
 class HomeScreenFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,11 +32,13 @@ class HomeScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(HOME)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             text_home_screen.setText(getHomeDesc(player))
         })
+
+        text_buy_characters.setOnClickListener {
+            findNavController().navigate(R.id.buyCharacterFragment)
+        }
     }
 }

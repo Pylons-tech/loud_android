@@ -25,7 +25,7 @@
     <string name="buy_items">Buy Items</string>
     <string name="sell_items">Sell Items</string>
     <string name="upgrade_items">Upgrade Items</string>
-    <string name="buy_characters">Buy Characters</string>
+    <string name="buy_characters">Select Characters</string>
     <string name="buy_5000_with_100_pylons">Buy 💰5000 with 100 pylons</string>
     <string name="you_cant_go_to_forest_without_character">You can\'t go to forest without character</string>
     <string name="pylons_central_desc">Turn Pylons into useful things. Like pretend gold. Yes! This is a good use of your valuable Pylons.</string>
@@ -42,9 +42,10 @@
     <string name="login_button_text">Continue</string>
     <string name="login_no_username_text">Enter valid username</string>
     <string name="buy_character_desc">Summon a hero. We got a whole lot of chosen ones back here.</string>
+    <string name="buy_character_prompt">Pick %1$s as your new companion?</string>
+    <string name="buy_character_complete">%1$s and you have become companions!</string>
     <string name="fight">Fight</string>
     <string name="you_have_bought_from_shop">You have bought %1$s from shop</string>
-    <string name="you_have_bought_from_pylons_central">You have bought %1$s from Pylons Central</string>
     <string name="you_did_fight_with_and_earned">You brave hero you! You defeated the %1$s and earned %2$d 💰</string>
     <string name="you_have_lost_your_weapon">You have lost your weapon accidentally</string>
     <string name="you_got_bonus_item">You got bonus item called %1$s</string>
@@ -84,7 +85,7 @@
     <string name="shop_upgrade_description">Two words. Up. Grade. Make your stuff more awesome.</string>
     <string name="shop_no_upgrade_description">No items to upgrade. Go buy some!</string>
     <string name="loading_account">%1$s eh! Good luck. </string>
-    <string name="loading_buy_character">You are buying %1$s at the pylons central</string>
+    <string name="loading_buy_character">Finalizing documents for %1$s and you</string>
     <string name="loading_fight">You are bravely laying into the %1$s with your %2$s level %3$d. Exciting!</string>
     <string name="loading_buy_shop_item">You are buying %1$s at the shop</string>
     <string name="loading_sell_shop_item">You are selling %1$s for %2$s</string>
