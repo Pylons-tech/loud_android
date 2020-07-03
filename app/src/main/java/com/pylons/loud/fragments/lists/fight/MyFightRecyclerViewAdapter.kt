@@ -9,7 +9,7 @@ import com.pylons.loud.R
 
 
 import com.pylons.loud.fragments.lists.fight.FightFragment.OnListFragmentInteractionListener
-import com.pylons.loud.models.Fight
+import com.pylons.loud.models.fight.Fight
 
 import kotlinx.android.synthetic.main.fragment_fight.view.*
 

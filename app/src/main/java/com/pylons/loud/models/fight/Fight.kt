@@ -1,4 +1,4 @@
-package com.pylons.loud.models
+package com.pylons.loud.models.fight
 
 import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
 import com.pylons.loud.constants.FightRequirements.ANGEL_SWORD
@@ -7,8 +7,9 @@ import com.pylons.loud.constants.FightRequirements.ICE_SPECIAL
 import com.pylons.loud.constants.FightRequirements.IRON_SWORD
 import com.pylons.loud.constants.FightRequirements.NO_SPECIAL
 import com.pylons.loud.constants.FightRequirements.SWORD
+import com.pylons.loud.models.User
 
-class Fight(
+open class Fight(
     val id: Int,
     val name: String,
     val hp: Int,

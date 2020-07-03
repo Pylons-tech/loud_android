@@ -12,7 +12,10 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.pylons.loud.R
+import com.pylons.loud.constants.FightId.ID_ACID_GIANT
+import com.pylons.loud.constants.FightId.ID_FIRE_GIANT
 import com.pylons.loud.constants.FightId.ID_GIANT
+import com.pylons.loud.constants.FightId.ID_ICE_GIANT
 import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
 import com.pylons.loud.constants.FightRequirements.FIRE_SPECIAL
@@ -60,6 +63,7 @@ import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.lists.trade.TradeFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.CoreController.getItemById
@@ -641,7 +645,7 @@ class GameScreenActivity : AppCompatActivity(),
                                     }
                                 }
                                 3 -> {
-                                    if (fight.id == ID_GIANT) {
+                                    if (fight.id == ID_GIANT || fight.id == ID_FIRE_GIANT || fight.id == ID_ICE_GIANT || fight.id == ID_ACID_GIANT) {
                                         val character = player.getActiveCharacter()
                                         if (character != null && character.special != NO_SPECIAL.toLong()) {
                                             val special = when (character.special) {

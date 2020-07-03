@@ -18,6 +18,9 @@
     <string name="wolf">Wolf </string>
     <string name="troll">Troll</string>
     <string name="giant">Giant</string>
+    <string name="fire_giant">Fire Giant</string>
+    <string name="ice_giant">Ice Giant</string>
+    <string name="acid_giant">Acid Giant</string>
     <string name="fire_dragon">Fire Dragon</string>
     <string name="ice_dragon">Ice Dragon</string>
     <string name="acid_dragon">Acid Dragon</string>
@@ -30,7 +33,11 @@
     <string name="you_cant_go_to_forest_without_character">You can\'t go to forest without character</string>
     <string name="pylons_central_desc">Turn Pylons into useful things. Like pretend gold. Yes! This is a good use of your valuable Pylons.</string>
     <string name="shop_desc">It’s a blacksmith’s store.\nThe blacksmith sells things, buys things, and mends things.\nSometimes he regrets his choices in life.</string>
-    <string name="forest_desc">Oh! Here are the dark and spooky woods.\nSomehow everything lives here at the same time. Don’t think about it. Just choose something to pick a fight with.</string>
+    <string name="forest_home_desc">You are in the forest. Do you take the path to the right or the left?</string>
+    <string name="forest_basic_desc">Oh! Here are the dark and spooky woods.\nSomehow everything lives here at the same time. Don’t think about it. Just choose something to pick a fight with.</string>
+    <string name="forest_special_desc">You have made it to the secret forest. These fights will require you to use pylons to activate. In return you will master your skills faster.</string>
+    <string name="forest_basic">Go Right</string>
+    <string name="forest_special">Go Left</string>
     <string name="inventory_desc">Your inventory.\nYou can select active character.</string>
     <string name="inventory_desc_item">You can select active weapon.</string>
     <string name="gold_icon">💰</string>
@@ -75,6 +82,9 @@
     <string name="fight_wolf_description">🐺\nAroooo! Not as fuzzy as the rabbit, better at biting things too.\nWolves don\'t have any money so they don\'t have gold.\nBut they do have wolf tails. Those might be useful, even if you aren\'t a wolf</string>
     <string name="fight_troll_description">👻\nBig, smelly, and fond of ‘yo mama’ jokes. Don’t say we didn’t warn you.\nTrolls don\'t really drop their toes but they might have a lot of gold because they eat unlucky travellers</string>
     <string name="fight_giant_description">🗿\nBigger than the troll, smellier than the troll. Less of a sense of humour than the troll.</string>
+    <string name="fight_fire_giant_description">🗿\nBigger than the troll, smellier than the troll. Less of a sense of humour than the troll. There is a fire aura around this giant.</string>
+    <string name="fight_ice_giant_description">🗿\nBigger than the troll, smellier than the troll. Less of a sense of humour than the troll. There is a icy aura around this giant.</string>
+    <string name="fight_acid_giant_description">🗿\nBigger than the troll, smellier than the troll. Less of a sense of humour than the troll. There is a acidic aura around this giant.</string>
     <string name="fight_fire_dragon_description">🦐\nThe classic fire-breathing dragon. You know the drill. Get at it!</string>
     <string name="fight_ice_dragon_description">🦈\nIt’s blue, it’s cold, and it’s not your friend.</string>
     <string name="fight_acid_dragon_description">🐊\nLost its way at a music festival. Colours confuse it. Will melt you and everything you hold dear in a heartbeat.</string>
@@ -155,4 +165,6 @@
     <string name="cancel">Cancel</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -10,7 +10,7 @@ import com.pylons.loud.constants.FightRequirements.IRON_SWORD
 import com.pylons.loud.constants.FightRequirements.NO_SPECIAL
 import com.pylons.loud.constants.Item
 import com.pylons.loud.models.Character
-import com.pylons.loud.models.Fight
+import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.User
 import com.pylons.loud.models.Weapon
 import org.junit.Test
@@ -100,7 +100,7 @@ class FightTest {
                 100,
                 10,
                 "",
-                listOf(IRON_SWORD, FightRequirements.NO_SPECIAL),
+                listOf(IRON_SWORD, NO_SPECIAL),
                 listOf("10% chance of sword lose", "GiantKiller badget on character")
             ), false
         ),
