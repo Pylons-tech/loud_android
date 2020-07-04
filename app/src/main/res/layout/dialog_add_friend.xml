@@ -8,24 +8,20 @@
 
     <EditText
         android:id="@+id/edit_text_address"
-        style="@style/MyEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/hint_address"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:theme="@style/MyEditText" />
+        android:inputType="textPersonName" />
 
     <EditText
         android:id="@+id/edit_text_name"
-        style="@style/MyEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:hint="@string/hint_name"
         android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        android:theme="@style/MyEditText" />
+        android:inputType="textPersonName" />
 
 </LinearLayout>

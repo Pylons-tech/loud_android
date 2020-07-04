@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_arrow_upward_green_64dp"
             android:gravity="center_horizontal"
-            android:textColor="@color/colorSuccess"
+            android:textColor="@color/colorAccent"
             android:textSize="32sp" />
 
     </LinearLayout>

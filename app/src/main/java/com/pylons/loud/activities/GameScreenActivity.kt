@@ -228,7 +228,7 @@ class GameScreenActivity : AppCompatActivity(),
             if (player.getActiveWeapon() == item) {
                 prompt = "Unset $name as active weapon?"
             }
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
@@ -263,7 +263,7 @@ class GameScreenActivity : AppCompatActivity(),
             val preItems = item.preItem.joinToString(", ")
             prompt += " and $preItems"
         }
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage("$prompt?")
             .setCancelable(false)
             .setPositiveButton(getString(R.string.yes)) { _, _ ->
@@ -360,7 +360,7 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
         if (player != null) {
             val name = item.name
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.yes)) { _, _ ->
@@ -422,7 +422,7 @@ class GameScreenActivity : AppCompatActivity(),
 
         if (item is Weapon && player != null) {
             if (player.gold > item.getUpgradePrice()) {
-                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage("Upgrade $name?")
                     .setCancelable(false)
                     .setPositiveButton("Upgrade") { _, _ ->
@@ -483,7 +483,7 @@ class GameScreenActivity : AppCompatActivity(),
             if (player.getActiveCharacter() == item) {
                 prompt = "Unset $name as active character?"
             }
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
@@ -547,7 +547,7 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
 
         if (player != null) {
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(getString(R.string.buy_character_prompt, item.name))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
@@ -704,7 +704,7 @@ class GameScreenActivity : AppCompatActivity(),
                 Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage(
                     getString(
                         R.string.confirm_buy_gold_with_pylons,
@@ -803,7 +803,7 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     private fun promptTrade(trade: Trade, itemIds: List<String>) {
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.trade_fulfill)
         )
@@ -985,7 +985,7 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onCancel(trade: Trade) {
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.trade_cancel)
         )
@@ -1041,7 +1041,7 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onCharacterUpdate(character: Character) {
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null)
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.update_character_prompt)
         )
@@ -1099,7 +1099,7 @@ class GameScreenActivity : AppCompatActivity(),
         val sheet = BottomSheetDialog(this)
         val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_friend, null)
         view.text_view_delete.setOnClickListener {
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(getString(R.string.delete_friend_prompt, friend.name, friend.address))
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->

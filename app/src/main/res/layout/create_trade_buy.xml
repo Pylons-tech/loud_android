@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/text_margin"
-        android:text="@string/trade_buy_desc"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/trade_buy_desc" />
 
     <Button
         android:id="@+id/button_pylons_buy"

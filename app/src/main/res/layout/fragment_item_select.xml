@@ -10,8 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/select_trade_item"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/select_trade_item" />
 
     <fragment
         android:id="@+id/fragment_item_select"

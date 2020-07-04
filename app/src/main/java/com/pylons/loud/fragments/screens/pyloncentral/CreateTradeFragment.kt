@@ -241,7 +241,7 @@ class CreateTradeFragment : Fragment() {
             if (c != null) {
                 val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_input, null)
 
-                val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(c)
                 dialogBuilder.setMessage(
                     getString(R.string.trade_pylon_buy, MINIMUM_TRADE_PRICE)
                 )
@@ -289,7 +289,7 @@ class CreateTradeFragment : Fragment() {
             if (c != null) {
                 val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_input, null)
 
-                val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(c)
                 dialogBuilder.setMessage(
                     getString(R.string.trade_gold_buy)
                 )
@@ -430,7 +430,7 @@ class CreateTradeFragment : Fragment() {
         val c = context
         if (c != null) {
             val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_input, null)
-            val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(c)
             dialogBuilder.setMessage(
                 getString(R.string.trade_pylon_offer, MINIMUM_TRADE_PRICE)
             )
@@ -486,7 +486,7 @@ class CreateTradeFragment : Fragment() {
             if (c != null) {
                 val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_input, null)
 
-                val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(c)
                 dialogBuilder.setMessage(
                     getString(R.string.trade_gold_sell)
                 )

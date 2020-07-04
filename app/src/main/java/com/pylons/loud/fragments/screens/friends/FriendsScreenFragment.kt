@@ -51,7 +51,7 @@ class FriendsScreenFragment : Fragment() {
             val c = context
             if (c != null) {
                 val mDialogView = LayoutInflater.from(c).inflate(R.layout.dialog_add_friend, null)
-                val dialogBuilder = AlertDialog.Builder(c, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(c)
                 dialogBuilder.setMessage(
                     getString(R.string.add_friend_prompt)
                 )
