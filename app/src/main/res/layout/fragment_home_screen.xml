@@ -4,19 +4,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/padding"
     tools:context=".fragments.screens.home.HomeScreenFragment">
 
     <TextView
         android:id="@+id/text_home_screen"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_marginBottom="@dimen/text_margin" />
 
-    <TextView
-        android:id="@+id/text_buy_characters"
+    <Button
+        android:id="@+id/button_buy_characters"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
         android:text="@string/buy_characters" />
 
 </LinearLayout>

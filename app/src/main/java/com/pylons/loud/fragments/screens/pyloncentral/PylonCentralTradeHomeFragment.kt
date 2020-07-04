@@ -43,15 +43,15 @@ class PylonCentralTradeHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         getTrades(MY_TRADES)
 
-        text_create_trade.setOnClickListener {
+        button_create_trade.setOnClickListener {
             findNavController().navigate(R.id.createTradeFragment)
         }
 
-        text_market.setOnClickListener {
+        button_market.setOnClickListener {
             getTrades(MARKET_TRADES)
         }
 
-        text_my_trades.setOnClickListener {
+        button_my_trades.setOnClickListener {
             getTrades(MY_TRADES)
         }
     }
@@ -115,8 +115,8 @@ class PylonCentralTradeHomeFragment : Fragment() {
 
             withContext(Main) {
                 if (type == MY_TRADES) {
-                    text_market.visibility = View.VISIBLE
-                    text_my_trades.visibility = View.GONE
+                    button_market.visibility = View.VISIBLE
+                    button_my_trades.visibility = View.GONE
 
                     if (list.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_my_trades)
@@ -128,8 +128,8 @@ class PylonCentralTradeHomeFragment : Fragment() {
                         )
                     }
                 } else {
-                    text_my_trades.visibility = View.VISIBLE
-                    text_market.visibility = View.GONE
+                    button_my_trades.visibility = View.VISIBLE
+                    button_market.visibility = View.GONE
 
                     if (list.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_market)

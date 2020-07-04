@@ -37,7 +37,7 @@ class HomeScreenFragment : Fragment() {
             text_home_screen.setText(getHomeDesc(player))
         })
 
-        text_buy_characters.setOnClickListener {
+        button_buy_characters.setOnClickListener {
             findNavController().navigate(R.id.buyCharacterFragment)
         }
     }

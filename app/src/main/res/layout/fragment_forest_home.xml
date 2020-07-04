@@ -17,14 +17,12 @@
         android:id="@+id/button_forest_basic"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorSuccess"
         android:text="@string/forest_basic" />
 
     <Button
         android:id="@+id/button_forest_special"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/colorSuccess"
         android:text="@string/forest_special" />
 
 </LinearLayout>

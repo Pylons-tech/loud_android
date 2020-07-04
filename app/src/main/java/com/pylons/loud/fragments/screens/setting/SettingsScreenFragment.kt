@@ -35,18 +35,18 @@ class SettingsScreenFragment : Fragment() {
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(SETTINGS)
 
-        text_switch_account.setOnClickListener {
+        button_switch_account.setOnClickListener {
             context?.let { it1 -> setCurrentAccountUserName(it1, "") }
             val intent = Intent(activity, LoginActivity::class.java)
             startActivity(intent)
             activity?.finish()
         }
 
-        text_get_dev_items.setOnClickListener {
+        button_get_dev_items.setOnClickListener {
             listener?.onGetDevItems()
         }
 
-        text_get_pylons.setOnClickListener {
+        button_get_pylons.setOnClickListener {
             listener?.onGetPylons()
         }
     }

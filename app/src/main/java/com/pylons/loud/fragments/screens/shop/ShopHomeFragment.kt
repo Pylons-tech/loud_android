@@ -31,17 +31,17 @@ class ShopHomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
-        text_buy.setOnClickListener {
+        button_buy.setOnClickListener {
             model.shopAction = BUY
             findNavController().navigate(R.id.shopActionFragment)
         }
 
-        text_sell.setOnClickListener {
+        button_sell.setOnClickListener {
             model.shopAction = SELL
             findNavController().navigate(R.id.shopActionFragment)
         }
 
-        text_upgrade.setOnClickListener {
+        button_upgrade.setOnClickListener {
             model.shopAction = UPGRADE
             findNavController().navigate(R.id.shopActionFragment)
         }

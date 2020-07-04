@@ -234,7 +234,7 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initTextPylonsBuy() {
-        text_pylons_buy.setOnClickListener {
+        button_pylons_buy.setOnClickListener {
             childFragmentManager.beginTransaction().hide(itemBuyFragment).commit()
 
             val c = context
@@ -282,7 +282,7 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initTextGoldBuy() {
-        text_gold_buy.setOnClickListener {
+        button_gold_buy.setOnClickListener {
             childFragmentManager.beginTransaction().hide(itemBuyFragment).commit()
 
             val c = context
@@ -330,7 +330,7 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initCharacterBuy() {
-        text_character_buy.setOnClickListener {
+        button_character_buy.setOnClickListener {
             val adapter = MyItemSpecRecyclerViewAdapter(
                 listOf(
                     CharacterSpec("LionBaby", Spec(1, 2), Spec(1.0, 1000000.0), NO_SPECIAL),
@@ -347,7 +347,7 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initItemBuy() {
-        text_item_buy.setOnClickListener {
+        button_item_buy.setOnClickListener {
             val adapter = MyItemSpecRecyclerViewAdapter(
                 listOf(
                     WeaponSpec(
@@ -476,7 +476,7 @@ class CreateTradeFragment : Fragment() {
     }
 
     private fun initTextGoldSell() {
-        text_gold_sell.setOnClickListener {
+        button_gold_sell.setOnClickListener {
             with(childFragmentManager) {
                 beginTransaction().hide(characterSellFragment).commit()
                 beginTransaction().hide(itemSellFragment).commit()
@@ -530,9 +530,9 @@ class CreateTradeFragment : Fragment() {
     private fun initCharacterSell() {
         val player = model.getPlayer().value
         val list = player?.characters ?: listOf<Character>()
-        text_character_sell.text = "${getString(R.string.trade_character)} (${list.size})"
+        button_character_sell.text = "${getString(R.string.trade_character)} (${list.size})"
 
-        text_character_sell.setOnClickListener {
+        button_character_sell.setOnClickListener {
             val player = model.getPlayer().value
             val list = player?.characters ?: listOf<Character>()
 
@@ -559,10 +559,10 @@ class CreateTradeFragment : Fragment() {
             val items = mutableListOf<Item>()
             items.addAll(player.weapons)
             items.addAll(player.materials)
-            text_item_sell.text = "${getString(R.string.trade_item)} (${items.size})"
+            button_item_sell.text = "${getString(R.string.trade_item)} (${items.size})"
         }
 
-        text_item_sell.setOnClickListener {
+        button_item_sell.setOnClickListener {
             val player = model.getPlayer().value
             if (player != null) {
                 val items = mutableListOf<Item>()

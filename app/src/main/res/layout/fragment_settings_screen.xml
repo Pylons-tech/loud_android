@@ -4,29 +4,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:padding="@dimen/padding"
     tools:context=".fragments.screens.setting.SettingsScreenFragment">
 
-    <TextView
-        android:id="@+id/text_switch_account"
+    <Button
+        android:id="@+id/button_switch_account"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/setting_switch_account"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/setting_switch_account" />
 
-    <TextView
-        android:id="@+id/text_get_dev_items"
+    <Button
+        android:id="@+id/button_get_dev_items"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/setting_get_dev_items"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/setting_get_dev_items" />
 
-    <TextView
-        android:id="@+id/text_get_pylons"
+    <Button
+        android:id="@+id/button_get_pylons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/setting_get_pylons"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:text="@string/setting_get_pylons" />
+
 </LinearLayout>

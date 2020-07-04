@@ -28,15 +28,15 @@ class PylonCentralHomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        text_buy_5000_with_100_pylons.setOnClickListener {
+        button_buy_5000_with_100_pylons.setOnClickListener {
             listener?.onBuyGoldWithPylons()
         }
 
-        text_trade.setOnClickListener {
+        button_trade.setOnClickListener {
             findNavController().navigate(R.id.pylonCentralTradeFragment)
         }
 
-        text_update_character.setOnClickListener {
+        button_update_character.setOnClickListener {
             findNavController().navigate(R.id.updateCharacterFragment)
         }
     }

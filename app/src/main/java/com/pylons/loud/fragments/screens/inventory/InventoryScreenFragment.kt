@@ -16,7 +16,6 @@ import com.pylons.loud.fragments.lists.character.MyCharacterRecyclerViewAdapter
 import com.pylons.loud.fragments.lists.item.ItemFragment
 import com.pylons.loud.fragments.lists.item.MyItemRecyclerViewAdapter
 import com.pylons.loud.models.User
-import kotlinx.android.synthetic.main.fragment_inventory.*
 
 /**
  * A simple [Fragment] subclass.
@@ -33,9 +32,6 @@ class InventoryScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        text_inventory_character.setText(R.string.inventory_desc)
-        text_inventory_item.setText(R.string.inventory_desc_item)
 
         val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(-1)

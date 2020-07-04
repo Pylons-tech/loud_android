@@ -39,7 +39,6 @@
             android:id="@+id/button_fight"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/colorSuccess"
             android:text="@string/fight"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

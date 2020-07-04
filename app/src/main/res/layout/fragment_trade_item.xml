@@ -36,7 +36,6 @@
         android:id="@+id/action"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        app:backgroundTint="@color/colorBackgroundSecondary" />
+        android:layout_gravity="center_vertical" />
 
 </LinearLayout>
