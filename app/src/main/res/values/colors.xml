@@ -6,6 +6,7 @@
     <color name="colorSuccess">#3DDC84</color>
     <color name="colorDanger">#FF0000</color>
     <color name="colorText">#FFFFFF</color>
+    <color name="colorHint">#A9A9A9</color>
     <color name="colorBackgroundPrimary">#000000</color>
     <color name="colorBackgroundSecondary">#1D1D1D</color>
     <color name="colorBorder">#FFFFFF</color>

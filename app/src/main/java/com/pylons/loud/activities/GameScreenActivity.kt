@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pylons.loud.R
 import com.pylons.loud.constants.FightId.ID_ACID_GIANT
 import com.pylons.loud.constants.FightId.ID_FIRE_GIANT
@@ -77,6 +78,7 @@ import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 import com.pylons.wallet.core.types.tx.trade.TradeItemInput
+import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.android.synthetic.main.dialog_input_text.view.*
@@ -1094,6 +1096,32 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onFriend(friend: Friend) {
-        // TODO: Delete Friend?
+        val sheet = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_friend, null)
+        view.text_view_delete.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            dialogBuilder.setMessage(getString(R.string.delete_friend_prompt, friend.name, friend.address))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
+                    val player = model.getPlayer().value
+                    if (player != null) {
+                        player.deleteFriend(friend.address)
+                        model.setPlayer(player)
+                        player.saveAsync(this)
+                        sheet.dismiss()
+                    }
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                    sheet.dismiss()
+                }
+
+            val alert = dialogBuilder.create()
+            alert.setTitle(getString(R.string.confirm))
+            alert.show()
+        }
+
+        sheet.setContentView(view)
+        sheet.show()
     }
 }

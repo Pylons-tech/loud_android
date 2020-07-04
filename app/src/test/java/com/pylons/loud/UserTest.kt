@@ -56,7 +56,8 @@ class UserTest {
                 5500
             )
         ),
-        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+        mutableListOf()
     )
 
     @Test

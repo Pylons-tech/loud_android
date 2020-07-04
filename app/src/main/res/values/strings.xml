@@ -167,4 +167,10 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add_friend">Add Friend</string>
+    <string name="add_friend_prompt">Enter your friend\'s address and name.</string>
+    <string name="hint_address">Address</string>
+    <string name="hint_name">Name</string>
+    <string name="invalid_add_friend">Enter valid address and name</string>
+    <string name="delete">Delete</string>
+    <string name="delete_friend_prompt">Delete %1$s?\n\n%2$s</string>
 </resources>

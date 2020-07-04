@@ -32,7 +32,7 @@ class FriendFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyFriendRecyclerViewAdapter(listOf())
+                adapter = MyFriendRecyclerViewAdapter(listOf(), listener)
             }
         }
         return view

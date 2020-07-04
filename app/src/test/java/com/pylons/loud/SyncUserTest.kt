@@ -28,7 +28,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("abc"),
                 mutableMapOf(),
@@ -46,7 +47,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "abc"
+                "abc",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -61,7 +63,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -136,7 +139,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -151,7 +155,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -202,7 +207,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -217,7 +223,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -278,7 +285,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -293,7 +301,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -389,7 +398,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
 
@@ -439,7 +449,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -535,7 +546,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
 
@@ -576,7 +588,8 @@ class SyncUserTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -597,7 +610,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -646,7 +660,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -664,7 +679,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         )
     )

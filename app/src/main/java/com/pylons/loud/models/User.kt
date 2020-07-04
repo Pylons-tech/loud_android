@@ -20,7 +20,8 @@ data class User(
     var weapons: MutableList<Weapon>,
     var activeWeapon: Int,
     var materials: MutableList<Material>,
-    var address: String
+    var address: String,
+    var friends: MutableList<Friend>
 ) {
 
     fun getActiveCharacter(): Character? {
@@ -248,5 +249,15 @@ data class User(
         }
 
         return listOf()
+    }
+
+    fun addFriend(address: String, name: String) {
+        friends.add(Friend(address, name))
+    }
+
+    fun deleteFriend(address: String) {
+        friends.removeIf {
+            it.address == address
+        }
     }
 }
