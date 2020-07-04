@@ -40,4 +40,9 @@
         android:name="com.pylons.loud.fragments.screens.home.BuyCharacterFragment"
         android:label="fragment_buy_character"
         tools:layout="@layout/fragment_buy_character" />
+    <fragment
+        android:id="@+id/friendsScreenFragment"
+        android:name="com.pylons.loud.fragments.screens.friends.FriendsScreenFragment"
+        android:label="fragment_friends_screen"
+        tools:layout="@layout/fragment_friends_screen" />
 </navigation>

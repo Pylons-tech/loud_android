@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_settings_screen.*
  */
 class SettingsScreenFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -32,7 +33,7 @@ class SettingsScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
+
         model.setPlayerLocation(SETTINGS)
 
         button_switch_account.setOnClickListener {

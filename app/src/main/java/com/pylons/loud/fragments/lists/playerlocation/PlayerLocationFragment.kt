@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.FRIENDS
 import com.pylons.loud.constants.Location.HOME
 import com.pylons.loud.constants.Location.PYLONS_CENTRAL
 import com.pylons.loud.constants.Location.SETTINGS
@@ -29,6 +30,7 @@ class PlayerLocationFragment : Fragment() {
     private var columnCount = 1
 
     private var listener: OnListFragmentInteractionListener? = null
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,6 +77,7 @@ class PlayerLocationFragment : Fragment() {
             PlayerLocation(
                 PYLONS_CENTRAL, getString(R.string.pylons_central)
             ),
+            PlayerLocation(FRIENDS, getString(R.string.friends)),
             PlayerLocation(
                 SETTINGS, getString(R.string.settings)
             )
@@ -83,8 +86,6 @@ class PlayerLocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.getPlayerLocation().observe(viewLifecycleOwner, Observer<Int> { location ->
             val adapter = (view as RecyclerView).adapter as MyPlayerLocationRecyclerViewAdapter
             val index = location - 1

@@ -36,6 +36,7 @@ import com.pylons.loud.constants.ItemID.ID_IRON_SWORD
 import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
 import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.FRIENDS
 import com.pylons.loud.constants.Location.HOME
 import com.pylons.loud.constants.Location.PYLONS_CENTRAL
 import com.pylons.loud.constants.Location.SETTINGS
@@ -54,6 +55,7 @@ import com.pylons.loud.constants.Recipe.RCP_SELL_SWORD
 import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPGRADE
 import com.pylons.loud.fragments.lists.character.CharacterFragment
 import com.pylons.loud.fragments.lists.fight.FightFragment
+import com.pylons.loud.fragments.lists.friend.FriendFragment
 import com.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
 import com.pylons.loud.fragments.lists.item.ItemFragment
 import com.pylons.loud.fragments.lists.playerlocation.PlayerLocationFragment
@@ -93,7 +95,8 @@ class GameScreenActivity : AppCompatActivity(),
     SettingsScreenFragment.OnFragmentInteractionListener,
     TradeFragment.OnListFragmentInteractionListener,
     CreateTradeFragment.OnFragmentInteractionListener,
-    ItemSpecFragment.OnListFragmentInteractionListener {
+    ItemSpecFragment.OnListFragmentInteractionListener,
+    FriendFragment.OnListFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -201,6 +204,9 @@ class GameScreenActivity : AppCompatActivity(),
             }
             PYLONS_CENTRAL -> {
                 nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
+            }
+            FRIENDS -> {
+                nav_host_fragment.findNavController().navigate(R.id.friendsScreenFragment)
             }
             SETTINGS -> {
                 nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
@@ -1085,5 +1091,9 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onItemTradeBuy(item: Item) {
         promptTrade(model.trade, listOf(item.id))
+    }
+
+    override fun onFriend(friend: Friend) {
+        // TODO: Delete Friend?
     }
 }
