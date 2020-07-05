@@ -1,4 +1,4 @@
-package com.pylons.loud.fragments.lists.playerstatus
+package com.pylons.loud.fragments.ui
 
 import android.os.Bundle
 import android.util.TypedValue

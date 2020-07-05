@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/fragment_player_status"
-        android:name="com.pylons.loud.fragments.lists.playerstatus.PlayerStatusFragment"
+        android:name="com.pylons.loud.fragments.ui.PlayerStatusFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
