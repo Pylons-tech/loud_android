@@ -59,12 +59,12 @@ import com.pylons.loud.fragments.lists.fight.FightFragment
 import com.pylons.loud.fragments.lists.friend.FriendFragment
 import com.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
 import com.pylons.loud.fragments.lists.item.ItemFragment
-import com.pylons.loud.fragments.lists.playerlocation.PlayerLocationFragment
 import com.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment
 import com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
 import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.lists.trade.TradeFragment
+import com.pylons.loud.fragments.ui.BottomNavigationFragment
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
@@ -88,7 +88,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import java.util.logging.Logger
 
 class GameScreenActivity : AppCompatActivity(),
-    PlayerLocationFragment.OnListFragmentInteractionListener,
+    BottomNavigationFragment.OnFragmentInteractionListener,
     FightFragment.OnListFragmentInteractionListener,
     ItemFragment.OnListFragmentInteractionListener,
     CharacterFragment.OnListFragmentInteractionListener,
@@ -186,8 +186,8 @@ class GameScreenActivity : AppCompatActivity(),
 
     }
 
-    override fun onLocation(location: PlayerLocation) {
-        when (location.id) {
+    override fun onNavigation(id: Int) {
+        when (id) {
             HOME -> {
                 nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
             }
@@ -1100,7 +1100,13 @@ class GameScreenActivity : AppCompatActivity(),
         val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_friend, null)
         view.text_view_delete.setOnClickListener {
             val dialogBuilder = AlertDialog.Builder(this)
-            dialogBuilder.setMessage(getString(R.string.delete_friend_prompt, friend.name, friend.address))
+            dialogBuilder.setMessage(
+                getString(
+                    R.string.delete_friend_prompt,
+                    friend.name,
+                    friend.address
+                )
+            )
                 .setCancelable(false)
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val player = model.getPlayer().value

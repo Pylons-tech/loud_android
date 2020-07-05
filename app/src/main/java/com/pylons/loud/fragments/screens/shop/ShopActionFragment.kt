@@ -38,6 +38,7 @@ import kotlinx.android.synthetic.main.fragment_shop_action.*
  * A simple [Fragment] subclass.
  */
 class ShopActionFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +51,6 @@ class ShopActionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment
 
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->

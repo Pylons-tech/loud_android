@@ -14,6 +14,8 @@ import com.pylons.loud.constants.Location.SHOP
  * A simple [Fragment] subclass.
  */
 class ShopScreenFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,7 +26,6 @@ class ShopScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(SHOP)
     }
 }

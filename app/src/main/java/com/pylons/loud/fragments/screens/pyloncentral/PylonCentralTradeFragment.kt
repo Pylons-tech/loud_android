@@ -9,8 +9,6 @@ import android.view.ViewGroup
 import com.pylons.loud.R
 import java.util.logging.Logger
 
-const val MY_TRADES = 1
-const val MARKET_TRADES = 2
 /**
  * A simple [Fragment] subclass.
  */

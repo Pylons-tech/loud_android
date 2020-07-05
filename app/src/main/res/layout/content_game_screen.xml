@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
@@ -12,7 +13,8 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_player_status" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_game"
@@ -31,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:defaultNavHost="true"
-            app:layout_constraintBottom_toTopOf="@+id/fragment_player_location"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_bottom_navigation"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -40,13 +42,14 @@
             app:navGraph="@navigation/nav_graph" />
 
         <fragment
-            android:id="@+id/fragment_player_location"
-            android:name="com.pylons.loud.fragments.lists.playerlocation.PlayerLocationFragment"
+            android:id="@+id/fragment_bottom_navigation"
+            android:name="com.pylons.loud.fragments.ui.BottomNavigationFragment"
             android:layout_width="0dp"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout="@layout/fragment_bottom_navigation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

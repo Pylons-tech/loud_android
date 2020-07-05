@@ -21,6 +21,7 @@ import com.pylons.loud.models.User
  * A simple [Fragment] subclass.
  */
 class InventoryScreenFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,7 +34,6 @@ class InventoryScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(-1)
         model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
             val frag = childFragmentManager.findFragmentById(R.id.fragment_item) as ItemFragment

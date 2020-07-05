@@ -25,11 +25,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.logging.Logger
 
+
+const val MY_TRADES = 1
+const val MARKET_TRADES = 2
+
 /**
  * A simple [Fragment] subclass.
  */
 class PylonCentralTradeHomeFragment : Fragment() {
     private val Log = Logger.getLogger(PylonCentralTradeHomeFragment::class.java.name)
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,7 +62,6 @@ class PylonCentralTradeHomeFragment : Fragment() {
     }
 
     private fun getTrades(type: Int) {
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         val player = model.getPlayer().value
         CoroutineScope(Dispatchers.IO).launch {
             val tradesResponse = Core.engine.listTrades()

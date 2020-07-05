@@ -15,6 +15,7 @@ import com.pylons.loud.constants.Location.FOREST
  * A simple [Fragment] subclass.
  */
 class ForestScreenFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,7 +27,6 @@ class ForestScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
         model.setPlayerLocation(FOREST)
     }
 }

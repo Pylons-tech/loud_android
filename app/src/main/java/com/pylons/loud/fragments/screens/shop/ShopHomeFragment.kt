@@ -19,6 +19,8 @@ import kotlinx.android.synthetic.main.fragment_shop_home.*
  * A simple [Fragment] subclass.
  */
 class ShopHomeFragment : Fragment() {
+    val model: GameScreenActivity.SharedViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,7 +31,6 @@ class ShopHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
         button_buy.setOnClickListener {
             model.shopAction = BUY
