@@ -4,13 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="@dimen/padding"
     tools:context=".fragments.screens.friends.FriendsScreenFragment">
 
     <Button
         android:id="@+id/button_add_friend"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
         android:text="@string/add_friend" />
 
     <fragment

@@ -2,38 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/padding">
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/text_margin"
+        android:layout_margin="@dimen/text_margin"
         android:text="@string/trade_buy_desc" />
 
-    <Button
-        android:id="@+id/button_pylons_buy"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/trade_pylon" />
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding"
+        android:paddingBottom="@dimen/padding">
 
-    <Button
-        android:id="@+id/button_gold_buy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/trade_gold" />
+        <Button
+            android:id="@+id/button_pylons_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trade_pylon" />
 
-    <Button
-        android:id="@+id/button_character_buy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/trade_character" />
+        <Button
+            android:id="@+id/button_gold_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trade_gold" />
 
-    <Button
-        android:id="@+id/button_item_buy"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/trade_item" />
+        <Button
+            android:id="@+id/button_character_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trade_character" />
+
+        <Button
+            android:id="@+id/button_item_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/trade_item" />
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
