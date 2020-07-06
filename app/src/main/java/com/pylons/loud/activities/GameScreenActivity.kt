@@ -187,6 +187,7 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onNavigation(id: Int) {
+        nav_host_fragment.findNavController().popBackStack()
         when (id) {
             HOME -> {
                 nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)

@@ -20,7 +20,6 @@ import com.pylons.loud.models.User
 import kotlinx.android.synthetic.main.fragment_player_status.*
 import java.util.logging.Logger
 
-
 /**
  * A simple [Fragment] subclass.
  */
@@ -40,15 +39,19 @@ class PlayerStatusFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         layout_pylon_count.setOnClickListener {
+            findNavController().popBackStack()
             findNavController().navigate(R.id.pylonCentralFragment)
         }
         layout_gold_count.setOnClickListener {
+            findNavController().popBackStack()
             findNavController().navigate(R.id.shopScreenFragment)
         }
         layout_active_character.setOnClickListener {
+            findNavController().popBackStack()
             findNavController().navigate(R.id.inventoryFragment)
         }
         layout_active_weapon.setOnClickListener {
+            findNavController().popBackStack()
             findNavController().navigate(R.id.inventoryFragment)
         }
 
