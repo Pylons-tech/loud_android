@@ -123,6 +123,7 @@
     <string name="trade_item">Item 🗡️</string>
     <string name="trade_create_loading">You are waiting to create trade request</string>
     <string name="trade_create_complete">Successfully created trade request</string>
+    <string name="trade_create_error">There was an error creating trade</string>
     <string name="trade_fulfill">Are you sure you want to trade?</string>
     <string name="trade_fulfill_loading">You are waiting to complete trade</string>
     <string name="trade_fulfill_complete">Successfully completed trade!</string>

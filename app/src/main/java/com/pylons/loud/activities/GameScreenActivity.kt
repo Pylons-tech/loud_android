@@ -904,7 +904,6 @@ class GameScreenActivity : AppCompatActivity(),
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
     ): Transaction? {
-        Log.info(itemOutput.toString())
         val tx =
             Core.engine.createTrade(
                 coinInput,
@@ -915,15 +914,17 @@ class GameScreenActivity : AppCompatActivity(),
             )
         tx.submit()
         Log.info(tx.toString())
-        Log.info(tx.id)
 
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            Log.info(tx.toString())
-            return tx
+        if (tx.state == Transaction.State.TX_ACCEPTED) {
+            Log.info(tx.id)
+            // TODO("Remove delay, walletcore should handle it")
+            delay(5000)
+            val txId = tx.id
+            if (txId != null) {
+                val tx = Core.engine.getTransaction(txId)
+                Log.info(tx.toString())
+                return tx
+            }
         }
 
         return null
@@ -942,18 +943,24 @@ class GameScreenActivity : AppCompatActivity(),
                 getString(R.string.trade_create_loading)
             )
         CoroutineScope(IO).launch {
-            createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
-            syncProfile()
-
+            val tx = createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
             withContext(Main) {
                 loading.dismiss()
-                displayMessage(
-                    this@GameScreenActivity,
-                    getString(R.string.trade_create_complete)
-                )
-            }
 
-            refreshTrade()
+                if (tx != null) {
+                    syncProfile()
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.trade_create_complete)
+                    )
+                    refreshTrade()
+                } else {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.trade_create_error)
+                    )
+                }
+            }
         }
     }
 
@@ -1155,12 +1162,12 @@ class GameScreenActivity : AppCompatActivity(),
         val loading = displayLoading(this, getString(R.string.send_items_loading))
         CoroutineScope(IO).launch {
             val tx = sendItems(friendAddress, itemIds)
-            syncProfile()
 
             withContext(Main) {
                 loading.dismiss()
 
                 if (tx != null) {
+                    syncProfile()
                     displayMessage(
                         this@GameScreenActivity,
                         getString(R.string.send_items_complete)
@@ -1182,18 +1189,16 @@ class GameScreenActivity : AppCompatActivity(),
             val tx = Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
             tx.submit()
             Log.info(tx.toString())
-            Log.info(tx.id)
-            if (tx.state == Transaction.State.TX_REFUSED) {
-                return null
-            }
-
-            // TODO("Remove delay, walletcore should handle it")
-            delay(5000)
-            val txId = tx.id
-            if (txId != null) {
-                val tx = Core.engine.getTransaction(txId)
-                Log.info(tx.toString())
-                return tx
+            if (tx.state == Transaction.State.TX_ACCEPTED) {
+                Log.info(tx.id)
+                // TODO("Remove delay, walletcore should handle it")
+                delay(5000)
+                val txId = tx.id
+                if (txId != null) {
+                    val tx = Core.engine.getTransaction(txId)
+                    Log.info(tx.toString())
+                    return tx
+                }
             }
         }
 
