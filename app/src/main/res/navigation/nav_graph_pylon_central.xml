@@ -20,4 +20,9 @@
         android:name="com.pylons.loud.fragments.screens.pyloncentral.UpdateCharacterFragment"
         android:label="fragment_update_character"
         tools:layout="@layout/fragment_update_character" />
+    <fragment
+        android:id="@+id/sendItemScreenFragment"
+        android:name="com.pylons.loud.fragments.screens.senditem.SendItemScreenFragment"
+        android:label="fragment_send_item_screen"
+        tools:layout="@layout/fragment_send_item_screen" />
 </navigation>

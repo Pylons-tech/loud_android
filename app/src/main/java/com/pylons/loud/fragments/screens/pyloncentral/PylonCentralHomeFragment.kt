@@ -6,9 +6,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 
 import com.pylons.loud.R
+import com.pylons.loud.activities.GameScreenActivity
 import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
 
 /**
@@ -16,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_pylon_central_home.*
  */
 class PylonCentralHomeFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
+    private val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +42,16 @@ class PylonCentralHomeFragment : Fragment() {
 
         button_update_character.setOnClickListener {
             findNavController().navigate(R.id.updateCharacterFragment)
+        }
+
+        button_send_items.setOnClickListener {
+            val player = model.getPlayer().value
+            if (player != null && player.getItems().isNotEmpty()) {
+                findNavController().navigate((R.id.sendItemScreenFragment))
+            } else {
+                Toast.makeText(context, getString(R.string.send_items_no_items), Toast.LENGTH_SHORT)
+                    .show()
+            }
         }
     }
 

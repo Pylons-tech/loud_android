@@ -260,4 +260,12 @@ data class User(
             it.address == address
         }
     }
+
+    fun getItems(): List<Item> {
+        val items = mutableListOf<Item>()
+        items.addAll(characters)
+        items.addAll(weapons)
+        items.addAll(materials)
+        return items
+    }
 }

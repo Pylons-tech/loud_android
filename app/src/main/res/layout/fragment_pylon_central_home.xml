@@ -32,4 +32,10 @@
         android:layout_height="wrap_content"
         android:text="@string/update_character_name" />
 
+    <Button
+        android:id="@+id/button_send_items"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/send_items" />
+
 </LinearLayout>

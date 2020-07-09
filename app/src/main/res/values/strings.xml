@@ -14,6 +14,7 @@
     <string name="select_active_weapon">Select active weapon</string>
     <string name="restore_character_health">Restore character health</string>
     <string name="update_character_name">Change your character\'s name</string>
+    <string name="send_items">Send Items</string>
     <string name="rabbit">Rabbit</string>
     <string name="goblin">Goblin</string>
     <string name="wolf">Wolf </string>
@@ -173,4 +174,11 @@
     <string name="invalid_add_friend">Enter valid address and name</string>
     <string name="delete">Delete</string>
     <string name="delete_friend_prompt">Delete %1$s?\n\n%2$s</string>
+    <string name="send_items_desc">Who do you want to send items to?</string>
+    <string name="send_items_list_desc">What do you want to send?</string>
+    <string name="send_items_confirm">Confirm Send?</string>
+    <string name="send_items_loading">Sending items...</string>
+    <string name="send_items_complete">Items have been sent</string>
+    <string name="send_items_error">There was an error sending items</string>
+    <string name="send_items_no_items">No items to send!</string>
 </resources>

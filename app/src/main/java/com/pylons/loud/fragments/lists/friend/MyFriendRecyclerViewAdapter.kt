@@ -16,7 +16,8 @@ import com.pylons.loud.models.fight.Fight
  */
 class MyFriendRecyclerViewAdapter(
     private val values: List<Friend>,
-    private val mListener: FriendFragment.OnListFragmentInteractionListener?
+    private val mListener: FriendFragment.OnListFragmentInteractionListener?,
+    private val mode: Int
 ) : RecyclerView.Adapter<MyFriendRecyclerViewAdapter.ViewHolder>() {
 
     private val mOnClickListener: View.OnClickListener
@@ -26,7 +27,10 @@ class MyFriendRecyclerViewAdapter(
             val item = v.tag as Friend
             // Notify the active callbacks interface (the activity, if the fragment is attached to
             // one) that an item has been selected.
-            mListener?.onFriend(item)
+            when (mode) {
+                1 -> mListener?.onFriend(item)
+                2 -> mListener?.onSendItem(item)
+            }
         }
     }
 

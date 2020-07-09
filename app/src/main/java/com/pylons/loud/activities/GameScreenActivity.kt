@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -39,6 +40,7 @@ import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.constants.Location.FOREST
 import com.pylons.loud.constants.Location.FRIENDS
 import com.pylons.loud.constants.Location.HOME
+import com.pylons.loud.constants.Location.INVENTORY
 import com.pylons.loud.constants.Location.PYLONS_CENTRAL
 import com.pylons.loud.constants.Location.SETTINGS
 import com.pylons.loud.constants.Location.SHOP
@@ -64,6 +66,8 @@ import com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
 import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.lists.trade.TradeFragment
+import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
+import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
@@ -98,7 +102,8 @@ class GameScreenActivity : AppCompatActivity(),
     TradeFragment.OnListFragmentInteractionListener,
     CreateTradeFragment.OnFragmentInteractionListener,
     ItemSpecFragment.OnListFragmentInteractionListener,
-    FriendFragment.OnListFragmentInteractionListener {
+    FriendFragment.OnListFragmentInteractionListener,
+    SendItemConfirmFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -145,6 +150,7 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     private val model: SharedViewModel by viewModels()
+    private val sendItemViewModel: SendItemViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -213,6 +219,9 @@ class GameScreenActivity : AppCompatActivity(),
             }
             SETTINGS -> {
                 nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
+            }
+            INVENTORY -> {
+                nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
             }
             else -> {
                 Log.warning("Not exist")
@@ -344,7 +353,7 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.you_have_bought_from_shop, name)
                             )
                         }
-                        nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                        onNavigation(INVENTORY)
                     }
                 }
             }
@@ -576,7 +585,7 @@ class GameScreenActivity : AppCompatActivity(),
                                     )
                                 )
                             }
-                            nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                            onNavigation(INVENTORY)
                         }
                     }
 
@@ -777,7 +786,7 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.got_dev_items)
                     )
                 }
-                nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                onNavigation(INVENTORY)
             }
         }
     }
@@ -1130,5 +1139,64 @@ class GameScreenActivity : AppCompatActivity(),
 
         sheet.setContentView(view)
         sheet.show()
+    }
+
+    override fun onSendItem(friend: Friend) {
+        sendItemViewModel.friend = friend
+        findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemListFragment)
+    }
+
+    override fun onItemSend(item: Item) {
+        sendItemViewModel.itemIds = listOf(item)
+        findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemConfirmFragment)
+    }
+
+    override fun onSendItems(friendAddress: String, itemIds: List<Item>) {
+        val loading = displayLoading(this, getString(R.string.send_items_loading))
+        CoroutineScope(IO).launch {
+            val tx = sendItems(friendAddress, itemIds)
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+
+                if (tx != null) {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.send_items_complete)
+                    )
+                    onNavigation(PYLONS_CENTRAL)
+                } else {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.send_items_error)
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun sendItems(friendAddress: String, itemIds: List<Item>): Transaction? {
+        val player = model.getPlayer().value
+        if (player != null) {
+            val tx = Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
+            tx.submit()
+            Log.info(tx.toString())
+            Log.info(tx.id)
+            if (tx.state == Transaction.State.TX_REFUSED) {
+                return null
+            }
+
+            // TODO("Remove delay, walletcore should handle it")
+            delay(5000)
+            val txId = tx.id
+            if (txId != null) {
+                val tx = Core.engine.getTransaction(txId)
+                Log.info(tx.toString())
+                return tx
+            }
+        }
+
+        return null
     }
 }

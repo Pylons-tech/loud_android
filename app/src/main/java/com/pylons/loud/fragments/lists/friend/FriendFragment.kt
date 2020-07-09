@@ -32,7 +32,7 @@ class FriendFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyFriendRecyclerViewAdapter(listOf(), listener)
+                adapter = MyFriendRecyclerViewAdapter(listOf(), listener, 1)
             }
         }
         return view
@@ -54,5 +54,6 @@ class FriendFragment : Fragment() {
 
     interface OnListFragmentInteractionListener {
         fun onFriend(friend: Friend)
+        fun onSendItem(friend: Friend)
     }
 }

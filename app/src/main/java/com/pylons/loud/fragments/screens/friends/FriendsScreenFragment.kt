@@ -43,7 +43,7 @@ class FriendsScreenFragment : Fragment() {
             val view = frag?.view as RecyclerView
             val c = context
             if (c is FriendFragment.OnListFragmentInteractionListener) {
-                view.adapter = MyFriendRecyclerViewAdapter(it.friends, c)
+                view.adapter = MyFriendRecyclerViewAdapter(it.friends, c, 1)
             }
         })
 

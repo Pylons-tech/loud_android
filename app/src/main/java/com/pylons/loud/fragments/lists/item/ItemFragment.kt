@@ -86,6 +86,7 @@ class ItemFragment : Fragment() {
         fun onItemUpgrade(item: Item)
         fun onItemTradeSell(item: Item)
         fun onItemTradeBuy(item: Item)
+        fun onItemSend(item: Item)
     }
 
     companion object {
