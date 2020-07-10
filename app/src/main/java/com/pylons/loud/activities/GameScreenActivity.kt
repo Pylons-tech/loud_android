@@ -1128,7 +1128,7 @@ class GameScreenActivity : AppCompatActivity(),
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val player = model.getPlayer().value
                     if (player != null) {
-                        player.deleteFriend(friend.address)
+                        player.deleteFriend(friend)
                         model.setPlayer(player)
                         player.saveAsync(this)
                         sheet.dismiss()

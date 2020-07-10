@@ -255,9 +255,9 @@ data class User(
         friends.add(Friend(address, name))
     }
 
-    fun deleteFriend(address: String) {
+    fun deleteFriend(friend: Friend) {
         friends.removeIf {
-            it.address == address
+            it.address == friend.address && it.name == friend.name
         }
     }
 
