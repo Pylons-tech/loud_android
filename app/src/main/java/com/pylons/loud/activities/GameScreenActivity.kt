@@ -944,11 +944,12 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
+            syncProfile()
+
             withContext(Main) {
                 loading.dismiss()
 
                 if (tx != null) {
-                    syncProfile()
                     displayMessage(
                         this@GameScreenActivity,
                         getString(R.string.trade_create_complete)
@@ -989,7 +990,6 @@ class GameScreenActivity : AppCompatActivity(),
         CoroutineScope(IO).launch {
             val coreItem = getItemById(id)
             if (coreItem != null) {
-                Log.info(coreItem.toString())
                 withContext(Main) {
                     model.setTradeOutput(
                         coreItem
@@ -1162,12 +1162,12 @@ class GameScreenActivity : AppCompatActivity(),
         val loading = displayLoading(this, getString(R.string.send_items_loading))
         CoroutineScope(IO).launch {
             val tx = sendItems(friendAddress, itemIds)
+            syncProfile()
 
             withContext(Main) {
                 loading.dismiss()
 
                 if (tx != null) {
-                    syncProfile()
                     displayMessage(
                         this@GameScreenActivity,
                         getString(R.string.send_items_complete)

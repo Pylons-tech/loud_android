@@ -161,7 +161,8 @@ class CreateTradeFragment : Fragment() {
                                             item.special
                                         )
                                     ),
-                                    listOf(StringInputParam("Name", item.name))
+                                    listOf(StringInputParam("Name", item.name)),
+                                    FeeInputParam(0, 0)
                                 )
                             )
                         )
@@ -179,7 +180,8 @@ class CreateTradeFragment : Fragment() {
                                             item.level.max
                                         )
                                     ),
-                                    listOf(StringInputParam("Name", item.name))
+                                    listOf(StringInputParam("Name", item.name)),
+                                    FeeInputParam(0, 0)
                                 )
                             )
                         )
@@ -197,7 +199,8 @@ class CreateTradeFragment : Fragment() {
                                             item.level.max
                                         )
                                     ),
-                                    listOf(StringInputParam("Name", item.name))
+                                    listOf(StringInputParam("Name", item.name)),
+                                    FeeInputParam(0, 0)
                                 )
                             )
                         )
