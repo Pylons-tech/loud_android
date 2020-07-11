@@ -8,7 +8,7 @@ object UI {
     fun displayLoading(context: Context, message: String): AlertDialog {
         with(context) {
             val dialogBuilder =
-                AlertDialog.Builder(this, R.style.MyDialogTheme)
+                AlertDialog.Builder(this)
             dialogBuilder.setMessage(
                 message
             )
@@ -25,7 +25,7 @@ object UI {
     fun displayMessage(context: Context, message: String): AlertDialog {
         with(context) {
             val dialogBuilder =
-                AlertDialog.Builder(this, R.style.MyDialogTheme)
+                AlertDialog.Builder(this)
             dialogBuilder.setMessage(
                 message
             )

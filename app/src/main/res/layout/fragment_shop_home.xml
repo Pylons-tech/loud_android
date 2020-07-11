@@ -1,43 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.ShopScreen.ShopHomeFragment">
+    tools:context=".fragments.screens.shop.ShopHomeFragment">
 
     <TextView
         android:id="@+id/text_shop"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/shop_desc"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/text_buy"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:text="@string/buy_items"
-        android:textAppearance="?attr/textAppearanceListItem"></TextView>
+        android:text="@string/shop_desc" />
 
-    <TextView
-        android:id="@+id/text_sell"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/sell_items"
-        android:textAppearance="?attr/textAppearanceListItem"></TextView>
+        android:orientation="vertical"
+        android:paddingHorizontal="@dimen/padding">
 
-    <TextView
-        android:id="@+id/text_upgrade"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/upgrade_items"
-        android:textAppearance="?attr/textAppearanceListItem"></TextView>
+        <Button
+            android:id="@+id/button_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/buy_items" />
+
+        <Button
+            android:id="@+id/button_sell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/sell_items" />
+
+        <Button
+            android:id="@+id/button_upgrade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/upgrade_items" />
+    </LinearLayout>
 </LinearLayout>

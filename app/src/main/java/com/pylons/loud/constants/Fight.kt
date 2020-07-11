@@ -10,6 +10,9 @@ object FightId {
     const val ID_ICE_DRAGON = 7
     const val ID_ACID_DRAGON = 8
     const val ID_UNDEAD_DRAGON = 9
+    const val ID_FIRE_GIANT = 10
+    const val ID_ICE_GIANT = 11
+    const val ID_ACID_GIANT = 12
 }
 
 object FightRequirements {

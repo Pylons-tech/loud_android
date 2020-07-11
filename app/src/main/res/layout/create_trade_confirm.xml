@@ -35,7 +35,7 @@
             android:layout_weight="1"
             android:drawableTop="@drawable/ic_arrow_upward_green_64dp"
             android:gravity="center_horizontal"
-            android:textColor="@color/colorSuccess"
+            android:textColor="@color/colorAccent"
             android:textSize="32sp" />
 
     </LinearLayout>
@@ -45,7 +45,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/text_margin"
-        android:backgroundTint="@color/colorSuccess"
         android:text="@string/create_trade"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

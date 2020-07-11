@@ -9,10 +9,15 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pylons.loud.R
+import com.pylons.loud.constants.FightId.ID_ACID_GIANT
+import com.pylons.loud.constants.FightId.ID_FIRE_GIANT
 import com.pylons.loud.constants.FightId.ID_GIANT
+import com.pylons.loud.constants.FightId.ID_ICE_GIANT
 import com.pylons.loud.constants.FightId.ID_RABBIT
 import com.pylons.loud.constants.FightRequirements.ACID_SPECIAL
 import com.pylons.loud.constants.FightRequirements.FIRE_SPECIAL
@@ -33,7 +38,9 @@ import com.pylons.loud.constants.ItemID.ID_IRON_SWORD
 import com.pylons.loud.constants.ItemID.ID_SILVER_SWORD
 import com.pylons.loud.constants.ItemID.ID_WOODEN_SWORD
 import com.pylons.loud.constants.Location.FOREST
+import com.pylons.loud.constants.Location.FRIENDS
 import com.pylons.loud.constants.Location.HOME
+import com.pylons.loud.constants.Location.INVENTORY
 import com.pylons.loud.constants.Location.PYLONS_CENTRAL
 import com.pylons.loud.constants.Location.SETTINGS
 import com.pylons.loud.constants.Location.SHOP
@@ -45,21 +52,25 @@ import com.pylons.loud.constants.Recipe.RCP_BUY_GOLD_WITH_PYLON
 import com.pylons.loud.constants.Recipe.RCP_BUY_IRON_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_SILVER_SWORD
 import com.pylons.loud.constants.Recipe.RCP_BUY_WOODEN_SWORD
-import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPG
+import com.pylons.loud.constants.Recipe.RCP_COPPER_SWORD_UPGRADE
 import com.pylons.loud.constants.Recipe.RCP_GET_TEST_ITEMS
 import com.pylons.loud.constants.Recipe.RCP_SELL_SWORD
-import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPG
-import com.pylons.loud.fragments.Character.CharacterFragment
-import com.pylons.loud.fragments.Fight.FightFragment
-import com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment
-import com.pylons.loud.fragments.Item.ItemFragment
-import com.pylons.loud.fragments.PlayerLocation.PlayerLocationFragment
-import com.pylons.loud.fragments.PylonCentralScreen.CreateTradeFragment
-import com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment
-import com.pylons.loud.fragments.SettingsScreen.SettingsScreenFragment
-import com.pylons.loud.fragments.itemspec.ItemSpecFragment
-import com.pylons.loud.fragments.trade.TradeFragment
+import com.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPGRADE
+import com.pylons.loud.fragments.lists.character.CharacterFragment
+import com.pylons.loud.fragments.lists.fight.FightFragment
+import com.pylons.loud.fragments.lists.friend.FriendFragment
+import com.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
+import com.pylons.loud.fragments.lists.item.ItemFragment
+import com.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment
+import com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
+import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
+import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
+import com.pylons.loud.fragments.lists.trade.TradeFragment
+import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
+import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
+import com.pylons.loud.fragments.ui.BottomNavigationFragment
 import com.pylons.loud.models.*
+import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.CoreController.getItemById
@@ -70,7 +81,8 @@ import com.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.recipe.CoinOutput
-import com.pylons.wallet.core.types.tx.recipe.ItemInput
+import com.pylons.wallet.core.types.tx.trade.TradeItemInput
+import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
 
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.android.synthetic.main.dialog_input_text.view.*
@@ -80,7 +92,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import java.util.logging.Logger
 
 class GameScreenActivity : AppCompatActivity(),
-    PlayerLocationFragment.OnListFragmentInteractionListener,
+    BottomNavigationFragment.OnFragmentInteractionListener,
     FightFragment.OnListFragmentInteractionListener,
     ItemFragment.OnListFragmentInteractionListener,
     CharacterFragment.OnListFragmentInteractionListener,
@@ -89,7 +101,9 @@ class GameScreenActivity : AppCompatActivity(),
     SettingsScreenFragment.OnFragmentInteractionListener,
     TradeFragment.OnListFragmentInteractionListener,
     CreateTradeFragment.OnFragmentInteractionListener,
-    ItemSpecFragment.OnListFragmentInteractionListener {
+    ItemSpecFragment.OnListFragmentInteractionListener,
+    FriendFragment.OnListFragmentInteractionListener,
+    SendItemConfirmFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -99,6 +113,8 @@ class GameScreenActivity : AppCompatActivity(),
         var shopAction = 0
         private val tradeInput = MutableLiveData<ItemSpec>()
         private val tradeOutput = MutableLiveData<com.pylons.wallet.core.types.tx.item.Item>()
+        lateinit var trade: Trade
+        lateinit var tradeBuyMatchingItems: List<Item>
 
         fun getPlayer(): MutableLiveData<User> {
             return player
@@ -134,6 +150,7 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     private val model: SharedViewModel by viewModels()
+    private val sendItemViewModel: SendItemViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -175,8 +192,9 @@ class GameScreenActivity : AppCompatActivity(),
 
     }
 
-    override fun onLocation(location: PlayerLocation) {
-        when (location.id) {
+    override fun onNavigation(id: Int) {
+        nav_host_fragment.findNavController().popBackStack()
+        when (id) {
             HOME -> {
                 nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
             }
@@ -196,8 +214,14 @@ class GameScreenActivity : AppCompatActivity(),
             PYLONS_CENTRAL -> {
                 nav_host_fragment.findNavController().navigate(R.id.pylonCentralFragment)
             }
+            FRIENDS -> {
+                nav_host_fragment.findNavController().navigate(R.id.friendsScreenFragment)
+            }
             SETTINGS -> {
                 nav_host_fragment.findNavController().navigate(R.id.settingsScreenFragment)
+            }
+            INVENTORY -> {
+                nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
             }
             else -> {
                 Log.warning("Not exist")
@@ -214,10 +238,10 @@ class GameScreenActivity : AppCompatActivity(),
             if (player.getActiveWeapon() == item) {
                 prompt = "Unset $name as active weapon?"
             }
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     if (player.getActiveWeapon() == item) {
                         player.activeWeapon = -1
                     } else {
@@ -226,12 +250,12 @@ class GameScreenActivity : AppCompatActivity(),
                     model.setPlayer(player)
                     player.saveAsync(this)
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -249,10 +273,10 @@ class GameScreenActivity : AppCompatActivity(),
             val preItems = item.preItem.joinToString(", ")
             prompt += " and $preItems"
         }
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage("$prompt?")
             .setCancelable(false)
-            .setPositiveButton("Buy") { _, _ ->
+            .setPositiveButton(getString(R.string.yes)) { _, _ ->
                 val itemIds = mutableListOf<String>()
                 var recipeId = ""
 
@@ -329,16 +353,16 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.you_have_bought_from_shop, name)
                             )
                         }
-                        nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                        onNavigation(INVENTORY)
                     }
                 }
             }
-            .setNegativeButton("No") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
@@ -346,10 +370,10 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
         if (player != null) {
             val name = item.name
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage("Sell $name for ${getString(R.string.gold_icon)} ${item.getSellPriceRange()}?")
                 .setCancelable(false)
-                .setPositiveButton("Sell") { _, _ ->
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
 
                     val loading = displayLoading(
                         this,
@@ -392,12 +416,12 @@ class GameScreenActivity : AppCompatActivity(),
                         }
                     }
                 }
-                .setNegativeButton("No") { dialog, _ ->
+                .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -408,13 +432,13 @@ class GameScreenActivity : AppCompatActivity(),
 
         if (item is Weapon && player != null) {
             if (player.gold > item.getUpgradePrice()) {
-                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage("Upgrade $name?")
                     .setCancelable(false)
                     .setPositiveButton("Upgrade") { _, _ ->
                         val recipeId = when (item.name) {
-                            WOODEN_SWORD -> RCP_WOODEN_SWORD_UPG
-                            COPPER_SWORD -> RCP_COPPER_SWORD_UPG
+                            WOODEN_SWORD -> RCP_WOODEN_SWORD_UPGRADE
+                            COPPER_SWORD -> RCP_COPPER_SWORD_UPGRADE
                             else -> ""
                         }
 
@@ -446,12 +470,12 @@ class GameScreenActivity : AppCompatActivity(),
                             }
                         }
                     }
-                    .setNegativeButton("No") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.show()
             } else {
                 displayMessage(this, getString(R.string.you_dont_have_enough_gold_to_upgrade, name))
@@ -469,10 +493,10 @@ class GameScreenActivity : AppCompatActivity(),
             if (player.getActiveCharacter() == item) {
                 prompt = "Unset $name as active character?"
             }
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+            val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(prompt)
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     if (player.getActiveCharacter() == item) {
                         player.activeCharacter = -1
                     } else {
@@ -481,12 +505,12 @@ class GameScreenActivity : AppCompatActivity(),
                     model.setPlayer(player)
                     player.saveAsync(this)
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -530,18 +554,15 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onBuyCharacter(item: Character) {
-        val name = item?.name
-        val price = item?.price
-        val pylonIcon = getString(R.string.pylon_icon)
         val player = model.getPlayer().value
 
         if (player != null) {
-            val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
-            dialogBuilder.setMessage("Buy $name for $pylonIcon $price?")
+            val dialogBuilder = AlertDialog.Builder(this)
+            dialogBuilder.setMessage(getString(R.string.buy_character_prompt, item.name))
                 .setCancelable(false)
-                .setPositiveButton("Proceed") { _, _ ->
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val loading =
-                        displayLoading(this, getString(R.string.loading_buy_character, name))
+                        displayLoading(this, getString(R.string.loading_buy_character, item.name))
                     CoroutineScope(IO).launch {
                         val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
                         syncProfile()
@@ -559,22 +580,22 @@ class GameScreenActivity : AppCompatActivity(),
                                 loading.dismiss()
                                 displayMessage(
                                     this@GameScreenActivity, getString(
-                                        R.string.you_have_bought_from_pylons_central,
-                                        name
+                                        R.string.buy_character_complete,
+                                        item.name
                                     )
                                 )
                             }
-                            nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                            onNavigation(INVENTORY)
                         }
                     }
 
                 }
-                .setNegativeButton("Cancel") { dialog, _ ->
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
                 }
 
             val alert = dialogBuilder.create()
-            alert.setTitle("Confirm")
+            alert.setTitle(getString(R.string.confirm))
             alert.show()
         }
     }
@@ -642,7 +663,7 @@ class GameScreenActivity : AppCompatActivity(),
                                     }
                                 }
                                 3 -> {
-                                    if (fight.id == ID_GIANT) {
+                                    if (fight.id == ID_GIANT || fight.id == ID_FIRE_GIANT || fight.id == ID_ICE_GIANT || fight.id == ID_ACID_GIANT) {
                                         val character = player.getActiveCharacter()
                                         if (character != null && character.special != NO_SPECIAL.toLong()) {
                                             val special = when (character.special) {
@@ -693,7 +714,7 @@ class GameScreenActivity : AppCompatActivity(),
                 Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
             } else {
-                val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+                val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage(
                     getString(
                         R.string.confirm_buy_gold_with_pylons,
@@ -702,7 +723,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 )
                     .setCancelable(false)
-                    .setPositiveButton("Proceed") { _, _ ->
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                         val loading =
                             displayLoading(
                                 this,
@@ -731,12 +752,12 @@ class GameScreenActivity : AppCompatActivity(),
                             }
                         }
                     }
-                    .setNegativeButton("Cancel") { dialog, _ ->
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                         dialog.cancel()
                     }
 
                 val alert = dialogBuilder.create()
-                alert.setTitle("Confirm")
+                alert.setTitle(getString(R.string.confirm))
                 alert.show()
             }
         }
@@ -765,7 +786,7 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.got_dev_items)
                     )
                 }
-                nav_host_fragment.findNavController().navigate(R.id.inventoryFragment)
+                onNavigation(INVENTORY)
             }
         }
     }
@@ -791,28 +812,20 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    override fun onTrade(trade: Trade) {
-        val player = model.getPlayer().value ?: return
-
-        if (!player.canFulfillTrade(trade)) {
-            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT)
-                .show()
-            return
-        }
-
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+    private fun promptTrade(trade: Trade, itemIds: List<String>) {
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.trade_fulfill)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                 val loading =
                     displayLoading(
                         this,
                         getString(R.string.trade_fulfill_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = executeTrade(trade)
+                    val tx = executeTrade(trade, itemIds)
                     syncProfile()
                     if (tx?.txError != null) {
                         withContext(Main) {
@@ -835,17 +848,39 @@ class GameScreenActivity : AppCompatActivity(),
                     }
                 }
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
-    private suspend fun executeTrade(trade: Trade): Transaction? {
-        val tx = Core.engine.fulfillTrade(trade.id)
+    override fun onTrade(trade: Trade) {
+        val player = model.getPlayer().value ?: return
+
+        if (!player.canFulfillTrade(trade)) {
+            Toast.makeText(this, getString(R.string.trade_cannot_fulfill), Toast.LENGTH_SHORT)
+                .show()
+            return
+        }
+
+        if (trade is BuyItemTrade) {
+            model.trade = trade
+            model.tradeBuyMatchingItems = player.getMatchingTradeItems(trade)
+            val frag =
+                supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            frag.childFragmentManager.fragments[0].childFragmentManager.fragments[0].childFragmentManager.fragments[0].childFragmentManager.fragments[0].findNavController()
+                .navigate(R.id.itemSelectFragment)
+            return
+        }
+
+        promptTrade(trade, listOf())
+    }
+
+    private suspend fun executeTrade(trade: Trade, itemIds: List<String>): Transaction? {
+        val tx = Core.engine.fulfillTrade(trade.id, itemIds)
         tx.submit()
         Log.info(tx.toString())
         Log.info(tx.id)
@@ -864,12 +899,11 @@ class GameScreenActivity : AppCompatActivity(),
 
     private suspend fun createTrade(
         coinInput: List<CoinInput>,
-        itemInput: List<ItemInput>,
+        itemInput: List<TradeItemInput>,
         coinOutput: List<CoinOutput>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
     ): Transaction? {
-        Log.info(itemOutput.toString())
         val tx =
             Core.engine.createTrade(
                 coinInput,
@@ -880,15 +914,17 @@ class GameScreenActivity : AppCompatActivity(),
             )
         tx.submit()
         Log.info(tx.toString())
-        Log.info(tx.id)
 
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            Log.info(tx.toString())
-            return tx
+        if (tx.state == Transaction.State.TX_ACCEPTED) {
+            Log.info(tx.id)
+            // TODO("Remove delay, walletcore should handle it")
+            delay(5000)
+            val txId = tx.id
+            if (txId != null) {
+                val tx = Core.engine.getTransaction(txId)
+                Log.info(tx.toString())
+                return tx
+            }
         }
 
         return null
@@ -896,7 +932,7 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
-        itemInput: List<ItemInput>,
+        itemInput: List<TradeItemInput>,
         coinOutput: List<CoinOutput>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
@@ -912,13 +948,20 @@ class GameScreenActivity : AppCompatActivity(),
 
             withContext(Main) {
                 loading.dismiss()
-                displayMessage(
-                    this@GameScreenActivity,
-                    getString(R.string.trade_create_complete)
-                )
-            }
 
-            refreshTrade()
+                if (tx != null) {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.trade_create_complete)
+                    )
+                    refreshTrade()
+                } else {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.trade_create_error)
+                    )
+                }
+            }
         }
     }
 
@@ -947,7 +990,6 @@ class GameScreenActivity : AppCompatActivity(),
         CoroutineScope(IO).launch {
             val coreItem = getItemById(id)
             if (coreItem != null) {
-                Log.info(coreItem.toString())
                 withContext(Main) {
                     model.setTradeOutput(
                         coreItem
@@ -960,19 +1002,19 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onCancel(trade: Trade) {
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.trade_cancel)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                 val loading =
                     displayLoading(
                         this,
                         getString(R.string.trade_cancel_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = cancelTrade(trade)
+                    cancelTrade(trade)
                     syncProfile()
 
                     withContext(Main) {
@@ -986,12 +1028,12 @@ class GameScreenActivity : AppCompatActivity(),
                     refreshTrade()
                 }
             }
-            .setNegativeButton("No") { dialog, _ ->
+            .setNegativeButton(getString(R.string.no)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.show()
     }
 
@@ -1016,25 +1058,25 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onCharacterUpdate(character: Character) {
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null)
-        val dialogBuilder = AlertDialog.Builder(this, R.style.MyDialogTheme)
+        val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
             getString(R.string.update_character_prompt)
         )
             .setCancelable(false)
-            .setPositiveButton("Proceed") { _, _ ->
+            .setPositiveButton(getString(R.string.proceed)) { _, _ ->
             }
-            .setNegativeButton("Cancel") { dialog, _ ->
+            .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                 dialog.cancel()
             }
 
         val alert = dialogBuilder.create()
-        alert.setTitle("Confirm")
+        alert.setTitle(getString(R.string.confirm))
         alert.setView(mDialogView)
         alert.show()
 
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val name = mDialogView.edit_text.text.toString()
-            if (name != "") {
+            if (name.isNotBlank()) {
                 onRenameCharacter(character, name)
                 alert.dismiss()
             } else {
@@ -1064,5 +1106,102 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    override fun onItemTradeBuy(item: Item) {
+        promptTrade(model.trade, listOf(item.id))
+    }
+
+    override fun onFriend(friend: Friend) {
+        val sheet = BottomSheetDialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_friend, null)
+        view.text_view_delete.setOnClickListener {
+            val dialogBuilder = AlertDialog.Builder(this)
+            dialogBuilder.setMessage(
+                getString(
+                    R.string.delete_friend_prompt,
+                    friend.name,
+                    friend.address
+                )
+            )
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
+                    val player = model.getPlayer().value
+                    if (player != null) {
+                        player.deleteFriend(friend)
+                        model.setPlayer(player)
+                        player.saveAsync(this)
+                        sheet.dismiss()
+                    }
+                }
+                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                    dialog.cancel()
+                    sheet.dismiss()
+                }
+
+            val alert = dialogBuilder.create()
+            alert.setTitle(getString(R.string.confirm))
+            alert.show()
+        }
+
+        sheet.setContentView(view)
+        sheet.show()
+    }
+
+    override fun onSendItem(friend: Friend) {
+        sendItemViewModel.friend = friend
+        findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemListFragment)
+    }
+
+    override fun onItemSend(item: Item) {
+        sendItemViewModel.itemIds = listOf(item)
+        findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemConfirmFragment)
+    }
+
+    override fun onSendItems(friendAddress: String, itemIds: List<Item>) {
+        val loading = displayLoading(this, getString(R.string.send_items_loading))
+        CoroutineScope(IO).launch {
+            val tx = sendItems(friendAddress, itemIds)
+            syncProfile()
+
+            withContext(Main) {
+                loading.dismiss()
+
+                if (tx != null) {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.send_items_complete)
+                    )
+                    onNavigation(PYLONS_CENTRAL)
+                } else {
+                    displayMessage(
+                        this@GameScreenActivity,
+                        getString(R.string.send_items_error)
+                    )
+                }
+            }
+        }
+    }
+
+    private suspend fun sendItems(friendAddress: String, itemIds: List<Item>): Transaction? {
+        val player = model.getPlayer().value
+        if (player != null) {
+            val tx = Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
+            tx.submit()
+            Log.info(tx.toString())
+            if (tx.state == Transaction.State.TX_ACCEPTED) {
+                Log.info(tx.id)
+                // TODO("Remove delay, walletcore should handle it")
+                delay(5000)
+                val txId = tx.id
+                if (txId != null) {
+                    val tx = Core.engine.getTransaction(txId)
+                    Log.info(tx.toString())
+                    return tx
+                }
+            }
+        }
+
+        return null
     }
 }

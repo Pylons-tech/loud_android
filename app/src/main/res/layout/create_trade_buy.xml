@@ -1,71 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="@string/trade_buy_desc" />
 
     <LinearLayout
-        android:id="@+id/layout_options_buy"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingHorizontal="@dimen/padding"
+        android:paddingBottom="@dimen/padding">
 
-        <TextView
+        <Button
+            android:id="@+id/button_pylons_buy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_buy_desc"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="@string/trade_pylon" />
 
-        <TextView
-            android:id="@+id/text_pylons_buy"
+        <Button
+            android:id="@+id/button_gold_buy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_pylon"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="@string/trade_gold" />
 
-        <TextView
-            android:id="@+id/text_gold_buy"
+        <Button
+            android:id="@+id/button_character_buy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_gold"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="@string/trade_character" />
 
-        <TextView
-            android:id="@+id/text_character_buy"
+        <Button
+            android:id="@+id/button_item_buy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_character"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <TextView
-            android:id="@+id/text_item_buy"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_item"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorBorder" />
+            android:text="@string/trade_item" />
     </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBorder" />
 
     <fragment
         android:id="@+id/fragment_item_buy"
-        android:name="com.pylons.loud.fragments.itemspec.ItemSpecFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_options_buy" />
+        android:name="com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

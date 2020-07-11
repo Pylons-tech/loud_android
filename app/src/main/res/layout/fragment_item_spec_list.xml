@@ -8,8 +8,7 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    android:scrollbarThumbVertical="@color/colorText"
     android:scrollbars="vertical"
     app:layoutManager="LinearLayoutManager"
-    tools:context=".fragments.itemspec.ItemSpecFragment"
+    tools:context=".fragments.lists.itemspec.ItemSpecFragment"
     tools:listitem="@layout/fragment_item_spec" />

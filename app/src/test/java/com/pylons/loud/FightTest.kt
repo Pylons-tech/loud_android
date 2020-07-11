@@ -10,7 +10,7 @@ import com.pylons.loud.constants.FightRequirements.IRON_SWORD
 import com.pylons.loud.constants.FightRequirements.NO_SPECIAL
 import com.pylons.loud.constants.Item
 import com.pylons.loud.models.Character
-import com.pylons.loud.models.Fight
+import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.User
 import com.pylons.loud.models.Weapon
 import org.junit.Test
@@ -31,9 +31,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -44,7 +46,8 @@ class FightTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_RABBIT,
                 "",
@@ -65,9 +68,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -89,14 +94,15 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_GIANT,
                 "",
                 100,
                 10,
                 "",
-                listOf(IRON_SWORD, FightRequirements.NO_SPECIAL),
+                listOf(IRON_SWORD, NO_SPECIAL),
                 listOf("10% chance of sword lose", "GiantKiller badget on character")
             ), false
         ),
@@ -110,9 +116,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -134,7 +142,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_GIANT,
                 "",
@@ -155,9 +164,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -169,7 +180,8 @@ class FightTest {
                 ),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_GIANT,
                 "",
@@ -190,11 +202,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
-                        0,
-                        0,
+                        1,
                         0,
                         0
                     )
@@ -214,7 +228,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_GIANT,
                 "",
@@ -235,11 +250,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         1,
-                        0,
                         0,
                         0
                     )
@@ -259,7 +276,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_GIANT,
                 "",
@@ -280,11 +298,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         1,
-                        0,
                         0,
                         0
                     )
@@ -304,7 +324,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_FIRE_DRAGON,
                 "",
@@ -325,9 +346,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -349,7 +372,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_FIRE_DRAGON,
                 "",
@@ -370,11 +394,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         2,
-                        0,
                         0,
                         0
                     )
@@ -394,7 +420,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_ICE_DRAGON,
                 "",
@@ -415,11 +442,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         1,
-                        0,
                         0,
                         0
                     )
@@ -439,7 +468,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_ICE_DRAGON,
                 "",
@@ -461,11 +491,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         3,
-                        0,
                         0,
                         0
                     )
@@ -485,7 +517,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_ACID_DRAGON,
                 "",
@@ -507,11 +540,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         2,
-                        0,
                         0,
                         0
                     )
@@ -531,7 +566,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 FightId.ID_ACID_DRAGON,
                 "",
@@ -553,11 +589,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         2,
-                        0,
                         0,
                         0
                     )
@@ -577,7 +615,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_UNDEAD_DRAGON,
                 "",
@@ -599,11 +638,13 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
                         0,
                         2,
-                        0,
                         0,
                         0
                     )
@@ -623,7 +664,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_UNDEAD_DRAGON,
                 "",
@@ -645,9 +687,11 @@ class FightTest {
                         "001",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        0,
                         1,
                         1.0,
-                        0,
                         0,
                         0,
                         0,
@@ -669,7 +713,8 @@ class FightTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Fight(
                 ID_UNDEAD_DRAGON,
                 "",

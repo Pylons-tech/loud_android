@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.PylonCentralScreen.CreateTradeFragment">
+    tools:context=".fragments.screens.pyloncentral.CreateTradeFragment">
 
     <include
         android:id="@+id/layout_create_trade_buy"

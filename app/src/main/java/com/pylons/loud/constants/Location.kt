@@ -5,7 +5,9 @@ object Location {
     const val FOREST = 2
     const val SHOP = 3
     const val PYLONS_CENTRAL = 4
-    const val SETTINGS = 5
+    const val FRIENDS = 5
+    const val SETTINGS = 6
+    const val INVENTORY = 7
 }
 
 object Shop {

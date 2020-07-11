@@ -1,74 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/text_margin"
+        android:text="@string/trade_sell_desc" />
 
     <LinearLayout
-        android:id="@+id/layout_options_sell"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:paddingHorizontal="@dimen/padding"
+        android:paddingBottom="@dimen/padding">
 
-        <TextView
+        <Button
+            android:id="@+id/button_gold_sell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_sell_desc"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="@string/trade_gold" />
 
-        <TextView
-            android:id="@+id/text_gold_sell"
+        <Button
+            android:id="@+id/button_character_sell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_gold"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:text="@string/trade_character" />
 
-        <TextView
-            android:id="@+id/text_character_sell"
+        <Button
+            android:id="@+id/button_item_sell"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_character"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <TextView
-            android:id="@+id/text_item_sell"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/trade_item"
-            android:textAppearance="?attr/textAppearanceListItem" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/colorBorder" />
+            android:text="@string/trade_item" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorBorder" />
 
     <fragment
         android:id="@+id/fragment_character_sell"
-        android:name="com.pylons.loud.fragments.Character.CharacterFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_options_sell" />
+        android:name="com.pylons.loud.fragments.lists.character.CharacterFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <fragment
         android:id="@+id/fragment_item_sell"
-        android:name="com.pylons.loud.fragments.Item.ItemFragment"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_options_sell" />
+        android:name="com.pylons.loud.fragments.lists.item.ItemFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

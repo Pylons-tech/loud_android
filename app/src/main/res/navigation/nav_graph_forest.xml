@@ -7,12 +7,22 @@
 
     <fragment
         android:id="@+id/forestHomeFragment"
-        android:name="com.pylons.loud.fragments.ForestScreen.ForestHomeFragment"
+        android:name="com.pylons.loud.fragments.screens.forest.ForestHomeFragment"
         android:label="fragment_forest_home"
         tools:layout="@layout/fragment_forest_home" />
     <fragment
         android:id="@+id/forestFightPreviewFragment"
-        android:name="com.pylons.loud.fragments.ForestScreen.ForestFightPreviewFragment"
+        android:name="com.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment"
         android:label="fragment_forest_fight_preview"
         tools:layout="@layout/fragment_forest_fight_preview" />
+    <fragment
+        android:id="@+id/forestSpecialFragment"
+        android:name="com.pylons.loud.fragments.screens.forest.ForestSpecialFragment"
+        android:label="fragment_forest_special"
+        tools:layout="@layout/fragment_forest_special" />
+    <fragment
+        android:id="@+id/forestBasicFragment"
+        android:name="com.pylons.loud.fragments.screens.forest.ForestBasicFragment"
+        android:label="fragment_forest_basic"
+        tools:layout="@layout/fragment_forest_basic" />
 </navigation>

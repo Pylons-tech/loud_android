@@ -21,13 +21,15 @@ class UserTest {
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                 "Tiger",
                 1,
+                0.0,
                 0,
+                0,
+                1,
                 1.0,
                 0,
                 0,
                 0,
-                0,
-                3000
+                0
             )
         ),
         -1,
@@ -54,7 +56,8 @@ class UserTest {
                 5500
             )
         ),
-        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+        mutableListOf()
     )
 
     @Test

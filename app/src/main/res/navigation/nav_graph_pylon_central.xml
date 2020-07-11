@@ -7,22 +7,22 @@
 
     <fragment
         android:id="@+id/pylonCentralHomeFragment"
-        android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralHomeFragment"
+        android:name="com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment"
         android:label="fragment_pylon_central_home"
         tools:layout="@layout/fragment_pylon_central_home" />
     <fragment
-        android:id="@+id/pylonCentralBuyCharacterFragment"
-        android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralBuyCharacterFragment"
-        android:label="fragment_pylon_central_buy_character"
-        tools:layout="@layout/fragment_pylon_central_buy_character" />
-    <fragment
         android:id="@+id/pylonCentralTradeFragment"
-        android:name="com.pylons.loud.fragments.PylonCentralScreen.PylonCentralTradeFragment"
+        android:name="com.pylons.loud.fragments.screens.pyloncentral.PylonCentralTradeFragment"
         android:label="fragment_pylon_central_trade"
         tools:layout="@layout/fragment_pylon_central_trade" />
     <fragment
         android:id="@+id/updateCharacterFragment"
-        android:name="com.pylons.loud.fragments.PylonCentralScreen.UpdateCharacterFragment"
+        android:name="com.pylons.loud.fragments.screens.pyloncentral.UpdateCharacterFragment"
         android:label="fragment_update_character"
         tools:layout="@layout/fragment_update_character" />
+    <fragment
+        android:id="@+id/sendItemScreenFragment"
+        android:name="com.pylons.loud.fragments.screens.senditem.SendItemScreenFragment"
+        android:label="fragment_send_item_screen"
+        tools:layout="@layout/fragment_send_item_screen" />
 </navigation>

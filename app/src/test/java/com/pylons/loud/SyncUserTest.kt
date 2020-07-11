@@ -28,7 +28,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("abc"),
                 mutableMapOf(),
@@ -46,7 +47,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "abc"
+                "abc",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -61,7 +63,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -75,6 +78,7 @@ class SyncUserTest {
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         3000,
                         mapOf("XP" to 1.0),
@@ -85,18 +89,21 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -108,13 +115,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        3000,
                         0,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 -1,
@@ -132,7 +141,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -147,7 +157,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -161,6 +172,7 @@ class SyncUserTest {
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         3000,
                         mapOf("XP" to 1.0),
@@ -171,18 +183,21 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -196,7 +211,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -211,7 +227,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -225,6 +242,7 @@ class SyncUserTest {
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         3000,
                         mapOf("XP" to 1.0),
@@ -235,18 +253,21 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -270,7 +291,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -285,7 +307,8 @@ class SyncUserTest {
                 mutableListOf(),
                 -1,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -299,6 +322,7 @@ class SyncUserTest {
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         3000,
                         mapOf("XP" to 1.0),
@@ -309,29 +333,34 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5500,
                         mapOf("attack" to 0.0),
                         mapOf("level" to 1L, "value" to 50L),
-                        mapOf("Name" to "Goblin ear")
+                        mapOf("Name" to "Goblin ear"),
+                        0
                     )
                 )
             ), User(
@@ -343,13 +372,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        3000,
                         0,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 -1,
@@ -376,7 +407,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
 
@@ -391,13 +423,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
                         0,
+                        0,
+                        1,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 0,
@@ -424,7 +458,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -438,6 +473,7 @@ class SyncUserTest {
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         3000,
                         mapOf("XP" to 1.0),
@@ -448,29 +484,34 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                         "",
+                        "",
                         true,
                         5500,
                         mapOf("attack" to 0.0),
                         mapOf("level" to 1L, "value" to 50L),
-                        mapOf("Name" to "Goblin ear")
+                        mapOf("Name" to "Goblin ear"),
+                        0
                     )
                 )
             ), User(
@@ -482,13 +523,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
+                        0,
+                        3000,
                         0,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 0,
@@ -515,7 +558,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
 
@@ -530,13 +574,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
                         0,
+                        0,
+                        1,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 0,
@@ -554,7 +600,8 @@ class SyncUserTest {
                 ),
                 0,
                 mutableListOf(),
-                ""
+                "",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -575,7 +622,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         ),
         MyTest(
@@ -589,13 +637,15 @@ class SyncUserTest {
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "Tiger",
                         1,
+                        0.0,
                         0,
+                        0,
+                        1,
                         1.0,
                         0,
                         0,
                         0,
-                        0,
-                        3000
+                        0
                     )
                 ),
                 0,
@@ -622,7 +672,8 @@ class SyncUserTest {
                         5500
                     )
                 ),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             ), Profile(
                 TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
                 mutableMapOf(),
@@ -640,7 +691,8 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
-                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
             )
         )
     )

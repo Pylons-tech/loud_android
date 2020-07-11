@@ -20,7 +20,8 @@ data class User(
     var weapons: MutableList<Weapon>,
     var activeWeapon: Int,
     var materials: MutableList<Material>,
-    var address: String
+    var address: String,
+    var friends: MutableList<Friend>
 ) {
 
     fun getActiveCharacter(): Character? {
@@ -108,7 +109,7 @@ data class User(
 
         var pylonAmount = 0L
         var goldAmount = 0L
-        profile.coins?.forEach {
+        profile.coins.forEach {
             when (it.denom) {
                 Coin.PYLON -> pylonAmount = it.amount
                 Coin.LOUD -> goldAmount = it.amount
@@ -130,13 +131,15 @@ data class User(
                         it.id,
                         it.strings["Name"] ?: "",
                         it.longs["level"] ?: 0,
+                        0.0,
+                        0,
+                        it.lastUpdate,
                         0,
                         it.doubles["XP"] ?: 0.0,
                         it.longs["GiantKill"] ?: 0,
                         it.longs["Special"] ?: 0,
                         it.longs["SpecialDragonKill"] ?: 0,
-                        it.longs["UndeadDragonKill"] ?: 0,
-                        it.lastUpdate
+                        it.longs["UndeadDragonKill"] ?: 0
                     )
                     characters.add(character)
                 }
@@ -219,5 +222,50 @@ data class User(
         }
 
         return false
+    }
+
+    fun getMatchingTradeItems(trade: Trade): List<Item> {
+        if (trade is BuyItemTrade) {
+            return when (trade.input) {
+                is CharacterSpec -> characters.filter {
+                    it.special == trade.input.special &&
+                            it.name == trade.input.name &&
+                            it.xp >= trade.input.xp.min &&
+                            it.xp <= trade.input.xp.max &&
+                            it.level >= trade.input.level.min &&
+                            it.level <= trade.input.level.max
+                }
+                else -> {
+                    val items = mutableListOf<Item>()
+                    items.addAll(weapons)
+                    items.addAll(materials)
+                    return items.filter {
+                        it.name == trade.input.name &&
+                                it.level >= trade.input.level.min &&
+                                it.level <= trade.input.level.max
+                    }
+                }
+            }
+        }
+
+        return listOf()
+    }
+
+    fun addFriend(address: String, name: String) {
+        friends.add(Friend(address, name))
+    }
+
+    fun deleteFriend(friend: Friend) {
+        friends.removeIf {
+            it.address == friend.address && it.name == friend.name
+        }
+    }
+
+    fun getItems(): List<Item> {
+        val items = mutableListOf<Item>()
+        items.addAll(characters)
+        items.addAll(weapons)
+        items.addAll(materials)
+        return items
     }
 }

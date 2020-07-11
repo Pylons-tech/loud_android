@@ -17,9 +17,11 @@ class HomeDesc {
                 "001",
                 "Tiger",
                 1,
+                0.0,
+                0,
+                0,
                 1,
                 1.0,
-                0,
                 0,
                 0,
                 0,
@@ -30,7 +32,8 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        ""
+        "",
+        mutableListOf()
     )
 
     private val playerNoCharacter = User(
@@ -42,7 +45,8 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        ""
+        "",
+        mutableListOf()
     )
 
     private val playerNoPylon = User(
@@ -54,7 +58,8 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        ""
+        "",
+        mutableListOf()
     )
 
     private val playerNoPylon2 = User(
@@ -66,9 +71,11 @@ class HomeDesc {
                 "001",
                 "Tiger",
                 1,
+                0.0,
+                0,
+                0,
                 1,
                 1.0,
-                0,
                 0,
                 0,
                 0,
@@ -79,7 +86,8 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        ""
+        "",
+        mutableListOf()
     )
 
     private val playerNoPylon3 = User(
@@ -91,9 +99,11 @@ class HomeDesc {
                 "001",
                 "Tiger",
                 1,
+                0.0,
+                0,
+                0,
                 1,
                 1.0,
-                0,
                 0,
                 0,
                 0,
@@ -104,7 +114,8 @@ class HomeDesc {
         mutableListOf(),
         -1,
         mutableListOf(),
-        ""
+        "",
+        mutableListOf()
     )
 
     @Test

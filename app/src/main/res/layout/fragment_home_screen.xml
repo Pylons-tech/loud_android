@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeScreen.HomeScreenFragment">
+    android:orientation="vertical"
+    android:padding="@dimen/padding"
+    tools:context=".fragments.screens.home.HomeScreenFragment">
 
     <TextView
         android:id="@+id/text_home_screen"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="@dimen/text_margin" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/text_margin" />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/button_buy_characters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buy_characters" />
+
+</LinearLayout>

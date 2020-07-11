@@ -21,7 +21,7 @@ class LoginActivity : AppCompatActivity() {
         button_continue.setOnClickListener {
             val username = edit_text_username.text.toString()
 
-            if (username == "") {
+            if (username.isBlank()) {
                 Toast.makeText(this, R.string.login_no_username_text, Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
