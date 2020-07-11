@@ -89,7 +89,8 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
@@ -101,7 +102,8 @@ class SyncUserTest {
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -181,7 +183,8 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
@@ -193,7 +196,8 @@ class SyncUserTest {
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -249,7 +253,8 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
@@ -261,7 +266,8 @@ class SyncUserTest {
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     )
                 )
             ), User(
@@ -327,7 +333,8 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
@@ -339,7 +346,8 @@ class SyncUserTest {
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
@@ -351,7 +359,8 @@ class SyncUserTest {
                         5500,
                         mapOf("attack" to 0.0),
                         mapOf("level" to 1L, "value" to 50L),
-                        mapOf("Name" to "Goblin ear")
+                        mapOf("Name" to "Goblin ear"),
+                        0
                     )
                 )
             ), User(
@@ -475,7 +484,8 @@ class SyncUserTest {
                             "SpecialDragonKill" to 0L,
                             "UndeadDragonKill" to 0L
                         ),
-                        mapOf("Name" to "Tiger", "Type" to "Character")
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
@@ -487,7 +497,8 @@ class SyncUserTest {
                         5000,
                         mapOf("attack" to 3.0),
                         mapOf("level" to 1L, "value" to 100L),
-                        mapOf("Name" to "Wooden sword")
+                        mapOf("Name" to "Wooden sword"),
+                        0
                     ),
                     Item(
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
@@ -499,7 +510,8 @@ class SyncUserTest {
                         5500,
                         mapOf("attack" to 0.0),
                         mapOf("level" to 1L, "value" to 50L),
-                        mapOf("Name" to "Goblin ear")
+                        mapOf("Name" to "Goblin ear"),
+                        0
                     )
                 )
             ), User(
