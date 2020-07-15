@@ -7,6 +7,7 @@ import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.models.User
 import com.pylons.wallet.core.Core
+import com.pylons.wallet.core.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.*
@@ -27,6 +28,13 @@ object Account {
                 tx.submit()
                 Log.info(tx.toString())
                 Log.info(tx.id)
+                delay(5000)
+                Core.engine.getOwnBalances()
+
+                val tx2 = Core.engine.getPylons(500)
+                tx2.submit()
+                delay(5000)
+
                 val playerKeys = CoreController.dumpUserData()
                 Log.info(playerKeys)
                 savePlayerKeys(context, username, playerKeys)
@@ -85,6 +93,19 @@ object Account {
         }
     }
 
+    private suspend fun createAccount(): Profile? {
+        val tx = Core.engine.createChainAccount()
+        tx.submit()
+        // TODO("Remove delay, walletcore should handle it")
+        delay(5000)
+        Core.engine.getOwnBalances()
+
+        val tx2 = Core.engine.getPylons(500)
+        tx2.submit()
+        delay(5000)
+        return Core.engine.getOwnBalances()
+    }
+
     private fun setupWithKeys(context: Context, username: String, playerKeys: String) {
         CoreController.setUserData(playerKeys)
 
@@ -109,11 +130,7 @@ object Account {
             // I have keys but no account on chain
             // TODO("Remove this check, walletcore should handle this once done")
             if (profile == null) {
-                val tx = Core.engine.getPylons(500)
-                tx.submit()
-                // TODO("Remove delay, walletcore should handle it")
-                delay(5000)
-                profile = Core.engine.getOwnBalances()
+                profile = createAccount()
             }
 
             if (profile != null) {
