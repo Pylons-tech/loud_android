@@ -13,7 +13,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/home"
         android:textColor="@color/state_text" />
 
@@ -24,7 +24,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/forest"
         android:textColor="@color/state_text" />
 
@@ -35,7 +35,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/shop"
         android:textColor="@color/state_text" />
 
@@ -46,7 +46,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/pylons_central"
         android:textColor="@color/state_text" />
 
@@ -57,7 +57,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/friends"
         android:textColor="@color/state_text" />
 
@@ -68,7 +68,7 @@
         android:layout_weight="1"
         android:gravity="center"
         android:paddingHorizontal="8dp"
-        android:paddingVertical="24dp"
+        android:paddingVertical="16dp"
         android:text="@string/settings"
         android:textColor="@color/state_text" />
 </LinearLayout>
