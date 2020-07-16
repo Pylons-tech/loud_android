@@ -368,6 +368,15 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.you_have_bought_from_shop, name)
                             )
                             tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                            if (player.activeWeapon == -1) {
+                                val index = player.weapons.indexOfFirst {
+                                    it.id == tx?.txData?.output?.get(0)?.itemId
+                                }
+                                player.setActiveWeapon(player.weapons[index])
+                                model.setPlayer(player)
+                                player.saveAsync(this@GameScreenActivity)
+                            }
                         }
                         onNavigation(INVENTORY)
                     }
@@ -573,7 +582,6 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onBuyCharacter(item: Character) {
         val player = model.getPlayer().value
-
         if (player != null) {
             val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(getString(R.string.buy_character_prompt, item.name))
@@ -603,7 +611,17 @@ class GameScreenActivity : AppCompatActivity(),
                                     )
                                 )
                                 tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                                if (player.activeCharacter == -1) {
+                                    val index = player.characters.indexOfFirst {
+                                        it.id == tx?.txData?.output?.get(0)?.itemId
+                                    }
+                                    player.setActiveCharacter(player.characters[index])
+                                    model.setPlayer(player)
+                                    player.saveAsync(this@GameScreenActivity)
+                                }
                             }
+
                             onNavigation(INVENTORY)
                         }
                     }
