@@ -15,6 +15,12 @@
         android:text="@string/pylons_central_desc" />
 
     <Button
+        android:id="@+id/button_purchase_pylon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/purchase_pylon" />
+
+    <Button
         android:id="@+id/button_buy_5000_with_100_pylons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
