@@ -27,7 +27,8 @@ class MyItemRecyclerViewAdapter(
     private val Log = Logger.getLogger(MyItemRecyclerViewAdapter::class.java.name)
 
     private val mOnClickListener: View.OnClickListener
-    var selectedPos = RecyclerView.NO_POSITION
+    var activeCharacterPos = RecyclerView.NO_POSITION
+    var activeWeaponPos = RecyclerView.NO_POSITION
 
     init {
         mOnClickListener = View.OnClickListener { v ->
@@ -56,7 +57,14 @@ class MyItemRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
-        holder.itemView.isSelected = selectedPos == position;
+
+        if (activeCharacterPos == position) {
+            holder.mContentView.append(" [Active Character]")
+        }
+
+        if (activeWeaponPos == position) {
+            holder.mContentView.append(" [Active Weapon]")
+        }
 
         when (mode) {
             2 -> {

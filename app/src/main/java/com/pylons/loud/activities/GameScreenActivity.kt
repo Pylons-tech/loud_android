@@ -248,31 +248,35 @@ class GameScreenActivity : AppCompatActivity(),
         val name = item.name
         val player = model.getPlayer().value
 
-        if (player != null) {
-            var prompt = "Set $name as active weapon?"
-            if (player.getActiveWeapon() == item) {
-                prompt = "Unset $name as active weapon?"
-            }
-            val dialogBuilder = AlertDialog.Builder(this)
-            dialogBuilder.setMessage(prompt)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
-                    if (player.getActiveWeapon() == item) {
-                        player.activeWeapon = -1
-                    } else {
-                        player.setActiveWeapon(item as Weapon)
+        when (item) {
+            is Character -> onCharacter(item)
+            is Weapon -> if (player != null) {
+                var prompt = "Set $name as active weapon?"
+                if (player.getActiveWeapon() == item) {
+                    prompt = "Unset $name as active weapon?"
+                }
+                val dialogBuilder = AlertDialog.Builder(this)
+                dialogBuilder.setMessage(prompt)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
+                        if (player.getActiveWeapon() == item) {
+                            player.activeWeapon = -1
+                        } else {
+                            player.setActiveWeapon(item)
+                        }
+                        model.setPlayer(player)
+                        player.saveAsync(this)
                     }
-                    model.setPlayer(player)
-                    player.saveAsync(this)
-                }
-                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                    dialog.cancel()
-                }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.cancel()
+                    }
 
-            val alert = dialogBuilder.create()
-            alert.setTitle(getString(R.string.confirm))
-            alert.show()
+                val alert = dialogBuilder.create()
+                alert.setTitle(getString(R.string.confirm))
+                alert.show()
+            }
         }
+
     }
 
     override fun onItemBuy(item: Item) {
