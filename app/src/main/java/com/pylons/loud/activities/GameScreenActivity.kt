@@ -69,6 +69,7 @@ import com.pylons.loud.fragments.lists.trade.TradeFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
+import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
@@ -89,7 +90,9 @@ import kotlinx.android.synthetic.main.dialog_input_text.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import java.util.*
 import java.util.logging.Logger
+import kotlin.concurrent.fixedRateTimer
 
 class GameScreenActivity : AppCompatActivity(),
     BottomNavigationFragment.OnFragmentInteractionListener,
@@ -151,6 +154,8 @@ class GameScreenActivity : AppCompatActivity(),
 
     private val model: SharedViewModel by viewModels()
     private val sendItemViewModel: SendItemViewModel by viewModels()
+    private val blockChainStatusViewModel: BlockChainStatusViewModel by viewModels()
+    private lateinit var getStatusBlockTimer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -158,13 +163,24 @@ class GameScreenActivity : AppCompatActivity(),
 
         val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
-            val model: SharedViewModel by viewModels()
             model.setPlayer(currentPlayer)
+            getStatusBlockTimer = fixedRateTimer("getStatusBlock", false, 0, 5000) {
+                CoroutineScope(IO).launch {
+                    blockChainStatusViewModel.getStatusBlock()
+                }
+            }
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
             finish()
             return
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        if (this::getStatusBlockTimer.isInitialized) {
+            getStatusBlockTimer.cancel()
         }
     }
 
@@ -189,7 +205,6 @@ class GameScreenActivity : AppCompatActivity(),
                 ).show()
             }
         }
-
     }
 
     override fun onNavigation(id: Int) {
@@ -233,31 +248,35 @@ class GameScreenActivity : AppCompatActivity(),
         val name = item.name
         val player = model.getPlayer().value
 
-        if (player != null) {
-            var prompt = "Set $name as active weapon?"
-            if (player.getActiveWeapon() == item) {
-                prompt = "Unset $name as active weapon?"
-            }
-            val dialogBuilder = AlertDialog.Builder(this)
-            dialogBuilder.setMessage(prompt)
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.proceed)) { _, _ ->
-                    if (player.getActiveWeapon() == item) {
-                        player.activeWeapon = -1
-                    } else {
-                        player.setActiveWeapon(item as Weapon)
+        when (item) {
+            is Character -> onCharacter(item)
+            is Weapon -> if (player != null) {
+                var prompt = "Set $name as active weapon?"
+                if (player.getActiveWeapon() == item) {
+                    prompt = "Unset $name as active weapon?"
+                }
+                val dialogBuilder = AlertDialog.Builder(this)
+                dialogBuilder.setMessage(prompt)
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.proceed)) { _, _ ->
+                        if (player.getActiveWeapon() == item) {
+                            player.activeWeapon = -1
+                        } else {
+                            player.setActiveWeapon(item)
+                        }
+                        model.setPlayer(player)
+                        player.saveAsync(this)
                     }
-                    model.setPlayer(player)
-                    player.saveAsync(this)
-                }
-                .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
-                    dialog.cancel()
-                }
+                    .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
+                        dialog.cancel()
+                    }
 
-            val alert = dialogBuilder.create()
-            alert.setTitle(getString(R.string.confirm))
-            alert.show()
+                val alert = dialogBuilder.create()
+                alert.setTitle(getString(R.string.confirm))
+                alert.show()
+            }
         }
+
     }
 
     override fun onItemBuy(item: Item) {
@@ -352,6 +371,16 @@ class GameScreenActivity : AppCompatActivity(),
                                 this@GameScreenActivity,
                                 getString(R.string.you_have_bought_from_shop, name)
                             )
+                            tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                            if (player.activeWeapon == -1) {
+                                val index = player.weapons.indexOfFirst {
+                                    it.id == tx?.txData?.output?.get(0)?.itemId
+                                }
+                                player.setActiveWeapon(player.weapons[index])
+                                model.setPlayer(player)
+                                player.saveAsync(this@GameScreenActivity)
+                            }
                         }
                         onNavigation(INVENTORY)
                     }
@@ -412,6 +441,7 @@ class GameScreenActivity : AppCompatActivity(),
                                     this@GameScreenActivity,
                                     getString(R.string.you_sold_item_for_gold, name, amount)
                                 )
+                                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                             }
                         }
                     }
@@ -466,6 +496,7 @@ class GameScreenActivity : AppCompatActivity(),
                                         this@GameScreenActivity,
                                         getString(R.string.you_have_upgraded_item, name)
                                     )
+                                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                                 }
                             }
                         }
@@ -555,7 +586,6 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onBuyCharacter(item: Character) {
         val player = model.getPlayer().value
-
         if (player != null) {
             val dialogBuilder = AlertDialog.Builder(this)
             dialogBuilder.setMessage(getString(R.string.buy_character_prompt, item.name))
@@ -584,7 +614,18 @@ class GameScreenActivity : AppCompatActivity(),
                                         item.name
                                     )
                                 )
+                                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                                if (player.activeCharacter == -1) {
+                                    val index = player.characters.indexOfFirst {
+                                        it.id == tx?.txData?.output?.get(0)?.itemId
+                                    }
+                                    player.setActiveCharacter(player.characters[index])
+                                    model.setPlayer(player)
+                                    player.saveAsync(this@GameScreenActivity)
+                                }
                             }
+
                             onNavigation(INVENTORY)
                         }
                     }
@@ -601,12 +642,6 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onEngageFight(fight: Fight, recipeId: String, itemIds: Array<String>) {
-        Log.info(recipeId)
-
-        itemIds.forEach {
-            Log.info(it)
-        }
-
         val player = model.getPlayer().value
         if (player != null) {
             val currentCharacterName = player.getActiveCharacter()?.name
@@ -701,6 +736,7 @@ class GameScreenActivity : AppCompatActivity(),
                     withContext(Main) {
                         loading.dismiss()
                         displayMessage(this@GameScreenActivity, prompt)
+                        tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                     }
                 }
             }
@@ -748,6 +784,7 @@ class GameScreenActivity : AppCompatActivity(),
                                         this@GameScreenActivity,
                                         getString(R.string.bought_gold_with_pylons, 5000, 100)
                                     )
+                                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                                 }
                             }
                         }
@@ -785,6 +822,7 @@ class GameScreenActivity : AppCompatActivity(),
                         this@GameScreenActivity,
                         getString(R.string.got_dev_items)
                     )
+                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                 }
                 onNavigation(INVENTORY)
             }
@@ -808,6 +846,7 @@ class GameScreenActivity : AppCompatActivity(),
                     this@GameScreenActivity,
                     getString(R.string.got_pylons)
                 )
+                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
             }
         }
     }
@@ -842,6 +881,7 @@ class GameScreenActivity : AppCompatActivity(),
                                 this@GameScreenActivity,
                                 getString(R.string.trade_fulfill_complete)
                             )
+                            tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                         }
 
                         refreshTrade()
@@ -954,6 +994,7 @@ class GameScreenActivity : AppCompatActivity(),
                         this@GameScreenActivity,
                         getString(R.string.trade_create_complete)
                     )
+                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                     refreshTrade()
                 } else {
                     displayMessage(
@@ -1014,7 +1055,7 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.trade_cancel_loading)
                     )
                 CoroutineScope(IO).launch {
-                    cancelTrade(trade)
+                    val tx = cancelTrade(trade)
                     syncProfile()
 
                     withContext(Main) {
@@ -1023,6 +1064,7 @@ class GameScreenActivity : AppCompatActivity(),
                             this@GameScreenActivity,
                             getString(R.string.trade_cancel_complete)
                         )
+                        tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                     }
 
                     refreshTrade()
@@ -1103,6 +1145,7 @@ class GameScreenActivity : AppCompatActivity(),
                     this@GameScreenActivity,
                     getString(R.string.update_character_complete, name)
                 )
+                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
             }
         }
 
@@ -1172,6 +1215,7 @@ class GameScreenActivity : AppCompatActivity(),
                         this@GameScreenActivity,
                         getString(R.string.send_items_complete)
                     )
+                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
                     onNavigation(PYLONS_CENTRAL)
                 } else {
                     displayMessage(

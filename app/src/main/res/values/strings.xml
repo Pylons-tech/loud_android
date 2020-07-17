@@ -40,8 +40,7 @@
     <string name="forest_special_desc">You have made it to the secret forest. These fights will require you to use pylons to activate. In return you will master your skills faster.</string>
     <string name="forest_basic">Go Right</string>
     <string name="forest_special">Go Left</string>
-    <string name="inventory_desc">Your inventory.\nYou can select active character.</string>
-    <string name="inventory_desc_item">You can select active weapon.</string>
+    <string name="inventory_desc">Your inventory.\nYou can select active character and active weapon</string>
     <string name="gold_icon">💰</string>
     <string name="pylon_icon">🔷</string>
     <string name="weapon_icon">🗡️</string>

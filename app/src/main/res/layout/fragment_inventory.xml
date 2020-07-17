@@ -13,22 +13,29 @@
         android:layout_margin="@dimen/text_margin"
         android:text="@string/inventory_desc" />
 
-    <fragment
-        android:id="@+id/fragment_character"
-        android:name="com.pylons.loud.fragments.lists.character.CharacterFragment"
-        android:layout_width="match_parent"
-        android:layout_height="200dp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorBorder" />
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding"
-        android:text="@string/inventory_desc_item" />
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/button_all"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/button_characters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Characters"
+            android:layout_weight="1"/>
+        <Button
+            android:id="@+id/button_weapons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Weapons"
+            android:layout_weight="1"/>
+    </LinearLayout>
 
     <fragment
         android:id="@+id/fragment_item"
