@@ -79,6 +79,7 @@ class PurchasePylonFragment : Fragment() {
             Log.info(billingResult.debugMessage)
             Log.info(billingResult.responseCode.toString())
             Log.info(purchases.toString())
+            logPurchases(purchases)
         }
 
     private fun setupBillingClient() {
@@ -97,6 +98,7 @@ class PurchasePylonFragment : Fragment() {
                     if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
                         // The BillingClient is ready. You can query purchases here.
                         querySkuDetails()
+                        queryPurchases()
                     }
                 }
 
@@ -107,6 +109,50 @@ class PurchasePylonFragment : Fragment() {
                     // Google Play by calling the startConnection() method.
                 }
             })
+        }
+    }
+
+    private fun logPurchases(purchases: MutableList<Purchase>?) {
+        if (purchases != null && purchases.isNotEmpty()) {
+            purchases.forEach {
+                Log.info("sig: ${it.signature}")
+                Log.info("developerPayload: ${it.developerPayload}")
+                Log.info("orderId: ${it.orderId}")
+                Log.info("originalJson: ${it.originalJson}")
+                Log.info("packageName: ${it.packageName}")
+                Log.info("purchaseToken: ${it.purchaseToken}")
+                Log.info("sku: ${it.sku}")
+                Log.info("obfuscatedAccountId: ${it.accountIdentifiers?.obfuscatedAccountId}")
+                Log.info("obfuscatedProfileId: ${it.accountIdentifiers?.obfuscatedProfileId}")
+            }
+        } else {
+            Log.info("no purchase list")
+        }
+    }
+
+    private fun queryPurchases() {
+        Log.info("queryPurchases")
+        val result = billingClient.queryPurchases("pylons_1000")
+        Log.info(result.responseCode.toString())
+        logPurchases(result.purchasesList)
+
+        CoroutineScope(IO).launch {
+            val result2 = billingClient.queryPurchaseHistory("pylons_1000")
+            Log.info("queryPurchaseHistory")
+            Log.info(result2.toString())
+            val purchases = result2.purchaseHistoryRecordList
+            Log.info(purchases.toString())
+            if (purchases != null && purchases.isNotEmpty()) {
+                purchases.forEach {
+                    Log.info("sig: ${it.signature}")
+                    Log.info("developerPayload: ${it.developerPayload}")
+                    Log.info("originalJson: ${it.originalJson}")
+                    Log.info("purchaseToken: ${it.purchaseToken}")
+                    Log.info("sku: ${it.sku}")
+                }
+            } else {
+                Log.info("no purchase list")
+            }
         }
     }
 
