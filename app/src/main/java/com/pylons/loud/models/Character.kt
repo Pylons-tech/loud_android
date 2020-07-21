@@ -19,19 +19,20 @@ data class Character(
     var special: Long,
     var specialDragonKill: Long,
     var undeadDragonKill: Long
-): Item() {
-    suspend fun rename(name: String): Transaction? {
+) : Item() {
+    suspend fun rename(name: String): Transaction {
         val tx = Core.engine.setItemFieldString(id, "Name", name)
         tx.submit()
 
         // TODO("Remove delay, walletcore should handle it")
         delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            return tx
-        }
 
-        return null
+        val id = tx.id
+        return if (id != null) {
+            val resultTx = Core.engine.getTransaction(id)
+            resultTx
+        } else {
+            tx
+        }
     }
 }
