@@ -164,11 +164,6 @@ class GameScreenActivity : AppCompatActivity(),
         val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
             model.setPlayer(currentPlayer)
-            getStatusBlockTimer = fixedRateTimer("getStatusBlock", false, 0, 5000) {
-                CoroutineScope(IO).launch {
-                    blockChainStatusViewModel.getStatusBlock()
-                }
-            }
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -179,6 +174,28 @@ class GameScreenActivity : AppCompatActivity(),
 
     override fun onDestroy() {
         super.onDestroy()
+        cancelTimer()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        cancelTimer()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        initTimer()
+    }
+
+    private fun initTimer() {
+        getStatusBlockTimer = fixedRateTimer("getStatusBlock", false, 0, 5000) {
+            CoroutineScope(IO).launch {
+                blockChainStatusViewModel.getStatusBlock()
+            }
+        }
+    }
+
+    private fun cancelTimer() {
         if (this::getStatusBlockTimer.isInitialized) {
             getStatusBlockTimer.cancel()
         }
