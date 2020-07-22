@@ -375,10 +375,10 @@ class GameScreenActivity : AppCompatActivity(),
                     }
 
                     withContext(Main) {
-                        val message = if (tx.code != 0) {
-                            tx.raw_log
-                        } else {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
                             getString(R.string.you_have_bought_from_shop, name)
+                        } else {
+                            tx.raw_log
                         }
 
                         loading.dismiss()
@@ -388,7 +388,7 @@ class GameScreenActivity : AppCompatActivity(),
                         )
                         tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                        if (tx.code == 0) {
+                        if (tx.code == Transaction.ResponseCode.OK) {
                             if (player.activeWeapon == -1) {
                                 val index = player.weapons.indexOfFirst {
                                     it.id == tx.txData?.output?.get(0)?.itemId
@@ -435,9 +435,7 @@ class GameScreenActivity : AppCompatActivity(),
                         }
 
                         withContext(Main) {
-                            val message = if (tx.code != 0) {
-                                tx.raw_log
-                            } else {
+                            val message = if (tx.code == Transaction.ResponseCode.OK) {
                                 var amount = 0L
 
                                 val output = tx.txData.output
@@ -446,6 +444,8 @@ class GameScreenActivity : AppCompatActivity(),
                                 }
 
                                 getString(R.string.you_sold_item_for_gold, name, amount)
+                            } else {
+                                tx.raw_log
                             }
 
                             loading.dismiss()
@@ -494,10 +494,10 @@ class GameScreenActivity : AppCompatActivity(),
                             }
 
                             withContext(Main) {
-                                val message = if (tx.code != 0) {
-                                    tx.raw_log
-                                } else {
+                                val message = if (tx.code == Transaction.ResponseCode.OK) {
                                     getString(R.string.you_have_upgraded_item, name)
+                                } else {
+                                    tx.raw_log
                                 }
 
                                 loading.dismiss()
@@ -609,13 +609,13 @@ class GameScreenActivity : AppCompatActivity(),
                         }
 
                         withContext(Main) {
-                            val message = if (tx.code != 0) {
-                                tx.raw_log
-                            } else {
+                            val message = if (tx.code == Transaction.ResponseCode.OK) {
                                 getString(
                                     R.string.buy_character_complete,
                                     item.name
                                 )
+                            } else {
+                                tx.raw_log
                             }
 
                             loading.dismiss()
@@ -625,7 +625,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                             tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                            if (tx.code == 0) {
+                            if (tx.code == Transaction.ResponseCode.OK) {
                                 if (player.activeCharacter == -1) {
                                     val index = player.characters.indexOfFirst {
                                         it.id == tx.txData?.output?.get(0)?.itemId
@@ -672,9 +672,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                 withContext(Main) {
                     var message = ""
-                    if (tx.code != 0) {
-                        message = tx.raw_log
-                    } else {
+                    if (tx.code == Transaction.ResponseCode.OK) {
                         if (tx.txData.output.isEmpty()) {
                             message =
                                 getString(
@@ -734,6 +732,8 @@ class GameScreenActivity : AppCompatActivity(),
                                 )}"
                             }
                         }
+                    } else {
+                        message = tx.raw_log
                     }
 
                     loading.dismiss()
@@ -777,10 +777,10 @@ class GameScreenActivity : AppCompatActivity(),
                             }
 
                             withContext(Main) {
-                                val message = if (tx.code != 0) {
-                                    tx.raw_log
-                                } else {
+                                val message = if (tx.code == Transaction.ResponseCode.OK) {
                                     getString(R.string.bought_gold_with_pylons, 5000, 100)
+                                } else {
+                                    tx.raw_log
                                 }
 
                                 loading.dismiss()
@@ -812,10 +812,10 @@ class GameScreenActivity : AppCompatActivity(),
             }
 
             withContext(Main) {
-                val message = if (tx.code != 0) {
-                    tx.raw_log
-                } else {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
                     getString(R.string.got_dev_items)
+                } else {
+                    tx.raw_log
                 }
 
                 loading.dismiss()
@@ -825,7 +825,7 @@ class GameScreenActivity : AppCompatActivity(),
                 )
                 tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                if (tx.code == 0) {
+                if (tx.code == Transaction.ResponseCode.OK) {
                     onNavigation(INVENTORY)
                 }
             }
@@ -841,10 +841,10 @@ class GameScreenActivity : AppCompatActivity(),
             }
 
             withContext(Main) {
-                val message = if (tx.code != 0) {
-                    tx.raw_log
-                } else {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
                     getString(R.string.got_pylons)
+                } else {
+                    tx.raw_log
                 }
 
                 loading.dismiss()
@@ -875,10 +875,10 @@ class GameScreenActivity : AppCompatActivity(),
                     }
 
                     withContext(Main) {
-                        val message = if (tx.code != 0) {
-                            tx.raw_log
-                        } else {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
                             getString(R.string.trade_fulfill_complete)
+                        } else {
+                            tx.raw_log
                         }
 
                         loading.dismiss()
@@ -888,7 +888,7 @@ class GameScreenActivity : AppCompatActivity(),
                         )
                         tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                        if (tx.code == 0) {
+                        if (tx.code == Transaction.ResponseCode.OK) {
                             refreshTrade()
                         }
                     }
@@ -949,10 +949,10 @@ class GameScreenActivity : AppCompatActivity(),
             }
 
             withContext(Main) {
-                val message = if (tx.code != 0) {
-                    tx.raw_log
-                } else {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
                     getString(R.string.trade_create_complete)
+                } else {
+                    tx.raw_log
                 }
 
                 loading.dismiss()
@@ -962,7 +962,7 @@ class GameScreenActivity : AppCompatActivity(),
                 )
                 tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                if (tx.code == 0) {
+                if (tx.code == Transaction.ResponseCode.OK) {
                     refreshTrade()
                 }
             }
@@ -1023,10 +1023,10 @@ class GameScreenActivity : AppCompatActivity(),
                     }
 
                     withContext(Main) {
-                        val message = if (tx.code != 0) {
-                            tx.raw_log
-                        } else {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
                             getString(R.string.trade_cancel_complete)
+                        } else {
+                            tx.raw_log
                         }
 
                         loading.dismiss()
@@ -1036,7 +1036,7 @@ class GameScreenActivity : AppCompatActivity(),
                         )
                         tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                        if (tx.code == 0) {
+                        if (tx.code == Transaction.ResponseCode.OK) {
                             refreshTrade()
                         }
                     }
@@ -1093,10 +1093,10 @@ class GameScreenActivity : AppCompatActivity(),
             }
 
             withContext(Main) {
-                val message = if (tx.code != 0) {
-                    tx.raw_log
-                } else {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
                     getString(R.string.update_character_complete, name)
+                } else {
+                    tx.raw_log
                 }
 
                 loading.dismiss()
@@ -1170,10 +1170,10 @@ class GameScreenActivity : AppCompatActivity(),
                 }
 
                 withContext(Main) {
-                    val message = if (tx.code != 0) {
-                        tx.raw_log
-                    } else {
+                    val message = if (tx.code == Transaction.ResponseCode.OK) {
                         getString(R.string.send_items_complete)
+                    } else {
+                        tx.raw_log
                     }
 
                     loading.dismiss()
@@ -1183,7 +1183,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                     tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                    if (tx.code == 0) {
+                    if (tx.code == Transaction.ResponseCode.OK) {
                         onNavigation(PYLONS_CENTRAL)
                     }
                 }
