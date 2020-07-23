@@ -557,6 +557,10 @@ class GameScreenActivity : AppCompatActivity(),
         tx.submit()
         Log.info(tx.toString())
 
+        if (tx.state == Transaction.State.TX_REFUSED) {
+            return tx
+        }
+
         // TODO("Remove delay, walletcore should handle it")
         delay(5000)
 
