@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.android.billingclient.api.*
 import com.android.billingclient.api.BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED
@@ -57,7 +56,6 @@ class ProductsAdapter(
 class PurchasePylonFragment : Fragment() {
     private val Log = Logger.getLogger(PurchasePylonFragment::class.java.name)
 
-    private val viewModel: PurchasePylonViewModel by viewModels()
     private lateinit var billingClient: BillingClient
     private lateinit var productsAdapter: ProductsAdapter
 
@@ -132,12 +130,12 @@ class PurchasePylonFragment : Fragment() {
 
     private fun queryPurchases() {
         Log.info("queryPurchases")
-        val result = billingClient.queryPurchases("pylons_1000")
+        val result = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
         Log.info(result.responseCode.toString())
         logPurchases(result.purchasesList)
 
         CoroutineScope(IO).launch {
-            val result2 = billingClient.queryPurchaseHistory("pylons_1000")
+            val result2 = billingClient.queryPurchaseHistory(BillingClient.SkuType.INAPP)
             Log.info("queryPurchaseHistory")
             Log.info(result2.toString())
             val purchases = result2.purchaseHistoryRecordList
