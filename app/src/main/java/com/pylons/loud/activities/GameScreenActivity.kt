@@ -370,36 +370,35 @@ class GameScreenActivity : AppCompatActivity(),
                 )
 
                 CoroutineScope(IO).launch {
-                    val tx = executeRecipe(recipeId, itemIds.toTypedArray())
-                    syncProfile()
+                    val tx = txFlow {
+                        Core.engine.applyRecipe(recipeId, itemIds.toTypedArray())
+                    }
 
-                    if (tx?.txError != null) {
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity,
-                                getString(R.string.execute_recipe_error)
-                            )
+                    withContext(Main) {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
+                            getString(R.string.you_have_bought_from_shop, name)
+                        } else {
+                            tx.raw_log
                         }
-                    } else {
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity,
-                                getString(R.string.you_have_bought_from_shop, name)
-                            )
-                            tx?.id?.let { blockChainStatusViewModel.setTx(it) }
 
+                        loading.dismiss()
+                        displayMessage(
+                            this@GameScreenActivity,
+                            message
+                        )
+                        tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                        if (tx.code == Transaction.ResponseCode.OK) {
                             if (player.activeWeapon == -1) {
                                 val index = player.weapons.indexOfFirst {
-                                    it.id == tx?.txData?.output?.get(0)?.itemId
+                                    it.id == tx.txData?.output?.get(0)?.itemId
                                 }
                                 player.setActiveWeapon(player.weapons[index])
                                 model.setPlayer(player)
                                 player.saveAsync(this@GameScreenActivity)
                             }
+                            onNavigation(INVENTORY)
                         }
-                        onNavigation(INVENTORY)
                     }
                 }
             }
@@ -431,35 +430,30 @@ class GameScreenActivity : AppCompatActivity(),
                     )
 
                     CoroutineScope(IO).launch {
-                        val tx = executeRecipe(RCP_SELL_SWORD, arrayOf(item.id))
-                        syncProfile()
+                        val tx = txFlow {
+                            Core.engine.applyRecipe(RCP_SELL_SWORD, arrayOf(item.id))
+                        }
 
-                        if (tx?.txError != null) {
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity,
-                                    getString(R.string.execute_recipe_error)
-                                )
-                            }
-                        } else {
-                            var amount = 0L
+                        withContext(Main) {
+                            val message = if (tx.code == Transaction.ResponseCode.OK) {
+                                var amount = 0L
 
-                            if (tx != null) {
                                 val output = tx.txData.output
                                 if (output.isNotEmpty()) {
                                     amount = output[0].amount
                                 }
+
+                                getString(R.string.you_sold_item_for_gold, name, amount)
+                            } else {
+                                tx.raw_log
                             }
 
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity,
-                                    getString(R.string.you_sold_item_for_gold, name, amount)
-                                )
-                                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                            }
+                            loading.dismiss()
+                            displayMessage(
+                                this@GameScreenActivity,
+                                message
+                            )
+                            tx.id?.let { blockChainStatusViewModel.setTx(it) }
                         }
                     }
                 }
@@ -495,26 +489,23 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.loading_upgrade_shop_item, item.name)
                             )
                         CoroutineScope(IO).launch {
-                            val tx = executeRecipe(recipeId, arrayOf(item.id))
-                            syncProfile()
+                            val tx = txFlow {
+                                Core.engine.applyRecipe(recipeId, arrayOf(item.id))
+                            }
 
-                            if (tx?.txError != null) {
-                                withContext(Main) {
-                                    loading.dismiss()
-                                    displayMessage(
-                                        this@GameScreenActivity,
-                                        getString(R.string.execute_recipe_error)
-                                    )
+                            withContext(Main) {
+                                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                                    getString(R.string.you_have_upgraded_item, name)
+                                } else {
+                                    tx.raw_log
                                 }
-                            } else {
-                                withContext(Main) {
-                                    loading.dismiss()
-                                    displayMessage(
-                                        this@GameScreenActivity,
-                                        getString(R.string.you_have_upgraded_item, name)
-                                    )
-                                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                                }
+
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    message
+                                )
+                                tx.id?.let { blockChainStatusViewModel.setTx(it) }
                             }
                         }
                     }
@@ -529,8 +520,6 @@ class GameScreenActivity : AppCompatActivity(),
                 displayMessage(this, getString(R.string.you_dont_have_enough_gold_to_upgrade, name))
             }
         }
-
-
     }
 
     override fun onCharacter(item: Character) {
@@ -563,25 +552,29 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    private suspend fun executeRecipe(recipeId: String, itemIds: Array<String>): Transaction? {
-        val tx = Core.engine.applyRecipe(
-            recipeId,
-            itemIds
-        )
+    private suspend fun txFlow(func: () -> Transaction): Transaction {
+        val tx = func()
         tx.submit()
         Log.info(tx.toString())
-        Log.info(tx.id)
 
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            Log.info(tx.toString())
+        if (tx.state == Transaction.State.TX_REFUSED) {
             return tx
         }
 
-        return null
+        // TODO("Remove delay, walletcore should handle it")
+        delay(5000)
+
+        syncProfile()
+
+        val id = tx.id
+        return if (id != null) {
+            Log.info(tx.id)
+            val txResult = Core.engine.getTransaction(id)
+            Log.info(txResult.toString())
+            txResult
+        } else {
+            tx
+        }
     }
 
     private suspend fun syncProfile() {
@@ -610,43 +603,46 @@ class GameScreenActivity : AppCompatActivity(),
                 .setPositiveButton(getString(R.string.proceed)) { _, _ ->
                     val loading =
                         displayLoading(this, getString(R.string.loading_buy_character, item.name))
+
                     CoroutineScope(IO).launch {
-                        val tx = executeRecipe(RCP_BUY_CHARACTER, arrayOf())
-                        syncProfile()
+                        val tx = txFlow {
+                            Core.engine.applyRecipe(
+                                RCP_BUY_CHARACTER,
+                                arrayOf()
+                            )
+                        }
 
-                        if (tx?.txError != null) {
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity,
-                                    getString(R.string.execute_recipe_error)
+                        withContext(Main) {
+                            val message = if (tx.code == Transaction.ResponseCode.OK) {
+                                getString(
+                                    R.string.buy_character_complete,
+                                    item.name
                                 )
+                            } else {
+                                tx.raw_log
                             }
-                        } else {
-                            withContext(Main) {
-                                loading.dismiss()
-                                displayMessage(
-                                    this@GameScreenActivity, getString(
-                                        R.string.buy_character_complete,
-                                        item.name
-                                    )
-                                )
-                                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
 
+                            loading.dismiss()
+                            displayMessage(
+                                this@GameScreenActivity,
+                                message
+                            )
+                            tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                            if (tx.code == Transaction.ResponseCode.OK) {
                                 if (player.activeCharacter == -1) {
                                     val index = player.characters.indexOfFirst {
-                                        it.id == tx?.txData?.output?.get(0)?.itemId
+                                        it.id == tx.txData?.output?.get(0)?.itemId
                                     }
                                     player.setActiveCharacter(player.characters[index])
                                     model.setPlayer(player)
                                     player.saveAsync(this@GameScreenActivity)
                                 }
-                            }
 
-                            onNavigation(INVENTORY)
+                                onNavigation(INVENTORY)
+                            }
                         }
                     }
-
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
                     dialog.cancel()
@@ -674,42 +670,34 @@ class GameScreenActivity : AppCompatActivity(),
             )
 
             CoroutineScope(IO).launch {
-                val tx = executeRecipe(recipeId, itemIds)
-                syncProfile()
+                val tx = txFlow {
+                    Core.engine.applyRecipe(recipeId, itemIds)
+                }
 
-                if (tx?.txError != null) {
-                    withContext(Main) {
-                        loading.dismiss()
-                        displayMessage(
-                            this@GameScreenActivity,
-                            getString(R.string.execute_recipe_error)
-                        )
-                    }
-                } else {
-                    Log.info(tx?.txData.toString())
-                    var prompt = ""
-                    if (tx != null) {
-                        val output = tx.txData.output
-                        if (output.isEmpty()) {
-                            prompt =
+                withContext(Main) {
+                    var message = ""
+                    if (tx.code == Transaction.ResponseCode.OK) {
+                        if (tx.txData.output.isEmpty()) {
+                            message =
                                 getString(
                                     R.string.you_were_killed,
                                     currentCharacterName,
                                     "${getString(getFightIcon(fight.id))} ${fight.name}"
                                 )
-                            nav_host_fragment.findNavController().navigate(R.id.homeScreenFragment)
+                            nav_host_fragment.findNavController()
+                                .navigate(R.id.homeScreenFragment)
                         } else {
-                            prompt = getString(
+                            message = getString(
                                 R.string.you_did_fight_with_and_earned,
                                 "${getString(getFightIcon(fight.id))} ${fight.name}",
                                 tx.txData.output[0].amount
                             )
 
-                            when (output.size) {
+                            when (tx.txData.output.size) {
                                 2 -> {
                                     // Rabbit does not use weapon
                                     if (fight.id != ID_RABBIT) {
-                                        prompt += "\n ${getString(R.string.you_have_lost_your_weapon)}"
+                                        message += "\n ${getString(R.string.you_have_lost_your_weapon)}"
                                         nav_host_fragment.findNavController()
                                             .navigate(R.id.forestScreenFragment)
                                     }
@@ -730,7 +718,7 @@ class GameScreenActivity : AppCompatActivity(),
                                                 3L -> getString(R.string.acid_dragon)
                                                 else -> ""
                                             }
-                                            prompt += "\n${getString(
+                                            message += "\n${getString(
                                                 R.string.fight_giant_special,
                                                 special,
                                                 dragon
@@ -742,27 +730,32 @@ class GameScreenActivity : AppCompatActivity(),
 
                                     }
                                 }
-                                4 -> prompt += "\n ${getString(
+                                4 -> message += "\n ${getString(
                                     R.string.you_got_bonus_item,
                                     player.getItemNameByItemId(tx.txData.output[3].itemId)
                                 )}"
                             }
                         }
+                    } else {
+                        message = tx.raw_log
                     }
 
-                    withContext(Main) {
-                        loading.dismiss()
-                        displayMessage(this@GameScreenActivity, prompt)
-                        tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                    }
+                    loading.dismiss()
+                    displayMessage(
+                        this@GameScreenActivity,
+                        message
+                    )
+                    tx.id?.let { blockChainStatusViewModel.setTx(it) }
                 }
+
+
             }
         }
     }
 
     override fun onBuyGoldWithPylons() {
         val player = model.getPlayer().value
-        if (player != null) {
+        player?.let {
             if (player.pylonAmount < 100) {
                 Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
@@ -783,26 +776,23 @@ class GameScreenActivity : AppCompatActivity(),
                                 getString(R.string.loading_buy_gold_with_pylon, 100, 5000)
                             )
                         CoroutineScope(IO).launch {
-                            val tx = executeRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
-                            syncProfile()
+                            val tx = txFlow {
+                                Core.engine.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
+                            }
 
-                            if (tx?.txError != null) {
-                                withContext(Main) {
-                                    loading.dismiss()
-                                    displayMessage(
-                                        this@GameScreenActivity,
-                                        getString(R.string.execute_recipe_error)
-                                    )
+                            withContext(Main) {
+                                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                                    getString(R.string.bought_gold_with_pylons, 5000, 100)
+                                } else {
+                                    tx.raw_log
                                 }
-                            } else {
-                                withContext(Main) {
-                                    loading.dismiss()
-                                    displayMessage(
-                                        this@GameScreenActivity,
-                                        getString(R.string.bought_gold_with_pylons, 5000, 100)
-                                    )
-                                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                                }
+
+                                loading.dismiss()
+                                displayMessage(
+                                    this@GameScreenActivity,
+                                    message
+                                )
+                                tx.id?.let { blockChainStatusViewModel.setTx(it) }
                             }
                         }
                     }
@@ -821,27 +811,27 @@ class GameScreenActivity : AppCompatActivity(),
         val loading =
             displayLoading(this, getString(R.string.loading_get_dev_items))
         CoroutineScope(IO).launch {
-            val tx = executeRecipe(RCP_GET_TEST_ITEMS, arrayOf())
-            syncProfile()
+            val tx = txFlow {
+                Core.engine.applyRecipe(RCP_GET_TEST_ITEMS, arrayOf())
+            }
 
-            if (tx?.txError != null) {
-                withContext(Main) {
-                    loading.dismiss()
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.execute_recipe_error)
-                    )
+            withContext(Main) {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.got_dev_items)
+                } else {
+                    tx.raw_log
                 }
-            } else {
-                withContext(Main) {
-                    loading.dismiss()
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.got_dev_items)
-                    )
-                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    message
+                )
+                tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                if (tx.code == Transaction.ResponseCode.OK) {
+                    onNavigation(INVENTORY)
                 }
-                onNavigation(INVENTORY)
             }
         }
     }
@@ -850,20 +840,23 @@ class GameScreenActivity : AppCompatActivity(),
         val loading =
             displayLoading(this, getString(R.string.loading_get_pylons))
         CoroutineScope(IO).launch {
-            val tx = Core.engine.getPylons(500)
-            tx.submit()
-            Log.info(tx.id)
-            // TODO("Remove delay, walletcore should handle it")
-            delay(5000)
+            val tx = txFlow {
+                Core.engine.getPylons(500)
+            }
 
-            syncProfile()
             withContext(Main) {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.got_pylons)
+                } else {
+                    tx.raw_log
+                }
+
                 loading.dismiss()
                 displayMessage(
                     this@GameScreenActivity,
-                    getString(R.string.got_pylons)
+                    message
                 )
-                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+                tx.id?.let { blockChainStatusViewModel.setTx(it) }
             }
         }
     }
@@ -881,27 +874,27 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.trade_fulfill_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = executeTrade(trade, itemIds)
-                    syncProfile()
-                    if (tx?.txError != null) {
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity,
-                                getString(R.string.trade_error)
-                            )
-                        }
-                    } else {
-                        withContext(Main) {
-                            loading.dismiss()
-                            displayMessage(
-                                this@GameScreenActivity,
-                                getString(R.string.trade_fulfill_complete)
-                            )
-                            tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+                    val tx = txFlow {
+                        Core.engine.fulfillTrade(trade.id, itemIds)
+                    }
+
+                    withContext(Main) {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
+                            getString(R.string.trade_fulfill_complete)
+                        } else {
+                            tx.raw_log
                         }
 
-                        refreshTrade()
+                        loading.dismiss()
+                        displayMessage(
+                            this@GameScreenActivity,
+                            message
+                        )
+                        tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                        if (tx.code == Transaction.ResponseCode.OK) {
+                            refreshTrade()
+                        }
                     }
                 }
             }
@@ -936,57 +929,6 @@ class GameScreenActivity : AppCompatActivity(),
         promptTrade(trade, listOf())
     }
 
-    private suspend fun executeTrade(trade: Trade, itemIds: List<String>): Transaction? {
-        val tx = Core.engine.fulfillTrade(trade.id, itemIds)
-        tx.submit()
-        Log.info(tx.toString())
-        Log.info(tx.id)
-
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            Log.info(tx.toString())
-            return tx
-        }
-
-        return null
-    }
-
-    private suspend fun createTrade(
-        coinInput: List<CoinInput>,
-        itemInput: List<TradeItemInput>,
-        coinOutput: List<CoinOutput>,
-        itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
-        extraInfo: String
-    ): Transaction? {
-        val tx =
-            Core.engine.createTrade(
-                coinInput,
-                itemInput,
-                coinOutput,
-                itemOutput,
-                extraInfo
-            )
-        tx.submit()
-        Log.info(tx.toString())
-
-        if (tx.state == Transaction.State.TX_ACCEPTED) {
-            Log.info(tx.id)
-            // TODO("Remove delay, walletcore should handle it")
-            delay(5000)
-            val txId = tx.id
-            if (txId != null) {
-                val tx = Core.engine.getTransaction(txId)
-                Log.info(tx.toString())
-                return tx
-            }
-        }
-
-        return null
-    }
-
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
         itemInput: List<TradeItemInput>,
@@ -1000,24 +942,32 @@ class GameScreenActivity : AppCompatActivity(),
                 getString(R.string.trade_create_loading)
             )
         CoroutineScope(IO).launch {
-            val tx = createTrade(coinInput, itemInput, coinOutput, itemOutput, extraInfo)
-            syncProfile()
+            val tx = txFlow {
+                Core.engine.createTrade(
+                    coinInput,
+                    itemInput,
+                    coinOutput,
+                    itemOutput,
+                    extraInfo
+                )
+            }
 
             withContext(Main) {
-                loading.dismiss()
-
-                if (tx != null) {
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.trade_create_complete)
-                    )
-                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                    refreshTrade()
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.trade_create_complete)
                 } else {
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.trade_create_error)
-                    )
+                    tx.raw_log
+                }
+
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    message
+                )
+                tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                if (tx.code == Transaction.ResponseCode.OK) {
+                    refreshTrade()
                 }
             }
         }
@@ -1072,19 +1022,28 @@ class GameScreenActivity : AppCompatActivity(),
                         getString(R.string.trade_cancel_loading)
                     )
                 CoroutineScope(IO).launch {
-                    val tx = cancelTrade(trade)
-                    syncProfile()
+                    val tx = txFlow {
+                        Core.engine.cancelTrade(trade.id)
+                    }
 
                     withContext(Main) {
+                        val message = if (tx.code == Transaction.ResponseCode.OK) {
+                            getString(R.string.trade_cancel_complete)
+                        } else {
+                            tx.raw_log
+                        }
+
                         loading.dismiss()
                         displayMessage(
                             this@GameScreenActivity,
-                            getString(R.string.trade_cancel_complete)
+                            message
                         )
-                        tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                    }
+                        tx.id?.let { blockChainStatusViewModel.setTx(it) }
 
-                    refreshTrade()
+                        if (tx.code == Transaction.ResponseCode.OK) {
+                            refreshTrade()
+                        }
+                    }
                 }
             }
             .setNegativeButton(getString(R.string.no)) { dialog, _ ->
@@ -1094,25 +1053,6 @@ class GameScreenActivity : AppCompatActivity(),
         val alert = dialogBuilder.create()
         alert.setTitle(getString(R.string.confirm))
         alert.show()
-    }
-
-
-    private suspend fun cancelTrade(trade: Trade): Transaction? {
-        val tx = Core.engine.cancelTrade(trade.id)
-        tx.submit()
-        Log.info(tx.toString())
-        Log.info(tx.id)
-
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        val txId = tx.id
-        if (txId != null) {
-            val tx = Core.engine.getTransaction(txId)
-            Log.info(tx.toString())
-            return tx
-        }
-
-        return null
     }
 
     override fun onCharacterUpdate(character: Character) {
@@ -1152,17 +1092,23 @@ class GameScreenActivity : AppCompatActivity(),
                 getString(R.string.update_character_loading, character.name, name)
             )
         CoroutineScope(IO).launch {
-            val tx = character.rename(name)
-            Log.info(tx.toString())
-            syncProfile()
+            val tx = txFlow {
+                Core.engine.setItemFieldString(character.id, "Name", name)
+            }
 
             withContext(Main) {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.update_character_complete, name)
+                } else {
+                    tx.raw_log
+                }
+
                 loading.dismiss()
                 displayMessage(
                     this@GameScreenActivity,
-                    getString(R.string.update_character_complete, name)
+                    message
                 )
-                tx?.id?.let { blockChainStatusViewModel.setTx(it) }
+                tx.id?.let { blockChainStatusViewModel.setTx(it) }
             }
         }
 
@@ -1219,50 +1165,33 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onSendItems(friendAddress: String, itemIds: List<Item>) {
-        val loading = displayLoading(this, getString(R.string.send_items_loading))
-        CoroutineScope(IO).launch {
-            val tx = sendItems(friendAddress, itemIds)
-            syncProfile()
-
-            withContext(Main) {
-                loading.dismiss()
-
-                if (tx != null) {
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.send_items_complete)
-                    )
-                    tx?.id?.let { blockChainStatusViewModel.setTx(it) }
-                    onNavigation(PYLONS_CENTRAL)
-                } else {
-                    displayMessage(
-                        this@GameScreenActivity,
-                        getString(R.string.send_items_error)
-                    )
-                }
-            }
-        }
-    }
-
-    private suspend fun sendItems(friendAddress: String, itemIds: List<Item>): Transaction? {
         val player = model.getPlayer().value
-        if (player != null) {
-            val tx = Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
-            tx.submit()
-            Log.info(tx.toString())
-            if (tx.state == Transaction.State.TX_ACCEPTED) {
-                Log.info(tx.id)
-                // TODO("Remove delay, walletcore should handle it")
-                delay(5000)
-                val txId = tx.id
-                if (txId != null) {
-                    val tx = Core.engine.getTransaction(txId)
-                    Log.info(tx.toString())
-                    return tx
+        player?.let {
+            val loading = displayLoading(this, getString(R.string.send_items_loading))
+            CoroutineScope(IO).launch {
+                val tx = txFlow {
+                    Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
+                }
+
+                withContext(Main) {
+                    val message = if (tx.code == Transaction.ResponseCode.OK) {
+                        getString(R.string.send_items_complete)
+                    } else {
+                        tx.raw_log
+                    }
+
+                    loading.dismiss()
+                    displayMessage(
+                        this@GameScreenActivity,
+                        message
+                    )
+                    tx.id?.let { blockChainStatusViewModel.setTx(it) }
+
+                    if (tx.code == Transaction.ResponseCode.OK) {
+                        onNavigation(PYLONS_CENTRAL)
+                    }
                 }
             }
         }
-
-        return null
     }
 }
