@@ -3,12 +3,12 @@ package com.pylons.loud.fragments.screens.setting
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-
+import com.pylons.loud.BuildConfig
 import com.pylons.loud.R
 import com.pylons.loud.activities.GameScreenActivity
 import com.pylons.loud.activities.LoginActivity
@@ -35,6 +35,9 @@ class SettingsScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         model.setPlayerLocation(SETTINGS)
+
+        val versionName: String = BuildConfig.VERSION_NAME
+        text_version.text = "Version $versionName"
 
         button_switch_account.setOnClickListener {
             context?.let { it1 -> setCurrentAccountUserName(it1, "") }
