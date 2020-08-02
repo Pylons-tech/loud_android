@@ -79,9 +79,9 @@ import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
+import com.pylons.wallet.core.types.Coin
 import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
-import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
 
@@ -932,7 +932,7 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
         itemInput: List<TradeItemInput>,
-        coinOutput: List<CoinOutput>,
+        coinOutput: List<Coin>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
     ) {
@@ -943,7 +943,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.engine.createTrade(
+                    Core.engine.createTrade(
                     coinInput,
                     itemInput,
                     coinOutput,
