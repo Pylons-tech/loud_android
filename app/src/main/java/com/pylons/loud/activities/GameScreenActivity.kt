@@ -75,6 +75,7 @@ import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.CoreController.getItemById
+import com.pylons.loud.utils.Preferences.getFriendAddress
 import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
@@ -164,6 +165,11 @@ class GameScreenActivity : AppCompatActivity(),
         val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
             model.setPlayer(currentPlayer)
+
+            val friendAddress = getFriendAddress(this)
+            friendAddress?.let {
+                onNavigation(FRIENDS)
+            }
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)

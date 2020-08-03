@@ -169,6 +169,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add_friend">Add Friend</string>
+    <string name="share_address">Share Address</string>
     <string name="add_friend_prompt">Enter your friend\'s address and name.</string>
     <string name="hint_address">Address</string>
     <string name="hint_name">Name</string>
