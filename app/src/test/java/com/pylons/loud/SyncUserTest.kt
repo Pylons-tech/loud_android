@@ -74,6 +74,7 @@ class SyncUserTest {
                 ),
                 listOf(
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -93,6 +94,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -168,6 +170,7 @@ class SyncUserTest {
                 ),
                 listOf(
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -187,6 +190,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -238,6 +242,7 @@ class SyncUserTest {
                 ),
                 listOf(
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "LOUD-v0.1.0",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -257,6 +262,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -318,6 +324,7 @@ class SyncUserTest {
                 ),
                 listOf(
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -337,6 +344,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -350,6 +358,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -469,6 +478,7 @@ class SyncUserTest {
                 ),
                 listOf(
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -488,6 +498,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -501,6 +512,7 @@ class SyncUserTest {
                         0
                     ),
                     Item(
+                        "0.0.1",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
                         "LOUD-v0.1.0-1589853709",
                         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
