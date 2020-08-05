@@ -162,7 +162,17 @@ class PurchasePylonFragment : Fragment() {
 
         purchasesResult.forEach { purchase ->
             if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                handlePurchase(purchase)
+                CoroutineScope(IO).launch {
+                    val exists = Core.engine.checkGoogleIapOrder(purchase.purchaseToken)
+                    withContext(Main) {
+                        if (exists) {
+                            Log.info("order exists, consume immediately")
+                            consumePurchase(purchase)
+                        } else {
+                            handlePurchase(purchase)
+                        }
+                    }
+                }
             } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                 Log.info("Received a pending purchase of SKU: ${purchase.sku}")
                 // handle pending purchases, e.g. confirm with users about the pending
@@ -172,7 +182,6 @@ class PurchasePylonFragment : Fragment() {
     }
 
     private fun handlePurchase(purchase: Purchase) {
-//        consumePurchase(purchase)
         context?.let {
             val loading =
                 UI.displayLoading(it, getString(R.string.loading_get_pylons))
