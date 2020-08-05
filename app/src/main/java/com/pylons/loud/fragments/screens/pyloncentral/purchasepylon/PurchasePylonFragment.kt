@@ -172,7 +172,7 @@ class PurchasePylonFragment : Fragment() {
     }
 
     private fun handlePurchase(purchase: Purchase) {
-        consumePurchase(purchase)
+//        consumePurchase(purchase)
         context?.let {
             val loading =
                 UI.displayLoading(it, getString(R.string.loading_get_pylons))
