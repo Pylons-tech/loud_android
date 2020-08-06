@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pylons.loud.R
 import com.pylons.loud.constants.FightId.ID_ACID_GIANT
@@ -66,10 +67,12 @@ import com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
 import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.lists.trade.TradeFragment
+import com.pylons.loud.fragments.screens.pyloncentral.purchasepylon.PurchasePylonFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
 import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
+import com.pylons.loud.localdb.LocalDb
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
@@ -107,7 +110,8 @@ class GameScreenActivity : AppCompatActivity(),
     CreateTradeFragment.OnFragmentInteractionListener,
     ItemSpecFragment.OnListFragmentInteractionListener,
     FriendFragment.OnListFragmentInteractionListener,
-    SendItemConfirmFragment.OnFragmentInteractionListener {
+    SendItemConfirmFragment.OnFragmentInteractionListener,
+    PurchasePylonFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -157,6 +161,7 @@ class GameScreenActivity : AppCompatActivity(),
     private val sendItemViewModel: SendItemViewModel by viewModels()
     private val blockChainStatusViewModel: BlockChainStatusViewModel by viewModels()
     private lateinit var getStatusBlockTimer: Timer
+    private lateinit var localCacheClient: LocalDb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -170,6 +175,8 @@ class GameScreenActivity : AppCompatActivity(),
             friendAddress?.let {
                 onNavigation(FRIENDS)
             }
+
+            localCacheClient = LocalDb.getInstance(this)
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -949,7 +956,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                    Core.engine.createTrade(
+                Core.engine.createTrade(
                     coinInput,
                     itemInput,
                     coinOutput,
@@ -1199,5 +1206,45 @@ class GameScreenActivity : AppCompatActivity(),
                 }
             }
         }
+    }
+
+    override fun disbursePylons(purchase: Purchase) {
+        Log.info("disbursePylons purchase ${purchase.purchaseToken}")
+        CoroutineScope(IO).launch {
+            lateinit var loading: AlertDialog
+            withContext(Main) {
+                loading = displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
+            }
+
+            val tx = txFlow {
+                Core.engine.googleIapGetPylons(
+                    productId = purchase.sku,
+                    purchaseToken = purchase.purchaseToken,
+                    receiptData = purchase.originalJson,
+                    signature = purchase.signature
+                )
+            }
+
+            withContext(Main) {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.purchase_complete)
+                } else {
+                    tx.raw_log
+                }
+
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    message
+                )
+                tx.id?.let { id -> blockChainStatusViewModel.setTx(id) }
+            }
+
+            if (tx.code == Transaction.ResponseCode.OK) {
+                Log.info("purchase tx ok, delete local record")
+                localCacheClient.purchaseDao().delete(purchase)
+            }
+        }
+
     }
 }

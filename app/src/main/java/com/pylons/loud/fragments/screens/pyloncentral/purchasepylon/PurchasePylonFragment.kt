@@ -1,35 +1,32 @@
 package com.pylons.loud.fragments.screens.pyloncentral.purchasepylon
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.android.billingclient.api.*
 import com.pylons.loud.R
-import com.pylons.loud.activities.GameScreenActivity
-import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
-import com.pylons.loud.utils.UI
+import com.pylons.loud.constants.GameSku.INAPP_SKUS
+import com.pylons.loud.localdb.LocalDb
 import com.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.Transaction
 import kotlinx.android.synthetic.main.purchase_item.view.*
 import kotlinx.android.synthetic.main.purchase_pylon_fragment.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import java.util.ArrayList
 import java.util.logging.Logger
 
 class PurchasePylonFragment : Fragment() {
     private val Log = Logger.getLogger(PurchasePylonFragment::class.java.name)
 
+    private var listener: OnFragmentInteractionListener? = null
     private lateinit var billingClient: BillingClient
     private lateinit var productsAdapter: ProductsAdapter
-    private val model: GameScreenActivity.SharedViewModel by activityViewModels()
-    private val blockChainStatusViewModel: BlockChainStatusViewModel by activityViewModels()
+    private lateinit var localCacheClient: LocalDb
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,7 +37,10 @@ class PurchasePylonFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupBillingClient()
+        context?.let {
+            localCacheClient = LocalDb.getInstance(it)
+            setupBillingClient()
+        }
     }
 
     override fun onDestroy() {
@@ -49,6 +49,24 @@ class PurchasePylonFragment : Fragment() {
         if (this::billingClient.isInitialized) {
             billingClient.endConnection()
         }
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+        fun disbursePylons(purchase: Purchase)
     }
 
     private fun setupBillingClient() {
@@ -73,7 +91,7 @@ class PurchasePylonFragment : Fragment() {
                         BillingClient.BillingResponseCode.OK -> {
                             Log.info("onBillingSetupFinished successfully")
                             querySkuDetails()
-                            queryPurchases()
+                            checkPendingPurchases()
                             queryHistory()
                         }
                         BillingClient.BillingResponseCode.BILLING_UNAVAILABLE -> {
@@ -103,14 +121,8 @@ class PurchasePylonFragment : Fragment() {
 
     private fun querySkuDetails() {
         CoroutineScope(IO).launch {
-            val skuList = ArrayList<String>()
-            skuList.add("pylons_1000")
-            skuList.add("android.test.purchased")
-            skuList.add("android.test.canceled")
-            skuList.add("android.test.refunded")
-            skuList.add("android.test.item_unavailable")
             val params = SkuDetailsParams.newBuilder()
-            params.setSkusList(skuList).setType(BillingClient.SkuType.INAPP)
+            params.setSkusList(INAPP_SKUS).setType(BillingClient.SkuType.INAPP)
             val skuDetailsResult = withContext(IO) {
                 billingClient.querySkuDetails(params.build())
             }
@@ -119,6 +131,33 @@ class PurchasePylonFragment : Fragment() {
 
             withContext(Main) {
                 skuDetailsResult.skuDetailsList?.let { initProductAdapter(it) }
+            }
+        }
+    }
+
+    private fun checkPendingPurchases() {
+        Log.info("checkPendingPurchases")
+        CoroutineScope(IO).launch {
+            val cachedPurchases = localCacheClient.purchaseDao().getPurchases().map { it.data }
+            Log.info("processPurchases purchases in the lcl db ${cachedPurchases?.size}")
+
+            val pendingPurchases = mutableListOf<Purchase>()
+            cachedPurchases.forEach {
+                val exists = Core.engine.checkGoogleIapOrder(it.purchaseToken)
+
+                if (exists) {
+                    Log.info("purchase exists delete local")
+                    localCacheClient.purchaseDao().delete(it)
+                } else {
+                    pendingPurchases.add(it)
+                }
+            }
+
+            if (pendingPurchases.isNotEmpty()) {
+                Log.info("Has pending purchases ${pendingPurchases.size}")
+                handleConsumablePurchases(pendingPurchases)
+            } else {
+                queryPurchases()
             }
         }
     }
@@ -138,11 +177,7 @@ class PurchasePylonFragment : Fragment() {
 
             when (billingResult.responseCode) {
                 BillingClient.BillingResponseCode.OK -> {
-                    purchases?.let {
-                        it.forEach { purchase ->
-                            handlePurchase(purchase)
-                        }
-                    }
+                    purchases?.apply { processPurchases(this) }
                 }
                 BillingClient.BillingResponseCode.ITEM_ALREADY_OWNED -> {
                     Log.info(billingResult.debugMessage)
@@ -158,84 +193,37 @@ class PurchasePylonFragment : Fragment() {
         }
 
     private fun processPurchases(purchasesResult: MutableList<Purchase>) {
+        Log.info("processPurchases")
         logPurchases(purchasesResult)
 
+        val validPurchases = mutableListOf<Purchase>()
         purchasesResult.forEach { purchase ->
             if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
-                CoroutineScope(IO).launch {
-                    val exists = Core.engine.checkGoogleIapOrder(purchase.purchaseToken)
-                    withContext(Main) {
-                        if (exists) {
-                            Log.info("order exists, consume immediately")
-                            consumePurchase(purchase)
-                        } else {
-                            handlePurchase(purchase)
-                        }
-                    }
-                }
+                validPurchases.add(purchase)
             } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
                 Log.info("Received a pending purchase of SKU: ${purchase.sku}")
                 // handle pending purchases, e.g. confirm with users about the pending
                 // purchases, prompt them to complete it, etc.
             }
         }
-    }
 
-    private fun handlePurchase(purchase: Purchase) {
-        context?.let {
-            val loading =
-                UI.displayLoading(it, getString(R.string.loading_get_pylons))
-            CoroutineScope(IO).launch {
-                val tx = txFlow {
-                    Core.engine.googleIapGetPylons(
-                        productId = purchase.sku,
-                        purchaseToken = purchase.purchaseToken,
-                        receiptData = purchase.originalJson,
-                        signature = purchase.signature
-                    )
-                }
-
-                withContext(Main) {
-                    val message = if (tx.code == Transaction.ResponseCode.OK) {
-                        getString(R.string.purchase_complete)
-                    } else {
-                        tx.raw_log
-                    }
-
-                    loading.dismiss()
-                    UI.displayMessage(
-                        it,
-                        message
-                    )
-                    tx.id?.let { id -> blockChainStatusViewModel.setTx(id) }
-
-                    if (tx.code == Transaction.ResponseCode.OK) {
-                        consumePurchase(purchase)
-                    }
-                }
-            }
+        CoroutineScope(IO).launch {
+            localCacheClient.purchaseDao().insert(*validPurchases.toTypedArray())
         }
+        handleConsumablePurchases(validPurchases)
     }
 
-    private fun consumePurchase(purchase: Purchase) {
-        // Verify the purchase.
-        // Ensure entitlement was not already granted for this purchaseToken.
-        // Grant entitlement to the user.
-        Log.info("consumePurchase")
+    private fun handleConsumablePurchases(consumables: List<Purchase>) {
+        Log.info("handleConsumablePurchases called")
+        consumables.forEach {
+            Log.info("handleConsumablePurchases foreach it is $it")
 
-        Log.info(purchase.sku)
-
-        if (purchase.sku == "android.test.purchased") {
-            val consumeParams =
-                ConsumeParams.newBuilder()
-                    .setPurchaseToken(purchase.purchaseToken)
-                    .build()
-
-            billingClient.consumeAsync(consumeParams) { billingResult, outToken ->
+            val params = ConsumeParams.newBuilder().setPurchaseToken(it.purchaseToken).build()
+            billingClient.consumeAsync(params) { billingResult, _ ->
                 when (billingResult.responseCode) {
                     BillingClient.BillingResponseCode.OK -> {
-                        // Handle the success of the consume operation.
-                        Log.info("outToken: $outToken")
+                        Log.info("Consume OK")
+                        listener?.disbursePylons(it)
                     }
                     else -> {
                         Log.info(billingResult.debugMessage)
@@ -268,10 +256,10 @@ class PurchasePylonFragment : Fragment() {
 
     private fun queryHistory() {
         CoroutineScope(IO).launch {
-            val result2 = billingClient.queryPurchaseHistory(BillingClient.SkuType.INAPP)
+            val result = billingClient.queryPurchaseHistory(BillingClient.SkuType.INAPP)
             Log.info("queryPurchaseHistory")
-            Log.info(result2.toString())
-            val purchases = result2.purchaseHistoryRecordList
+            Log.info(result.toString())
+            val purchases = result.purchaseHistoryRecordList
             Log.info(purchases.toString())
             if (purchases != null && purchases.isNotEmpty()) {
                 purchases.forEach {
@@ -299,50 +287,6 @@ class PurchasePylonFragment : Fragment() {
             }
             products.adapter = productsAdapter
         }
-    }
-
-    private suspend fun txFlow(func: () -> Transaction): Transaction {
-        val tx = func()
-        tx.submit()
-        Log.info(tx.toString())
-
-        if (tx.state == Transaction.State.TX_REFUSED) {
-            return tx
-        }
-
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-
-        syncProfile()
-
-        val id = tx.id
-        return if (id != null) {
-            Log.info(tx.id)
-            val txResult = Core.engine.getTransaction(id)
-            Log.info(txResult.toString())
-            txResult
-        } else {
-            tx
-        }
-    }
-
-    private suspend fun syncProfile() {
-        val player = model.getPlayer().value
-        player?.let {
-            val profile = Core.engine.getOwnBalances()
-            profile?.let {
-                player.syncProfile(profile)
-                withContext(Main) {
-                    model.setPlayer(player)
-                }
-                context?.let {
-                    player.saveAsync(it)
-                    Log.info("saved user")
-                }
-            }
-
-        }
-        Log.info("Done syncProfile")
     }
 }
 
