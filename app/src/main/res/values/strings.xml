@@ -47,6 +47,7 @@
     <string name="weapon_icon">🗡️</string>
     <string name="character_icon">🦘</string>
     <string name="health_icon">🔶</string>
+    <string name="lock_icon">🔒</string>
     <string name="login_desc">Who challenges me?</string>
     <string name="login_button_text">Continue</string>
     <string name="login_no_username_text">Enter valid username</string>

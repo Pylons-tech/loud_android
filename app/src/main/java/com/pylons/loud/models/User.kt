@@ -14,7 +14,9 @@ import com.squareup.moshi.Moshi
 data class User(
     var name: String,
     var gold: Long,
+    var lockedGold: Long,
     var pylonAmount: Long,
+    var lockedPylonAmount: Long,
     var characters: MutableList<Character>,
     var activeCharacter: Int,
     var weapons: MutableList<Weapon>,
@@ -117,6 +119,17 @@ data class User(
         }
         this.pylonAmount = pylonAmount
         this.gold = goldAmount
+
+        var lockedGold = 0L
+        var lockedPylonAmount = 0L
+        profile.lockedCoinDetails.amount.forEach {
+            when (it.denom) {
+                Coin.PYLON -> lockedPylonAmount = it.amount
+                Coin.LOUD -> lockedGold = it.amount
+            }
+        }
+        this.lockedGold = lockedGold
+        this.lockedPylonAmount = lockedPylonAmount
 
         val characters = mutableListOf<Character>()
         val weapons = mutableListOf<Weapon>()
