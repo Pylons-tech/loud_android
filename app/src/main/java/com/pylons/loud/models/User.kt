@@ -25,6 +25,11 @@ data class User(
     var address: String,
     var friends: MutableList<Friend>
 ) {
+    val unlockedGold: Long
+        get() = gold - lockedGold
+
+    val unlockedPylon: Long
+        get() = pylonAmount - lockedPylonAmount
 
     fun getActiveCharacter(): Character? {
         return if (activeCharacter != -1 && activeCharacter < characters.size) {

@@ -324,6 +324,15 @@ class GameScreenActivity : AppCompatActivity(),
 
         Log.info(item.toString())
 
+        if (player.unlockedGold < item.price) {
+            Toast.makeText(
+                this@GameScreenActivity,
+                getString(R.string.you_dont_have_enough_gold),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         var prompt = "Buy $name for $goldIcon $price"
         if (item.preItem.isNotEmpty()) {
             val preItems = item.preItem.joinToString(", ")
@@ -361,15 +370,6 @@ class GameScreenActivity : AppCompatActivity(),
                         itemIds.add(player.getItemIdByName(DROP_DRAGONICE))
                         itemIds.add(player.getItemIdByName(DROP_DRAGONACID))
                     }
-                }
-
-                if (player.gold < item.price) {
-                    Toast.makeText(
-                        this@GameScreenActivity,
-                        getString(R.string.you_dont_have_enough_gold),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setPositiveButton
                 }
 
                 if (itemIds.contains("")) {
@@ -502,7 +502,7 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
 
         if (item is Weapon && player != null) {
-            if (player.gold > item.getUpgradePrice()) {
+            if (player.unlockedGold > item.getUpgradePrice()) {
                 val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage("Upgrade $name?")
                     .setCancelable(false)
@@ -786,7 +786,7 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onBuyGoldWithPylons() {
         val player = model.getPlayer().value
         player?.let {
-            if (player.pylonAmount < 100) {
+            if (player.unlockedPylon < 100) {
                 Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
             } else {
