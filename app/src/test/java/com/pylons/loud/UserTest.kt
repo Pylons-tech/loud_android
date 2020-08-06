@@ -15,7 +15,9 @@ class UserTest {
     private val user = User(
         "cluo",
         5000,
+        0,
         500,
+        0,
         mutableListOf(
             Character(
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",

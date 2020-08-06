@@ -25,7 +25,9 @@ class FightTest {
             "rabbit no sword", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -62,7 +64,9 @@ class FightTest {
             "giant user no iron sword", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -110,7 +114,9 @@ class FightTest {
             "giant user with iron sword and no special character", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -158,7 +164,9 @@ class FightTest {
             "giant user with no weapon and no special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -196,7 +204,9 @@ class FightTest {
             "giant user with wooden sword and special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -244,7 +254,9 @@ class FightTest {
             "giant user with iron sword and fire character", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -292,7 +304,9 @@ class FightTest {
             "fire dragon user with iron sword and fire character", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -340,7 +354,9 @@ class FightTest {
             "fire dragon user with iron sword and no special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -388,7 +404,9 @@ class FightTest {
             "ice dragon user with iron sword and ice special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -436,7 +454,9 @@ class FightTest {
             "ice dragon user with iron sword and fire special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -485,7 +505,9 @@ class FightTest {
             "acid dragon user with iron sword and acid special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -534,7 +556,9 @@ class FightTest {
             "acid dragon user with iron sword and ice special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -583,7 +607,9 @@ class FightTest {
             "undead dragon user with angel sword and ice special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -632,7 +658,9 @@ class FightTest {
             "undead dragon user with iron sword and ice special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
@@ -681,7 +709,9 @@ class FightTest {
             "undead dragon user with angel sword and no special", User(
                 "cluo",
                 5000,
+                0,
                 50000,
+                0,
                 mutableListOf(
                     Character(
                         "001",
