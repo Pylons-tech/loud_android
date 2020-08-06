@@ -185,4 +185,5 @@
     <string name="send_items_complete">Items have been sent</string>
     <string name="send_items_error">There was an error sending items</string>
     <string name="send_items_no_items">No items to send!</string>
+    <string name="item_is_locked">This item is locked in a %1$s and cannot be used</string>
 </resources>

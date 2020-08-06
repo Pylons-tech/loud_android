@@ -277,6 +277,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSelect(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val name = item.name
         val player = model.getPlayer().value
 
@@ -427,6 +432,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSell(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val player = model.getPlayer().value
         if (player != null) {
             val name = item.name
@@ -483,6 +493,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemUpgrade(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val name = item.name
         val player = model.getPlayer().value
 
@@ -1002,10 +1017,19 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemTradeSell(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         onTradeSell(item.id)
     }
 
     override fun onCharacterTradeSell(character: Character) {
+        if (character.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, character.lockedTo))
+            return
+        }
         onTradeSell(character.id)
     }
 
@@ -1071,6 +1095,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onCharacterUpdate(character: Character) {
+        if (character.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, character.lockedTo))
+            return
+        }
+
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null)
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
@@ -1175,6 +1204,10 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSend(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
         sendItemViewModel.itemIds = listOf(item)
         findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemConfirmFragment)
     }

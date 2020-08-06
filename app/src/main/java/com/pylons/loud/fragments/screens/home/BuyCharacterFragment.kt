@@ -44,7 +44,8 @@ class BuyCharacterFragment : Fragment() {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ), c, 2
             )
