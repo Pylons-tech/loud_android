@@ -65,7 +65,7 @@ class CreateTradeFragment : Fragment() {
 
     private var coinInput = listOf<CoinInput>()
     private var itemInput = listOf<TradeItemInput>()
-    private var coinOutput = listOf<CoinOutput>()
+    private var coinOutput = listOf<com.pylons.wallet.core.types.Coin>()
     private var itemOutput = listOf<com.pylons.wallet.core.types.tx.item.Item>()
     private var extraInfo = Trade.DEFAULT
     private lateinit var itemBuyFragment: ItemSpecFragment
@@ -114,7 +114,7 @@ class CreateTradeFragment : Fragment() {
         fun onCreateTrade(
             coinInput: List<CoinInput>,
             itemInput: List<TradeItemInput>,
-            coinOutput: List<CoinOutput>,
+            coinOutput: List<com.pylons.wallet.core.types.Coin>,
             itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
             extraInfo: String
         )
@@ -142,6 +142,7 @@ class CreateTradeFragment : Fragment() {
                             TradeItemInput(
                                 LOUD_CBID,
                                 ItemInput(
+                                    "",
                                     listOf(
                                         DoubleInputParam(
                                             "XP",
@@ -172,6 +173,7 @@ class CreateTradeFragment : Fragment() {
                             TradeItemInput(
                                 LOUD_CBID,
                                 ItemInput(
+                                    "",
                                     listOf(),
                                     listOf(
                                         LongInputParam(
@@ -191,6 +193,7 @@ class CreateTradeFragment : Fragment() {
                             TradeItemInput(
                                 LOUD_CBID,
                                 ItemInput(
+                                    "",
                                     listOf(),
                                     listOf(
                                         LongInputParam(
@@ -457,7 +460,7 @@ class CreateTradeFragment : Fragment() {
                 if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() < player?.pylonAmount ?: -1
                 ) {
                     coinOutput = listOf(
-                        CoinOutput(
+                        com.pylons.wallet.core.types.Coin(
                             Coin.PYLON,
                             amount.toLong()
                         )
@@ -510,7 +513,7 @@ class CreateTradeFragment : Fragment() {
                     val player = model.getPlayer().value
                     if (amount.isNotBlank() && amount.toLong() > 0 && amount.toLong() < player?.gold ?: -1) {
                         coinOutput = listOf(
-                            CoinOutput(
+                            com.pylons.wallet.core.types.Coin(
                                 Coin.LOUD,
                                 amount.toLong()
                             )

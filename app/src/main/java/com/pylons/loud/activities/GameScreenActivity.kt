@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModel
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.pylons.loud.R
 import com.pylons.loud.constants.FightId.ID_ACID_GIANT
@@ -66,22 +67,25 @@ import com.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
 import com.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import com.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import com.pylons.loud.fragments.lists.trade.TradeFragment
+import com.pylons.loud.fragments.screens.pyloncentral.purchasepylon.PurchasePylonFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
 import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
+import com.pylons.loud.localdb.LocalDb
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.CoreController.getItemById
+import com.pylons.loud.utils.Preferences.getFriendAddress
 import com.pylons.loud.utils.RenderText.getFightIcon
 import com.pylons.loud.utils.UI.displayLoading
 import com.pylons.loud.utils.UI.displayMessage
 import com.pylons.wallet.core.Core
+import com.pylons.wallet.core.types.Coin
 import com.pylons.wallet.core.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
-import com.pylons.wallet.core.types.tx.recipe.CoinOutput
 import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
 
@@ -106,7 +110,8 @@ class GameScreenActivity : AppCompatActivity(),
     CreateTradeFragment.OnFragmentInteractionListener,
     ItemSpecFragment.OnListFragmentInteractionListener,
     FriendFragment.OnListFragmentInteractionListener,
-    SendItemConfirmFragment.OnFragmentInteractionListener {
+    SendItemConfirmFragment.OnFragmentInteractionListener,
+    PurchasePylonFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -156,6 +161,7 @@ class GameScreenActivity : AppCompatActivity(),
     private val sendItemViewModel: SendItemViewModel by viewModels()
     private val blockChainStatusViewModel: BlockChainStatusViewModel by viewModels()
     private lateinit var getStatusBlockTimer: Timer
+    private lateinit var localCacheClient: LocalDb
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -164,6 +170,13 @@ class GameScreenActivity : AppCompatActivity(),
         val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
             model.setPlayer(currentPlayer)
+
+            val friendAddress = getFriendAddress(this)
+            friendAddress?.let {
+                onNavigation(FRIENDS)
+            }
+
+            localCacheClient = LocalDb.getInstance(this)
         } else {
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
@@ -177,12 +190,14 @@ class GameScreenActivity : AppCompatActivity(),
         cancelTimer()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        Log.info("onPause")
+        super.onPause()
         cancelTimer()
     }
 
     override fun onResume() {
+        Log.info("onResume")
         super.onResume()
         initTimer()
     }
@@ -932,7 +947,7 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
         itemInput: List<TradeItemInput>,
-        coinOutput: List<CoinOutput>,
+        coinOutput: List<Coin>,
         itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
         extraInfo: String
     ) {
@@ -1193,5 +1208,45 @@ class GameScreenActivity : AppCompatActivity(),
                 }
             }
         }
+    }
+
+    override fun disbursePylons(purchase: Purchase) {
+        Log.info("disbursePylons purchase ${purchase.purchaseToken}")
+        CoroutineScope(IO).launch {
+            lateinit var loading: AlertDialog
+            withContext(Main) {
+                loading = displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
+            }
+
+            val tx = txFlow {
+                Core.engine.googleIapGetPylons(
+                    productId = purchase.sku,
+                    purchaseToken = purchase.purchaseToken,
+                    receiptData = purchase.originalJson,
+                    signature = purchase.signature
+                )
+            }
+
+            withContext(Main) {
+                val message = if (tx.code == Transaction.ResponseCode.OK) {
+                    getString(R.string.purchase_complete)
+                } else {
+                    tx.raw_log
+                }
+
+                loading.dismiss()
+                displayMessage(
+                    this@GameScreenActivity,
+                    message
+                )
+                tx.id?.let { id -> blockChainStatusViewModel.setTx(id) }
+            }
+
+            if (tx.code == Transaction.ResponseCode.OK) {
+                Log.info("purchase tx ok, delete local record")
+                localCacheClient.purchaseDao().delete(purchase)
+            }
+        }
+
     }
 }

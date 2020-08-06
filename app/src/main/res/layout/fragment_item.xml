@@ -9,9 +9,7 @@
         android:id="@+id/content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:textAppearance="?attr/textAppearanceListItem"
-        android:textColor="@color/state_text" />
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/layout_price"
@@ -27,8 +25,7 @@
         <TextView
             android:id="@+id/price"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?attr/textAppearanceListItem" />
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

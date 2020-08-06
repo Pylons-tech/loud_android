@@ -105,6 +105,7 @@
     <string name="loading_buy_gold_with_pylon">Spending %1$d pylons for %2$d gold</string>
     <string name="loading_get_dev_items">Getting dev test items from pylon</string>
     <string name="loading_get_pylons">Getting pylons for you</string>
+    <string name="purchase_complete">Purchase Complete</string>
     <string name="bought_gold_with_pylons">Bought %1$d gold with %2$d pylons</string>
     <string name="got_dev_items">Finished getting developer test items:\n\nWolf tail\nTroll toes\nGoblin ear\nFire scale\nIcy shards\nPosion claws\nRuppell\'s Fox\nGentoo penguin\nColorado River toad</string>
     <string name="got_pylons">Got you some pylons!</string>
@@ -169,6 +170,7 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="add_friend">Add Friend</string>
+    <string name="share_address">Share Address</string>
     <string name="add_friend_prompt">Enter your friend\'s address and name.</string>
     <string name="hint_address">Address</string>
     <string name="hint_name">Name</string>
