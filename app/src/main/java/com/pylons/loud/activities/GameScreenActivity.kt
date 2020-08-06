@@ -183,12 +183,14 @@ class GameScreenActivity : AppCompatActivity(),
         cancelTimer()
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onPause() {
+        Log.info("onPause")
+        super.onPause()
         cancelTimer()
     }
 
     override fun onResume() {
+        Log.info("onResume")
         super.onResume()
         initTimer()
     }
