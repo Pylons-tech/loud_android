@@ -1,5 +1,6 @@
 package com.pylons.loud.fragments.lists.character
 
+import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -54,6 +55,12 @@ class MyCharacterRecyclerViewAdapter(
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
         holder.itemView.isSelected = selectedPos == position;
+
+        if (item.lockedTo.isNotBlank()) {
+            with(mListener as Context) {
+                holder.mContentView.append(" ${getString(R.string.lock_icon)}")
+            }
+        }
 
         with(holder.mView) {
             tag = item

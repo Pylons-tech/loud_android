@@ -11,7 +11,9 @@ class HomeDesc {
     private val playerDefault = User(
         "cluo",
         5000,
+        0,
         50000,
+        0,
         mutableListOf(
             Character(
                 "001",
@@ -25,7 +27,8 @@ class HomeDesc {
                 0,
                 0,
                 0,
-                0
+                0,
+                ""
             )
         ),
         0,
@@ -39,7 +42,9 @@ class HomeDesc {
     private val playerNoCharacter = User(
         "cluo",
         5000,
+        0,
         50000,
+        0,
         mutableListOf(),
         -1,
         mutableListOf(),
@@ -52,6 +57,8 @@ class HomeDesc {
     private val playerNoPylon = User(
         "cluo",
         5000,
+        0,
+        0,
         0,
         mutableListOf(),
         -1,
@@ -66,6 +73,8 @@ class HomeDesc {
         "cluo",
         5000,
         0,
+        0,
+        0,
         mutableListOf(
             Character(
                 "001",
@@ -79,7 +88,8 @@ class HomeDesc {
                 0,
                 0,
                 0,
-                0
+                0,
+                ""
             )
         ),
         0,
@@ -94,6 +104,8 @@ class HomeDesc {
         "cluo",
         5000,
         0,
+        0,
+        0,
         mutableListOf(
             Character(
                 "001",
@@ -107,7 +119,8 @@ class HomeDesc {
                 0,
                 0,
                 0,
-                0
+                0,
+                ""
             )
         ),
         -1,

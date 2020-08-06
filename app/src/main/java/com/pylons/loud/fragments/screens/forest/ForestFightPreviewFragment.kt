@@ -111,7 +111,7 @@ class ForestFightPreviewFragment : Fragment() {
         button_fight.setOnClickListener {
             val player = model.getPlayer().value
             if (player != null) {
-                if (fight is FightPremium && fight.cost > player.pylonAmount) {
+                if (fight is FightPremium && fight.cost > player.unlockedPylon) {
                     Toast.makeText(
                         context,
                         getString(R.string.not_enough_pylons),

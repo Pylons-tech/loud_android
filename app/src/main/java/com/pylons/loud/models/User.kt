@@ -14,7 +14,9 @@ import com.squareup.moshi.Moshi
 data class User(
     var name: String,
     var gold: Long,
+    var lockedGold: Long,
     var pylonAmount: Long,
+    var lockedPylonAmount: Long,
     var characters: MutableList<Character>,
     var activeCharacter: Int,
     var weapons: MutableList<Weapon>,
@@ -23,10 +25,20 @@ data class User(
     var address: String,
     var friends: MutableList<Friend>
 ) {
+    val unlockedGold: Long
+        get() = gold - lockedGold
+
+    val unlockedPylon: Long
+        get() = pylonAmount - lockedPylonAmount
 
     fun getActiveCharacter(): Character? {
         return if (activeCharacter != -1 && activeCharacter < characters.size) {
-            characters[activeCharacter]
+            val ac = characters[activeCharacter]
+            if (ac.lockedTo.isBlank()) {
+                ac
+            } else {
+                null
+            }
         } else {
             null
         }
@@ -38,7 +50,12 @@ data class User(
 
     fun getActiveWeapon(): Weapon? {
         return if (activeWeapon != -1 && activeWeapon < weapons.size) {
-            weapons[activeWeapon]
+            val aw = weapons[activeWeapon]
+            if (aw.lockedTo.isBlank()) {
+                aw
+            } else {
+                null
+            }
         } else {
             null
         }
@@ -118,12 +135,30 @@ data class User(
         this.pylonAmount = pylonAmount
         this.gold = goldAmount
 
+        var lockedGold = 0L
+        var lockedPylonAmount = 0L
+        profile.lockedCoinDetails.amount.forEach {
+            when (it.denom) {
+                Coin.PYLON -> lockedPylonAmount = it.amount
+                Coin.LOUD -> lockedGold = it.amount
+            }
+        }
+        this.lockedGold = lockedGold
+        this.lockedPylonAmount = lockedPylonAmount
+
         val characters = mutableListOf<Character>()
         val weapons = mutableListOf<Weapon>()
         val materials = mutableListOf<Material>()
         profile.items.forEach i@{
             if (it.cookbookId != LOUD_CBID) {
                 return@i
+            }
+            var lockedTo = ""
+            if (it.ownerRecipeID.isNotBlank()) {
+                lockedTo = "recipe"
+            }
+            if (it.ownerTradeID.isNotBlank()) {
+                lockedTo = "trade"
             }
             when (it.strings["Type"]) {
                 "Character" -> {
@@ -139,7 +174,8 @@ data class User(
                         it.longs["GiantKill"] ?: 0,
                         it.longs["Special"] ?: 0,
                         it.longs["SpecialDragonKill"] ?: 0,
-                        it.longs["UndeadDragonKill"] ?: 0
+                        it.longs["UndeadDragonKill"] ?: 0,
+                        lockedTo
                     )
                     characters.add(character)
                 }
@@ -153,7 +189,8 @@ data class User(
                             it.longs["value"] ?: 0,
                             0,
                             listOf(),
-                            it.lastUpdate
+                            it.lastUpdate,
+                            lockedTo
                         )
                         weapons.add(weapon)
                     } else {
@@ -163,7 +200,8 @@ data class User(
                             it.longs["level"] ?: 0,
                             it.doubles["attack"] ?: 0.0,
                             it.longs["value"] ?: 0,
-                            it.lastUpdate
+                            it.lastUpdate,
+                            lockedTo
                         )
                         materials.add(material)
                     }

@@ -59,6 +59,8 @@ class PlayerStatusFragment : Fragment() {
             text_player_name.text = player.name
             text_player_gold.text = player.gold.toString()
             text_player_pylon.text = player.pylonAmount.toString()
+            text_locked_gold.text = " (${getString(R.string.lock_icon)} ${player.lockedGold})"
+            text_locked_pylon.text = " (${getString(R.string.lock_icon)} ${player.lockedPylonAmount})"
 
             val activeCharacter = player.getActiveCharacter()
             if (activeCharacter != null) {

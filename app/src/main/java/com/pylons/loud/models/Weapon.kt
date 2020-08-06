@@ -13,7 +13,8 @@ data class Weapon(
     override val value: Long,
     val price: Int,
     val preItem: List<String>,
-    override val lastUpdate: Long
+    override val lastUpdate: Long,
+    override val lockedTo: String
 ) : Item() {
     fun getUpgradePrice(): Int {
         return when (name) {
