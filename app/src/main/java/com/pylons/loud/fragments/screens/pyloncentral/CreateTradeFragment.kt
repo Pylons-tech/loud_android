@@ -457,7 +457,7 @@ class CreateTradeFragment : Fragment() {
             alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                 val amount = mDialogView.edit_text_amount.text.toString()
                 val player = model.getPlayer().value
-                if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() < player?.unlockedPylon ?: -1
+                if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() <= player?.unlockedPylon ?: -1
                 ) {
                     coinOutput = listOf(
                         com.pylons.wallet.core.types.Coin(
@@ -511,7 +511,7 @@ class CreateTradeFragment : Fragment() {
                 alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
                     val amount = mDialogView.edit_text_amount.text.toString()
                     val player = model.getPlayer().value
-                    if (amount.isNotBlank() && amount.toLong() > 0 && amount.toLong() < player?.unlockedGold ?: -1) {
+                    if (amount.isNotBlank() && amount.toLong() > 0 && amount.toLong() <= player?.unlockedGold ?: -1) {
                         coinOutput = listOf(
                             com.pylons.wallet.core.types.Coin(
                                 Coin.LOUD,
