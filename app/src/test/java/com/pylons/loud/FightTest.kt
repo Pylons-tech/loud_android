@@ -41,7 +41,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -80,7 +81,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -93,7 +95,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -130,7 +133,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -143,7 +147,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -180,7 +185,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -220,7 +226,8 @@ class FightTest {
                         0,
                         1,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -233,7 +240,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -270,7 +278,8 @@ class FightTest {
                         0,
                         1,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -283,7 +292,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -320,7 +330,8 @@ class FightTest {
                         0,
                         1,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -333,7 +344,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -370,7 +382,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -383,7 +396,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -420,7 +434,8 @@ class FightTest {
                         0,
                         2,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -433,7 +448,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -470,7 +486,8 @@ class FightTest {
                         0,
                         1,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -483,7 +500,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -521,7 +539,8 @@ class FightTest {
                         0,
                         3,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -534,7 +553,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -572,7 +592,8 @@ class FightTest {
                         0,
                         2,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -585,7 +606,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -623,7 +645,8 @@ class FightTest {
                         0,
                         2,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -636,7 +659,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -674,7 +698,8 @@ class FightTest {
                         0,
                         2,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -687,7 +712,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -725,7 +751,8 @@ class FightTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -738,7 +765,8 @@ class FightTest {
                         0,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,

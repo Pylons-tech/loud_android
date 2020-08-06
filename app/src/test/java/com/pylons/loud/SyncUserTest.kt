@@ -136,7 +136,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 -1,
@@ -149,7 +150,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 -1,
@@ -242,7 +244,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 -1,
@@ -255,7 +258,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 -1,
@@ -346,7 +350,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 -1,
@@ -359,7 +364,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 -1,
@@ -523,7 +529,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 -1,
@@ -625,7 +632,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 -1,
@@ -638,7 +646,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 -1,
@@ -649,7 +658,8 @@ class SyncUserTest {
                         1,
                         0.0,
                         50,
-                        5500
+                        5500,
+                        ""
                     )
                 ),
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -678,7 +688,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -691,7 +702,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -702,7 +714,8 @@ class SyncUserTest {
                         1,
                         0.0,
                         50,
-                        5500
+                        5500,
+                        ""
                     )
                 ),
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -784,7 +797,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -797,7 +811,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -808,7 +823,8 @@ class SyncUserTest {
                         1,
                         0.0,
                         50,
-                        5500
+                        5500,
+                        ""
                     )
                 ),
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -837,7 +853,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -850,7 +867,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -905,7 +923,8 @@ class SyncUserTest {
                         0,
                         0,
                         0,
-                        0
+                        0,
+                        ""
                     )
                 ),
                 0,
@@ -918,7 +937,8 @@ class SyncUserTest {
                         100,
                         0,
                         listOf(),
-                        5000
+                        5000,
+                        ""
                     )
                 ),
                 0,
@@ -929,7 +949,8 @@ class SyncUserTest {
                         1,
                         0.0,
                         50,
-                        5500
+                        5500,
+                        ""
                     )
                 ),
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
@@ -954,6 +975,133 @@ class SyncUserTest {
                 ),
                 -1,
                 mutableListOf(),
+                "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                mutableListOf()
+            )
+        ),
+        MyTest(
+            "Gold, items, characters, weapons, materials (lock items)",
+            User(
+                "cluo",
+                0,
+                0,
+                0,
+                0,
+                mutableListOf(
+                ),
+                -1,
+                mutableListOf(),
+                -1,
+                mutableListOf(),
+                "",
+                mutableListOf()
+            ), Profile(
+                TxPylonsEngine.Credentials("cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c"),
+                mutableMapOf(),
+                listOf(
+                    Coin("loudcoin", 5000),
+                    Coin("pylon", 500)
+                ),
+                listOf(
+                    Item(
+                        "0.0.1",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
+                        "LOUD-v0.1.0-1589853709",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                        "",
+                        "id",
+                        true,
+                        3000,
+                        mapOf("XP" to 1.0),
+                        mapOf(
+                            "level" to 1L,
+                            "GiantKill" to 0L,
+                            "Special" to 0L,
+                            "SpecialDragonKill" to 0L,
+                            "UndeadDragonKill" to 0L
+                        ),
+                        mapOf("Name" to "Tiger", "Type" to "Character"),
+                        0
+                    ),
+                    Item(
+                        "0.0.1",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
+                        "LOUD-v0.1.0-1589853709",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                        "id",
+                        "",
+                        true,
+                        5000,
+                        mapOf("attack" to 3.0),
+                        mapOf("level" to 1L, "value" to 100L),
+                        mapOf("Name" to "Wooden sword"),
+                        0
+                    ),
+                    Item(
+                        "0.0.1",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
+                        "LOUD-v0.1.0-1589853709",
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
+                        "",
+                        "id",
+                        true,
+                        5500,
+                        mapOf("attack" to 0.0),
+                        mapOf("level" to 1L, "value" to 50L),
+                        mapOf("Name" to "Goblin ear"),
+                        0
+                    )
+                ),
+                LockedCoinDetails("", listOf(), listOf(), listOf())
+            ), User(
+                "cluo",
+                5000,
+                0,
+                500,
+                0,
+                mutableListOf(
+                    Character(
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c673a40ac-872e-4474-97cb-5250c400abff",
+                        "Tiger",
+                        1,
+                        0.0,
+                        0,
+                        3000,
+                        0,
+                        1.0,
+                        0,
+                        0,
+                        0,
+                        0,
+                        "trade"
+                    )
+                ),
+                -1,
+                mutableListOf(
+                    Weapon(
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2ad1",
+                        "Wooden sword",
+                        1,
+                        3.0,
+                        100,
+                        0,
+                        listOf(),
+                        5000,
+                        "recipe"
+                    )
+                ),
+                -1,
+                mutableListOf(
+                    Material(
+                        "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28cd49e6431-3722-48d1-bf82-dd9aa0bc2l3k",
+                        "Goblin ear",
+                        1,
+                        0.0,
+                        50,
+                        5500,
+                        "trade"
+                    )
+                ),
                 "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
                 mutableListOf()
             )

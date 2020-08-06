@@ -35,7 +35,8 @@ class TradeTest {
                 0,
                 0,
                 0,
-                0
+                0,
+                ""
             )
         ),
         -1,
@@ -48,7 +49,8 @@ class TradeTest {
                 100,
                 0,
                 listOf(),
-                5000
+                5000,
+                ""
             )
         ),
         -1,
@@ -59,7 +61,8 @@ class TradeTest {
                 1,
                 0.0,
                 50,
-                5500
+                5500,
+                ""
             )
         ),
         "cosmos1sx8wmlcm7l7rulg7fam56ngxge4fsvxq76q28c",
