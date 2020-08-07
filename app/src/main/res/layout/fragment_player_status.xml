@@ -20,6 +20,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <TextView
+            android:id="@+id/button_refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_baseline_refresh_24"
+            android:drawablePadding="8dp" />
+
         <LinearLayout
             android:id="@+id/layout_gold_count"
             android:layout_width="wrap_content"
@@ -35,6 +43,11 @@
 
             <TextView
                 android:id="@+id/text_player_gold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/text_locked_gold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -55,6 +68,11 @@
 
             <TextView
                 android:id="@+id/text_player_pylon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/text_locked_pylon"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>

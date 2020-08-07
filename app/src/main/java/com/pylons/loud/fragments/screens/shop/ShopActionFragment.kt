@@ -67,7 +67,8 @@ class ShopActionFragment : Fragment() {
                                 100,
                                 100,
                                 listOf(),
-                                0
+                                0,
+                                ""
                             ),
                             Weapon(
                                 ItemID.ID_COPPER_SWORD,
@@ -77,7 +78,8 @@ class ShopActionFragment : Fragment() {
                                 250,
                                 250,
                                 listOf(),
-                                0
+                                0,
+                                ""
                             ),
                             Weapon(
                                 ItemID.ID_SILVER_SWORD,
@@ -89,7 +91,8 @@ class ShopActionFragment : Fragment() {
                                 listOf(
                                     GOBLIN_EAR
                                 ),
-                                0
+                                0,
+                                ""
                             ),
                             Weapon(
                                 ItemID.ID_BRONZE_SWORD,
@@ -101,7 +104,8 @@ class ShopActionFragment : Fragment() {
                                 listOf(
                                     WOLF_TAIL
                                 ),
-                                0
+                                0,
+                                ""
                             ),
                             Weapon(
                                 ItemID.ID_IRON_SWORD,
@@ -113,7 +117,8 @@ class ShopActionFragment : Fragment() {
                                 listOf(
                                     TROLL_TOES
                                 ),
-                                0
+                                0,
+                                ""
                             ),
                             Weapon(
                                 ItemID.ID_ANGEL_SWORD,
@@ -127,7 +132,8 @@ class ShopActionFragment : Fragment() {
                                     DROP_DRAGONICE,
                                     DROP_DRAGONACID
                                 ),
-                                0
+                                0,
+                                ""
                             )
                         ), frag.getListener(), 2
                     )

@@ -71,6 +71,7 @@ import com.pylons.loud.fragments.screens.pyloncentral.purchasepylon.PurchasePylo
 import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
+import com.pylons.loud.fragments.ui.PlayerStatusFragment
 import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
 import com.pylons.loud.localdb.LocalDb
 import com.pylons.loud.models.*
@@ -111,7 +112,8 @@ class GameScreenActivity : AppCompatActivity(),
     ItemSpecFragment.OnListFragmentInteractionListener,
     FriendFragment.OnListFragmentInteractionListener,
     SendItemConfirmFragment.OnFragmentInteractionListener,
-    PurchasePylonFragment.OnFragmentInteractionListener {
+    PurchasePylonFragment.OnFragmentInteractionListener,
+    PlayerStatusFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -277,6 +279,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSelect(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val name = item.name
         val player = model.getPlayer().value
 
@@ -319,6 +326,15 @@ class GameScreenActivity : AppCompatActivity(),
 
         Log.info(item.toString())
 
+        if (player.unlockedGold < item.price) {
+            Toast.makeText(
+                this@GameScreenActivity,
+                getString(R.string.you_dont_have_enough_gold),
+                Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
+
         var prompt = "Buy $name for $goldIcon $price"
         if (item.preItem.isNotEmpty()) {
             val preItems = item.preItem.joinToString(", ")
@@ -356,15 +372,6 @@ class GameScreenActivity : AppCompatActivity(),
                         itemIds.add(player.getItemIdByName(DROP_DRAGONICE))
                         itemIds.add(player.getItemIdByName(DROP_DRAGONACID))
                     }
-                }
-
-                if (player.gold < item.price) {
-                    Toast.makeText(
-                        this@GameScreenActivity,
-                        getString(R.string.you_dont_have_enough_gold),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setPositiveButton
                 }
 
                 if (itemIds.contains("")) {
@@ -427,6 +434,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSell(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val player = model.getPlayer().value
         if (player != null) {
             val name = item.name
@@ -483,11 +495,16 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemUpgrade(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         val name = item.name
         val player = model.getPlayer().value
 
         if (item is Weapon && player != null) {
-            if (player.gold > item.getUpgradePrice()) {
+            if (player.unlockedGold > item.getUpgradePrice()) {
                 val dialogBuilder = AlertDialog.Builder(this)
                 dialogBuilder.setMessage("Upgrade $name?")
                     .setCancelable(false)
@@ -771,7 +788,7 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onBuyGoldWithPylons() {
         val player = model.getPlayer().value
         player?.let {
-            if (player.pylonAmount < 100) {
+            if (player.unlockedPylon < 100) {
                 Toast.makeText(this, getString(R.string.not_enough_pylons), Toast.LENGTH_SHORT)
                     .show()
             } else {
@@ -1002,10 +1019,19 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemTradeSell(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
+
         onTradeSell(item.id)
     }
 
     override fun onCharacterTradeSell(character: Character) {
+        if (character.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, character.lockedTo))
+            return
+        }
         onTradeSell(character.id)
     }
 
@@ -1071,6 +1097,11 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onCharacterUpdate(character: Character) {
+        if (character.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, character.lockedTo))
+            return
+        }
+
         val mDialogView = LayoutInflater.from(this).inflate(R.layout.dialog_input_text, null)
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
@@ -1175,6 +1206,10 @@ class GameScreenActivity : AppCompatActivity(),
     }
 
     override fun onItemSend(item: Item) {
+        if (item.lockedTo.isNotBlank()) {
+            displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
+            return
+        }
         sendItemViewModel.itemIds = listOf(item)
         findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemConfirmFragment)
     }
@@ -1215,7 +1250,8 @@ class GameScreenActivity : AppCompatActivity(),
         CoroutineScope(IO).launch {
             lateinit var loading: AlertDialog
             withContext(Main) {
-                loading = displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
+                loading =
+                    displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
             }
 
             val tx = txFlow {
@@ -1248,5 +1284,15 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    override fun onRefresh() {
+        val loading = displayLoading(this, getString(R.string.syncing_account))
+        CoroutineScope(IO).launch {
+            syncProfile()
+            withContext(Main) {
+                loading.dismiss()
+            }
+        }
     }
 }

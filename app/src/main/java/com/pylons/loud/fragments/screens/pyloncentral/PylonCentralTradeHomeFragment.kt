@@ -35,6 +35,7 @@ const val MARKET_TRADES = 2
 class PylonCentralTradeHomeFragment : Fragment() {
     private val Log = Logger.getLogger(PylonCentralTradeHomeFragment::class.java.name)
     val model: GameScreenActivity.SharedViewModel by activityViewModels()
+    var currentType = MY_TRADES
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,7 +47,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getTrades(MY_TRADES)
+        getTrades(currentType)
 
         button_create_trade.setOnClickListener {
             findNavController().navigate(R.id.createTradeFragment)
@@ -59,9 +60,14 @@ class PylonCentralTradeHomeFragment : Fragment() {
         button_my_trades.setOnClickListener {
             getTrades(MY_TRADES)
         }
+
+        text_trade_situation.setOnClickListener {
+            getTrades(currentType)
+        }
     }
 
     private fun getTrades(type: Int) {
+        currentType = type
         val player = model.getPlayer().value
         CoroutineScope(Dispatchers.IO).launch {
             val tradesResponse = Core.engine.listTrades()

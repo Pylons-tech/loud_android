@@ -47,6 +47,7 @@
     <string name="weapon_icon">🗡️</string>
     <string name="character_icon">🦘</string>
     <string name="health_icon">🔶</string>
+    <string name="lock_icon">🔒</string>
     <string name="login_desc">Who challenges me?</string>
     <string name="login_button_text">Continue</string>
     <string name="login_no_username_text">Enter valid username</string>
@@ -184,4 +185,6 @@
     <string name="send_items_complete">Items have been sent</string>
     <string name="send_items_error">There was an error sending items</string>
     <string name="send_items_no_items">No items to send!</string>
+    <string name="item_is_locked">This item is locked in a %1$s and cannot be used</string>
+    <string name="syncing_account">Syncing account</string>
 </resources>

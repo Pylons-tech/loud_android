@@ -94,6 +94,12 @@ class MyItemRecyclerViewAdapter(
                 holder.mContentView.append(" [Active Weapon]")
             }
 
+            if (item.lockedTo.isNotBlank()) {
+                with(mListener as Context) {
+                    holder.mContentView.append(" ${getString(R.string.lock_icon)}")
+                }
+            }
+
             when (mode) {
                 2 -> {
                     holder.mPriceLayout.visibility = View.VISIBLE
@@ -149,6 +155,13 @@ class MyItemRecyclerViewAdapter(
             if (activeCharacterPos == adapterPosition) {
                 mContentView.append(" [Active Character]")
             }
+
+            if (item.lockedTo.isNotBlank()) {
+                with(mListener as Context) {
+                    mContentView.append(" ${getString(R.string.lock_icon)}")
+                }
+            }
+
             render(item, this)
 
             with(mView) {

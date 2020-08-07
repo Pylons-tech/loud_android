@@ -15,5 +15,6 @@ data class Character(
     var giantKill: Long,
     var special: Long,
     var specialDragonKill: Long,
-    var undeadDragonKill: Long
+    var undeadDragonKill: Long,
+    override val lockedTo: String
 ) : Item()

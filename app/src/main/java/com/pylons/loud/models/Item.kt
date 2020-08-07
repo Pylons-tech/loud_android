@@ -7,6 +7,7 @@ abstract class Item {
     abstract val attack: Double
     abstract val value: Long
     abstract val lastUpdate: Long
+    abstract val lockedTo: String
 
     fun getSellPriceRange(): String {
         val minPrice = value * .8
