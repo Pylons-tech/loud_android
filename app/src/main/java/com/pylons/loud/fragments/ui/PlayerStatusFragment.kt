@@ -1,5 +1,6 @@
 package com.pylons.loud.fragments.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import java.util.logging.Logger
  */
 class PlayerStatusFragment : Fragment() {
     private val Log = Logger.getLogger(PlayerStatusFragment::class.java.name)
+    private var listener: OnFragmentInteractionListener? = null
     val model: GameScreenActivity.SharedViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -37,6 +39,10 @@ class PlayerStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        button_refresh.setOnClickListener {
+            listener?.onRefresh()
+        }
 
         layout_pylon_count.setOnClickListener {
             findNavController().popBackStack()
@@ -133,6 +139,24 @@ class PlayerStatusFragment : Fragment() {
                 text_no_active_weapon.visibility = View.VISIBLE
             }
         })
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is OnFragmentInteractionListener) {
+            listener = context
+        } else {
+            throw RuntimeException(context.toString() + " must implement OnFragmentInteractionListener")
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listener = null
+    }
+
+    interface OnFragmentInteractionListener {
+        fun onRefresh()
     }
 
     private fun addBadge(text: TextView) {

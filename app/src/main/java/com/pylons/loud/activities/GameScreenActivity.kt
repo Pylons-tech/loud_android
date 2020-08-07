@@ -71,6 +71,7 @@ import com.pylons.loud.fragments.screens.pyloncentral.purchasepylon.PurchasePylo
 import com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import com.pylons.loud.fragments.screens.senditem.SendItemViewModel
 import com.pylons.loud.fragments.ui.BottomNavigationFragment
+import com.pylons.loud.fragments.ui.PlayerStatusFragment
 import com.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
 import com.pylons.loud.localdb.LocalDb
 import com.pylons.loud.models.*
@@ -111,7 +112,8 @@ class GameScreenActivity : AppCompatActivity(),
     ItemSpecFragment.OnListFragmentInteractionListener,
     FriendFragment.OnListFragmentInteractionListener,
     SendItemConfirmFragment.OnFragmentInteractionListener,
-    PurchasePylonFragment.OnFragmentInteractionListener {
+    PurchasePylonFragment.OnFragmentInteractionListener,
+    PlayerStatusFragment.OnFragmentInteractionListener {
     private val Log = Logger.getLogger(GameScreenActivity::class.java.name)
 
     class SharedViewModel : ViewModel() {
@@ -1248,7 +1250,8 @@ class GameScreenActivity : AppCompatActivity(),
         CoroutineScope(IO).launch {
             lateinit var loading: AlertDialog
             withContext(Main) {
-                loading = displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
+                loading =
+                    displayLoading(this@GameScreenActivity, getString(R.string.loading_get_pylons))
             }
 
             val tx = txFlow {
@@ -1281,5 +1284,15 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
+    }
+
+    override fun onRefresh() {
+        val loading = displayLoading(this, getString(R.string.syncing_account))
+        CoroutineScope(IO).launch {
+            syncProfile()
+            withContext(Main) {
+                loading.dismiss()
+            }
+        }
     }
 }
