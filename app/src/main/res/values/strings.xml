@@ -187,4 +187,9 @@
     <string name="send_items_no_items">No items to send!</string>
     <string name="item_is_locked">This item is locked in a %1$s and cannot be used</string>
     <string name="syncing_account">Syncing account</string>
+    <string name="recipe_not_exist">Recipe does not exist</string>
+    <string name="recipe_not_found">Recipe does not exist</string>
+    test NFT recipe
+
+
 </resources>

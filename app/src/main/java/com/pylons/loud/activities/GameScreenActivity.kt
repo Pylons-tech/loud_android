@@ -77,6 +77,7 @@ import com.pylons.loud.localdb.LocalDb
 import com.pylons.loud.models.*
 import com.pylons.loud.models.fight.Fight
 import com.pylons.loud.models.trade.*
+import com.pylons.loud.pylons.services.WalletInitializer
 import com.pylons.loud.utils.Account.getCurrentUser
 import com.pylons.loud.utils.CoreController.getItemById
 import com.pylons.loud.utils.Preferences.getFriendAddress
@@ -95,6 +96,7 @@ import kotlinx.android.synthetic.main.dialog_input_text.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import tech.pylons.lib.types.tx.recipe.Recipe
 import java.util.*
 import java.util.logging.Logger
 import kotlin.concurrent.fixedRateTimer
@@ -323,6 +325,7 @@ class GameScreenActivity : AppCompatActivity(),
         val price = (item as Weapon).price
         val goldIcon = getString(R.string.gold_icon)
         val player = model.getPlayer().value ?: return
+        var recipes = ArrayList<Recipe>()
 
         Log.info(item.toString())
 
@@ -383,43 +386,29 @@ class GameScreenActivity : AppCompatActivity(),
                     return@setPositiveButton
                 }
 
-                val loading = displayLoading(
-                    this,
-                    getString(
-                        R.string.loading_buy_shop_item,
-                        item.name
-                    )
-                )
-
-                CoroutineScope(IO).launch {
-                    val tx = txFlow {
-                        Core.engine.applyRecipe(recipeId, itemIds.toTypedArray())
-                    }
-
-                    withContext(Main) {
-                        val message = if (tx.code == Transaction.ResponseCode.OK) {
-                            getString(R.string.you_have_bought_from_shop, name)
-                        } else {
-                            tx.raw_log
-                        }
-
-                        loading.dismiss()
-                        displayMessage(
-                            this@GameScreenActivity,
-                            message
-                        )
-                        tx.id?.let { blockChainStatusViewModel.setTx(it) }
-
-                        if (tx.code == Transaction.ResponseCode.OK) {
-                            if (player.activeWeapon == -1) {
-                                val index = player.weapons.indexOfFirst {
-                                    it.id == tx.txData?.output?.get(0)?.itemId
-                                }
-                                player.setActiveWeapon(player.weapons[index])
-                                model.setPlayer(player)
-                                player.saveAsync(this@GameScreenActivity)
+                runBlocking {
+                    launch {
+                        WalletInitializer.getWallet().listRecipes {
+                            it.forEach {
+                                recipes.add(it)
                             }
-                            onNavigation(INVENTORY)
+                        }
+                    }
+                }
+
+                var nft_recipe = recipes.find { it.name == "test NFT recipe" }
+
+                //create NFT
+                runBlocking {
+                    launch {
+                        WalletInitializer.getWallet().executeRecipe(
+                            nft_recipe!!.name,
+                            nft_recipe!!.cookbookId,
+                            listOf()
+                        ){
+                            if(it?.code == tech.pylons.lib.types.Transaction.ResponseCode.OK) {
+
+                            }
                         }
                     }
                 }

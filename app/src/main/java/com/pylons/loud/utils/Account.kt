@@ -26,8 +26,8 @@ object Account {
             CoroutineScope(Dispatchers.IO).launch {
                 val tx = Core.engine.registerNewProfile(username, null)
                 tx.submit()
-                Log.info(tx.toString())
-                Log.info(tx.id)
+                Log.info(tx?.toString())
+           //     Log.info(tx.id)
                 delay(5000)
                 Core.engine.getOwnBalances()
 
