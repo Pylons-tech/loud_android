@@ -26,21 +26,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
-//    configurations {
-//        all { // You should exclude one of them not both of them
-//            exclude group: "org.bitcoinj.core", module: "org.bitcoinj.core"
-//
-//        }
-//    }
-
-//    sourceSets {
-//        main {
-//            java {
-//                exclude 'org/bitcoinj/someotherpackage/core/**'
-//            }
-//        }
-//    }
-
 
     flavorDimensions "default"
     productFlavors {

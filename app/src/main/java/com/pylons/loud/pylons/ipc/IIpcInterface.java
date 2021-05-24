@@ -67,14 +67,14 @@ public interface IIpcInterface extends android.os.IInterface {
                     reply.writeString(descriptor);
                     return true;
                 }
-                case TRANSACTION_wallet2easel: {
+                case TRANSACTION_wallet2loud: {
                     data.enforceInterface(descriptor);
                     java.lang.String _result = this.wallet2easel();
                     reply.writeNoException();
                     reply.writeString(_result);
                     return true;
                 }
-                case TRANSACTION_easel2wallet: {
+                case TRANSACTION_loud2wallet: {
                     data.enforceInterface(descriptor);
                     java.lang.String _arg0;
                     _arg0 = data.readString();
@@ -111,7 +111,7 @@ public interface IIpcInterface extends android.os.IInterface {
                 java.lang.String _result;
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_wallet2easel, _data, _reply, 0);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_wallet2loud, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
                         return getDefaultImpl().wallet2easel();
                     }
@@ -131,7 +131,7 @@ public interface IIpcInterface extends android.os.IInterface {
                 try {
                     _data.writeInterfaceToken(DESCRIPTOR);
                     _data.writeString(json);
-                    boolean _status = mRemote.transact(Stub.TRANSACTION_easel2wallet, _data, _reply, 0);
+                    boolean _status = mRemote.transact(Stub.TRANSACTION_loud2wallet, _data, _reply, 0);
                     if (!_status && getDefaultImpl() != null) {
                         getDefaultImpl().easel2wallet(json);
                         return;
@@ -146,8 +146,8 @@ public interface IIpcInterface extends android.os.IInterface {
             public static com.pylons.loud.pylons.ipc.IIpcInterface sDefaultImpl;
         }
 
-        static final int TRANSACTION_wallet2easel = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
-        static final int TRANSACTION_easel2wallet = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
+        static final int TRANSACTION_wallet2loud = (android.os.IBinder.FIRST_CALL_TRANSACTION + 0);
+        static final int TRANSACTION_loud2wallet = (android.os.IBinder.FIRST_CALL_TRANSACTION + 1);
 
         public static boolean setDefaultImpl(com.pylons.loud.pylons.ipc.IIpcInterface impl) {
             // Only one user of this interface can use this function
