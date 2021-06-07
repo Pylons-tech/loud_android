@@ -43,13 +43,13 @@
 
     <fragment
         android:id="@+id/fragment_character_sell"
-        android:name="com.pylons.loud.fragments.lists.character.CharacterFragment"
+        android:name="tech.pylons.loud.fragments.lists.character.CharacterFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <fragment
         android:id="@+id/fragment_item_sell"
-        android:name="com.pylons.loud.fragments.lists.item.ItemFragment"
+        android:name="tech.pylons.loud.fragments.lists.item.ItemFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

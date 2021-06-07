@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/fragment_friend_list"
-        android:name="com.pylons.loud.fragments.lists.friend.FriendFragment"
+        android:name="tech.pylons.loud.fragments.lists.friend.FriendFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

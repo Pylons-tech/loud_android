@@ -187,12 +187,12 @@ steps:
 #
 - name: 'gcr.io/cloud-builders/curl'
   id: create_edit
-  args: ['-d', '"{\"id\":\"$BUILD_ID\"}"', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits']
+  args: ['-d', '"{\"id\":\"$BUILD_ID\"}"', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/tech.pylons.loud/edits']
   waitFor: ['align_apk']
 
 - name: 'gcr.io/cloud-builders/curl'
   id: upload_to_edit
-  args: ['-d', '@data=app/build/outputs/apk', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/com.pylons.loud/edits/$BUILD_ID/apks?uploadType=media']
+  args: ['-d', '@data=app/build/outputs/apk', '-X', 'POST', 'https://www.googleapis.com/androidpublisher/v3/applications/tech.pylons.loud/edits/$BUILD_ID/apks?uploadType=media']
   waitFor: ['create_edit']
 
 

@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/shopHomeFragment"
-        android:name="com.pylons.loud.fragments.screens.shop.ShopHomeFragment"
+        android:name="tech.pylons.loud.fragments.screens.shop.ShopHomeFragment"
         android:label="fragment_shop_home"
         tools:layout="@layout/fragment_shop_home" />
     <fragment
         android:id="@+id/shopActionFragment"
-        android:name="com.pylons.loud.fragments.screens.shop.ShopActionFragment"
+        android:name="tech.pylons.loud.fragments.screens.shop.ShopActionFragment"
         android:label="fragment_shop_action"
         tools:layout="@layout/fragment_shop_action" />
 </navigation>

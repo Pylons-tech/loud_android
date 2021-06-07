@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/sendItemFriendListFragment"
-        android:name="com.pylons.loud.fragments.screens.senditem.SendItemFriendListFragment"
+        android:name="tech.pylons.loud.fragments.screens.senditem.SendItemFriendListFragment"
         android:label="fragment_send_item_friend_list"
         tools:layout="@layout/fragment_send_item_friend_list" />
     <fragment
         android:id="@+id/sendItemListFragment"
-        android:name="com.pylons.loud.fragments.screens.senditem.SendItemListFragment"
+        android:name="tech.pylons.loud.fragments.screens.senditem.SendItemListFragment"
         android:label="fragment_send_item_list"
         tools:layout="@layout/fragment_send_item_list" />
     <fragment
         android:id="@+id/sendItemConfirmFragment"
-        android:name="com.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment"
+        android:name="tech.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment"
         android:label="fragment_send_item_confirm"
         tools:layout="@layout/fragment_send_item_confirm" />
 </navigation>

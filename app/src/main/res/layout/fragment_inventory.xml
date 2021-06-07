@@ -39,7 +39,7 @@
 
     <fragment
         android:id="@+id/fragment_item"
-        android:name="com.pylons.loud.fragments.lists.item.ItemFragment"
+        android:name="tech.pylons.loud.fragments.lists.item.ItemFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

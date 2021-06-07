@@ -48,7 +48,7 @@
 
     <fragment
         android:id="@+id/fragment_trade_list"
-        android:name="com.pylons.loud.fragments.lists.trade.TradeFragment"
+        android:name="tech.pylons.loud.fragments.lists.trade.TradeFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

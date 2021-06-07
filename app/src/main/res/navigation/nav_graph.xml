@@ -7,42 +7,42 @@
 
     <fragment
         android:id="@+id/homeScreenFragment"
-        android:name="com.pylons.loud.fragments.screens.home.HomeScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.home.HomeScreenFragment"
         android:label="fragment_home_screen"
         tools:layout="@layout/fragment_home_screen" />
     <fragment
         android:id="@+id/forestScreenFragment"
-        android:name="com.pylons.loud.fragments.screens.forest.ForestScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.forest.ForestScreenFragment"
         android:label="fragment_forest_screen"
         tools:layout="@layout/fragment_forest_screen" />
     <fragment
         android:id="@+id/shopScreenFragment"
-        android:name="com.pylons.loud.fragments.screens.shop.ShopScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.shop.ShopScreenFragment"
         android:label="fragment_shop_screen"
         tools:layout="@layout/fragment_shop_screen" />
     <fragment
         android:id="@+id/pylonCentralFragment"
-        android:name="com.pylons.loud.fragments.screens.pyloncentral.PylonCentralFragment"
+        android:name="tech.pylons.loud.fragments.screens.pyloncentral.PylonCentralFragment"
         android:label="fragment_pylon_central"
         tools:layout="@layout/fragment_pylon_central" />
     <fragment
         android:id="@+id/inventoryFragment"
-        android:name="com.pylons.loud.fragments.screens.inventory.InventoryScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.inventory.InventoryScreenFragment"
         android:label="fragment_inventory"
         tools:layout="@layout/fragment_inventory" />
     <fragment
         android:id="@+id/settingsScreenFragment"
-        android:name="com.pylons.loud.fragments.screens.setting.SettingsScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.setting.SettingsScreenFragment"
         android:label="fragment_settings_screen"
         tools:layout="@layout/fragment_settings_screen" />
     <fragment
         android:id="@+id/buyCharacterFragment"
-        android:name="com.pylons.loud.fragments.screens.home.BuyCharacterFragment"
+        android:name="tech.pylons.loud.fragments.screens.home.BuyCharacterFragment"
         android:label="fragment_buy_character"
         tools:layout="@layout/fragment_buy_character" />
     <fragment
         android:id="@+id/friendsScreenFragment"
-        android:name="com.pylons.loud.fragments.screens.friends.FriendsScreenFragment"
+        android:name="tech.pylons.loud.fragments.screens.friends.FriendsScreenFragment"
         android:label="fragment_friends_screen"
         tools:layout="@layout/fragment_friends_screen" />
 </navigation>

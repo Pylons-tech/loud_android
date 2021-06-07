@@ -14,7 +14,7 @@
 
     <fragment
         android:id="@+id/fragment_fight"
-        android:name="com.pylons.loud.fragments.lists.fight.FightFragment"
+        android:name="tech.pylons.loud.fragments.lists.fight.FightFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

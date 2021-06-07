@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/pylonCentralTradeHomeFragment"
-        android:name="com.pylons.loud.fragments.screens.pyloncentral.PylonCentralTradeHomeFragment"
+        android:name="tech.pylons.loud.fragments.screens.pyloncentral.PylonCentralTradeHomeFragment"
         android:label="fragment_pylon_central_trade_home"
         tools:layout="@layout/fragment_pylon_central_trade_home" />
     <fragment
         android:id="@+id/createTradeFragment"
-        android:name="com.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment"
+        android:name="tech.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment"
         android:label="fragment_create_trade"
         tools:layout="@layout/fragment_create_trade" />
     <fragment
         android:id="@+id/itemSelectFragment"
-        android:name="com.pylons.loud.fragments.screens.pyloncentral.trade.ItemSelectFragment"
+        android:name="tech.pylons.loud.fragments.screens.pyloncentral.trade.ItemSelectFragment"
         android:label="fragment_item_select"
         tools:layout="@layout/fragment_item_select" />
 </navigation>
