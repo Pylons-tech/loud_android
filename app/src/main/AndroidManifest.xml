@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.pylons.loud">
+    package="tech.pylons.loud">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -43,7 +43,7 @@
             android:exported="false"
             tools:node="merge">
             <!-- This entry makes ExampleLoggerInitializer discoverable. -->
-            <meta-data  android:name="com.pylons.loud.pylons.services.WalletInitializer" android:value="androidx.startup" />
+            <meta-data  android:name="tech.pylons.loud.pylons.services.WalletInitializer" android:value="androidx.startup" />
         </provider>
     </application>
 
