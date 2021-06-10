@@ -4,13 +4,13 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion "29.0.3"
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "tech.pylons.loud"
         minSdkVersion 26
-        targetSdkVersion 29
+        targetSdkVersion 30
         versionCode 9
         versionName "0.0.9"
 
@@ -18,6 +18,8 @@ android {
 
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+
+        buildConfigField "String", "APP_NAME", "\"LOUD\""
     }
 
     buildTypes {
@@ -109,12 +111,13 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
 
-    def libkylons_version = "libkylons-0.1.jar"
-
     def startup_version = "1.0.0"
     implementation "androidx.startup:startup-runtime:$startup_version"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+//    implementation "tech.pylons.lib:libpylons:0.1"
+//    implementation files('./libs/libpylons-0.1.jar')
 }

@@ -77,7 +77,7 @@ import tech.pylons.loud.localdb.LocalDb
 import tech.pylons.loud.models.*
 import tech.pylons.loud.models.fight.Fight
 import tech.pylons.loud.models.trade.*
-import tech.pylons.loud.pylons.services.WalletInitializer
+import tech.pylons.loud.services.WalletInitializer
 import tech.pylons.loud.utils.Account.getCurrentUser
 import tech.pylons.loud.utils.CoreController.getItemById
 import tech.pylons.loud.utils.Preferences.getFriendAddress

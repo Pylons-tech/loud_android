@@ -1,9 +1,10 @@
-package tech.pylons.loud.pylons.services
+package tech.pylons.loud.services
 
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.startup.Initializer
-import tech.pylons.loud.pylons.ipc.IpcServiceConnection
+import tech.pylons.ipc.DroidIpcWireImpl
+import tech.pylons.ipc.IpcServiceConnection
 import tech.pylons.lib.Wallet
 import java.lang.ref.WeakReference
 

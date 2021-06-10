@@ -1,46 +1,26 @@
-package tech.pylons.easel.service
+package tech.pylons.loud.services
 
 import android.content.Context
-import android.os.Handler
-import android.os.Looper.getMainLooper
 import android.util.Log
 import android.widget.Toast
-import tech.pylons.loud.pylons.services.WalletInitializer
 import kotlinx.coroutines.*
+import tech.pylons.loud.BuildConfig
 import tech.pylons.lib.types.Cookbook
 import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
-import java.lang.Runnable
 import java.math.BigDecimal
-import java.math.BigInteger
 
 
-class WalletNftService() {
+class WalletNftService {
 
     companion object{
         var userProfile:Profile? = null
         var userCookbooks = mutableListOf<Cookbook>()
         var userCookbook:Cookbook? = null
         var userNfts = mutableListOf<Recipe>()
-        var appName = "Easel"
-        var appPkgName = "tech.pylons.easel"
-    }
-
-    /**
-     * initWallet
-     * call when IpcService initiated. IpcService::onServiceConnected()
-     * all ipc actions will be come after initWallet() succeeds
-     */
-    fun initWallet(context: Context?) {
-        runBlocking {
-            launch {
-                WalletInitializer.getWallet().initWallet(appName, appPkgName) {
-                    println("Wallet Initiated")
-                    WalletNftService().InitUserInfo(context)
-                }
-            }
-        }
+        var appName = BuildConfig.APP_NAME
+        var appPkgName = BuildConfig.APPLICATION_ID
     }
 
     /**
@@ -64,7 +44,8 @@ class WalletNftService() {
         royalty: String,
         quantity: Long,
         url: String,
-        description: String
+        description: String,
+        callback: (Boolean)->Unit
     ) {
         //if cookbook not created, create cookbook
         if (userCookbook == null) {
@@ -74,9 +55,13 @@ class WalletNftService() {
                         Toast.makeText(context,
                             "Portfolio not initiated",
                             Toast.LENGTH_LONG).show()
+
                     }
                 }
+
+                createAutoCookbook(context, userProfile)
             }
+            callback(false)
             return
         }
 
@@ -174,9 +159,55 @@ class WalletNftService() {
                             weight = "1"
                         )
                     )
-                    ,
-                    callback = onNftRetrieved(context),
-                )
+                ){
+                    val transaction = it
+                    var ret = false
+                    Log.i("onNftRetrieved()", "Response from Wallet: $it")
+                    CoroutineScope(Dispatchers.IO).launch {
+                        when (it) {
+                            null -> {
+                                //if this is correct logic?
+                                withContext(Dispatchers.Main) {
+                                    Toast.makeText(
+                                        context,
+                                        "Creating Nft Cancelled!",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                            }
+                            else -> {
+                                //retrieve NFT list
+                                listNfts(context)
+                                withContext(Dispatchers.Main) {
+
+                                    //this part should be considered
+                                    val id = transaction?.id
+                                    val code = transaction?.code
+                                    val raw_log = transaction?.raw_log
+
+                                    if (code != Transaction.ResponseCode.OK) {
+                                        Toast.makeText(
+                                            context,
+                                            "Creating NFT failed: ${raw_log}",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        return@withContext
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Successfully Created Nft!",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        ret = true
+                                        return@withContext
+                                    }
+                                }
+                            }
+                        }
+
+                        callback(ret)
+                    }
+                }
             }
         }
 
@@ -245,10 +276,10 @@ class WalletNftService() {
                     when(profile) {
                         null->{}
                         else->{
-                            val address = profile?.address
-                            val items = profile?.items
-                            val coins = profile?.coins
-                            Companion.userProfile = profile
+                            val address = profile.address
+                            val items = profile.items
+                            val coins = profile.coins
+                            userProfile = profile
 
                             //retrieve cookbook list
                             //listNfts(context)
@@ -279,10 +310,10 @@ class WalletNftService() {
             val cookbooks = it
 
             if (cookbooks.isNotEmpty()) {
-                Companion.userCookbooks.clear()
-                cookbooks?.forEach {
-                    if (it.sender == Companion.userProfile?.address)
-                        Companion.userCookbooks.add(it)
+                userCookbooks.clear()
+                cookbooks.forEach {
+                    if (it.sender == userProfile?.address)
+                        userCookbooks.add(it)
                 }
             }
 
@@ -292,25 +323,25 @@ class WalletNftService() {
             //Companion.userCookbook = Companion.userCookbooks.find{
             //    it.name == Easel_cookbook_name
             //}
-            if (Companion.userCookbooks.isNotEmpty()) {
-                Companion.userCookbook = Companion.userCookbooks.get(0)
+            if (userCookbooks.isNotEmpty()) {
+                userCookbook = userCookbooks.get(0)
             }
 
-            if (Companion.userCookbook != null) {
+            if (userCookbook != null) {
                 //retrieve NFT list
                 listNfts(context)
             } else {
                 //this means not cookbook created for this user
                 //create cookbook
-                CreateAutoCookbook(context, Companion.userProfile)
+                createAutoCookbook(context, userProfile)
             }
         }
     }
 
-    fun BuyPylons(context: Context?) {
+    fun buyPylons(context: Context?) {
         CoroutineScope(Dispatchers.IO).launch {
             //loading screen launch
-            WalletInitializer.getWallet().BuyPylons(onBuyPylons(context))
+            WalletInitializer.getWallet().buyPylons(onBuyPylons(context))
         }
     }
 
@@ -343,19 +374,19 @@ class WalletNftService() {
             val nfts = it
             if (nfts.isNotEmpty()) {
                 userNfts.clear()
-                nfts?.forEach {
-                    if(it.sender == Companion.userProfile?.address)
+                nfts.forEach {
+                    if(it.sender == userProfile?.address)
                         userNfts.add(it)
                 }
             }
         }
-        Toast.makeText(context,
-            "Create Portfolio failed",
-            Toast.LENGTH_LONG).show()
-
+        // unreachable code
+        /*Toast.makeText(context,
+                "Create Portfolio failed",
+                Toast.LENGTH_LONG).show()*/
     }
 
-    fun CreateAutoCookbook(context:Context?, profile:Profile?) {
+    fun createAutoCookbook(context:Context?, profile:Profile?) {
         runBlocking {
             launch {
                 WalletInitializer.getWallet().createAutoCookbook(profile!!, "Easel", onCreateAutoCookbook(context))
@@ -381,7 +412,7 @@ class WalletNftService() {
                     }
                 }
                 else -> {
-                    if(transaction?.code == Transaction.ResponseCode.OK){
+                    if(transaction.code == Transaction.ResponseCode.OK){
                         //transaction ok
                         //retrieve NFT list
                         CoroutineScope(Dispatchers.IO).launch {
@@ -415,7 +446,7 @@ class WalletNftService() {
     }
 
 
-    fun InitUserInfo(context: Context?){
+    fun initUserInfo(context: Context?){
         CoroutineScope(Dispatchers.IO).launch {
             if(userProfile == null){
                 //testCreateNft(context)
@@ -425,17 +456,21 @@ class WalletNftService() {
         }
     }
 
-    fun ExecuteRecipe(recipe: String, cookbook:String, itemInputs: List<String>, context: Context) {
+    fun executeRecipe(recipe: String, cookbook:String, itemInputs: List<String>, context: Context) {
 
         CoroutineScope(Dispatchers.IO).launch {
-            WalletInitializer.getWallet().executeRecipe(recipe, cookbook, itemInputs, callback=OnExecuteRecipe(context))
+            WalletInitializer.getWallet().executeRecipe(recipe, cookbook, itemInputs, callback=onExecuteRecipe(context))
         }
     }
 
-    fun OnExecuteRecipe(context: Context): (Transaction?)->Unit {
+    fun onExecuteRecipe(context: Context): (Transaction?)->Unit {
         return {
 
         }
+    }
+
+    fun GetWebLink(recipeName:String, recipeId: String): String {
+        return WalletInitializer.getWallet().generateWebLink(recipeName, recipeId)
     }
 
     /**
@@ -526,8 +561,8 @@ class WalletNftService() {
                 WalletInitializer.getWallet().createRecipe(
                     name = "test NFT recipe",
                     itemInputs = listOf(), // this field is not necessary in NFT creation
-                    cookbook = cookbook?.id!!,
-                    description = "test recipe description blabla blabla blabla",
+                    cookbook = cookbook.id,
+                    description = "test recipe description for nft image",
                     blockInterval = 0,
                     coinInputs = listOf(
                         CoinInput(

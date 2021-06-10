@@ -6,7 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import tech.pylons.loud.R
-import tech.pylons.loud.pylons.services.WalletInitializer
+import tech.pylons.loud.services.WalletInitializer
 import tech.pylons.loud.utils.Account.initAccount
 import tech.pylons.loud.utils.UI.displayLoading
 import kotlinx.android.synthetic.main.activity_login.*
