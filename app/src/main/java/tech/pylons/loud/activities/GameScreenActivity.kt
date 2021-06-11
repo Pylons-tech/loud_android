@@ -166,6 +166,8 @@ class GameScreenActivity : AppCompatActivity(),
     private lateinit var getStatusBlockTimer: Timer
     private lateinit var localCacheClient: LocalDb
 
+    private val cookbookId = "Cookbook"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
@@ -421,6 +423,7 @@ class GameScreenActivity : AppCompatActivity(),
         alert.show()
     }
 
+    @ExperimentalUnsignedTypes
     override fun onItemSell(item: Item) {
         if (item.lockedTo.isNotBlank()) {
             displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
@@ -446,7 +449,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                     CoroutineScope(IO).launch {
                         val tx = txFlow {
-                            Core.current?.applyRecipe(RCP_SELL_SWORD, arrayOf(item.id))
+                            Core.current?.applyRecipe(RCP_SELL_SWORD, cookbookId, listOf(item.id))!!
                         }
 
                         withContext(Main) {
@@ -482,6 +485,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onItemUpgrade(item: Item) {
         if (item.lockedTo.isNotBlank()) {
             displayMessage(this, getString(R.string.item_is_locked, item.lockedTo))
@@ -510,7 +514,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.current?.applyRecipe(recipeId, arrayOf(item.id))
+                                Core.current?.applyRecipe(recipeId, cookbookId, listOf(item.id))!!
                             }
 
                             withContext(Main) {
@@ -572,6 +576,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     private suspend fun txFlow(func: () -> Transaction): Transaction {
         val tx = func()
         tx.submit()
@@ -587,20 +592,21 @@ class GameScreenActivity : AppCompatActivity(),
         syncProfile()
 
         val id = tx.id
-        return if (id != null) {
+        return if (id != null) ({
             Log.info(tx.id)
             val txResult = Core.current?.getTransaction(id)
             Log.info(txResult.toString())
             txResult
-        } else {
+        })!! else {
             tx
         }
     }
 
+    @ExperimentalUnsignedTypes
     private suspend fun syncProfile() {
         val player = model.getPlayer().value
         if (player != null) {
-            val profile = Core.current?.getOwnBalances()
+            val profile = Core.current?.getProfile()
             if (profile != null) {
                 player.syncProfile(profile)
                 withContext(Main) {
@@ -614,6 +620,7 @@ class GameScreenActivity : AppCompatActivity(),
         Log.info("Done syncProfile")
     }
 
+    @ExperimentalUnsignedTypes
     override fun onBuyCharacter(item: Character) {
         val player = model.getPlayer().value
         if (player != null) {
@@ -628,8 +635,9 @@ class GameScreenActivity : AppCompatActivity(),
                         val tx = txFlow {
                             Core.current?.applyRecipe(
                                 RCP_BUY_CHARACTER,
-                                arrayOf()
-                            )
+                                cookbookId,
+                                listOf()
+                            )!!
                         }
 
                         withContext(Main) {
@@ -674,6 +682,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onEngageFight(fight: Fight, recipeId: String, itemIds: Array<String>) {
         val player = model.getPlayer().value
         if (player != null) {
@@ -691,7 +700,7 @@ class GameScreenActivity : AppCompatActivity(),
 
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.current?.applyRecipe(recipeId, itemIds)
+                    Core.current?.applyRecipe(recipeId, cookbookId, itemIds.toList())!!
                 }
 
                 withContext(Main) {
@@ -773,6 +782,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onBuyGoldWithPylons() {
         val player = model.getPlayer().value
         player?.let {
@@ -797,7 +807,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.current?.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
+                                Core.current?.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, cookbookId, listOf())!!
                             }
 
                             withContext(Main) {
@@ -827,12 +837,13 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onGetDevItems() {
         val loading =
             displayLoading(this, getString(R.string.loading_get_dev_items))
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.current?.applyRecipe(RCP_GET_TEST_ITEMS, arrayOf())
+                Core.current?.applyRecipe(RCP_GET_TEST_ITEMS, cookbookId, listOf())!!
             }
 
             withContext(Main) {
@@ -856,12 +867,13 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onGetPylons() {
         val loading =
             displayLoading(this, getString(R.string.loading_get_pylons))
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.current?.getPylons(500)
+                Core.current?.getPylons(500)!!
             }
 
             withContext(Main) {
@@ -881,6 +893,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     private fun promptTrade(trade: Trade, itemIds: List<String>) {
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
@@ -895,7 +908,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 CoroutineScope(IO).launch {
                     val tx = txFlow {
-                        Core.current?.fulfillTrade(trade.id, itemIds)
+                        Core.current?.fulfillTrade(trade.id, itemIds)!!
                     }
 
                     withContext(Main) {
@@ -949,6 +962,7 @@ class GameScreenActivity : AppCompatActivity(),
         promptTrade(trade, listOf())
     }
 
+    @ExperimentalUnsignedTypes
     override fun onCreateTrade(
         coinInput: List<CoinInput>,
         itemInput: List<TradeItemInput>,
@@ -969,7 +983,7 @@ class GameScreenActivity : AppCompatActivity(),
                     coinOutput,
                     itemOutput,
                     extraInfo
-                )
+                )!!
             }
 
             withContext(Main) {
@@ -1038,6 +1052,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun onCancel(trade: Trade) {
         val dialogBuilder = AlertDialog.Builder(this)
         dialogBuilder.setMessage(
@@ -1052,7 +1067,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 CoroutineScope(IO).launch {
                     val tx = txFlow {
-                        Core.current?.cancelTrade(trade.id)
+                        Core.current?.cancelTrade(trade.id)!!
                     }
 
                     withContext(Main) {
@@ -1110,7 +1125,7 @@ class GameScreenActivity : AppCompatActivity(),
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val name = mDialogView.edit_text.text.toString()
             if (name.isNotBlank()) {
-                onRenameCharacter(character, name)
+//                onRenameCharacter(character, name)
                 alert.dismiss()
             } else {
                 Toast.makeText(this, getString(R.string.enter_valid_name), Toast.LENGTH_SHORT)
@@ -1119,6 +1134,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    /*@ExperimentalUnsignedTypes
     private fun onRenameCharacter(character: Character, name: String) {
         val loading =
             displayLoading(
@@ -1146,7 +1162,7 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
-    }
+    }*/
 
     override fun onItemTradeBuy(item: Item) {
         promptTrade(model.trade, listOf(item.id))
@@ -1233,6 +1249,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
+    @ExperimentalUnsignedTypes
     override fun disbursePylons(purchase: Purchase) {
         Log.info("disbursePylons purchase ${purchase.purchaseToken}")
         CoroutineScope(IO).launch {
@@ -1248,7 +1265,7 @@ class GameScreenActivity : AppCompatActivity(),
                     purchaseToken = purchase.purchaseToken,
                     receiptData = purchase.originalJson,
                     signature = purchase.signature
-                )
+                )!!
             }
 
             withContext(Main) {
