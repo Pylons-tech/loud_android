@@ -446,7 +446,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                     CoroutineScope(IO).launch {
                         val tx = txFlow {
-                            Core.engine.applyRecipe(RCP_SELL_SWORD, arrayOf(item.id))
+                            Core.current?.applyRecipe(RCP_SELL_SWORD, arrayOf(item.id))
                         }
 
                         withContext(Main) {
@@ -510,7 +510,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.engine.applyRecipe(recipeId, arrayOf(item.id))
+                                Core.current?.applyRecipe(recipeId, arrayOf(item.id))
                             }
 
                             withContext(Main) {
@@ -589,7 +589,7 @@ class GameScreenActivity : AppCompatActivity(),
         val id = tx.id
         return if (id != null) {
             Log.info(tx.id)
-            val txResult = Core.engine.getTransaction(id)
+            val txResult = Core.current?.getTransaction(id)
             Log.info(txResult.toString())
             txResult
         } else {
@@ -600,7 +600,7 @@ class GameScreenActivity : AppCompatActivity(),
     private suspend fun syncProfile() {
         val player = model.getPlayer().value
         if (player != null) {
-            val profile = Core.engine.getOwnBalances()
+            val profile = Core.current?.getOwnBalances()
             if (profile != null) {
                 player.syncProfile(profile)
                 withContext(Main) {
@@ -626,7 +626,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                     CoroutineScope(IO).launch {
                         val tx = txFlow {
-                            Core.engine.applyRecipe(
+                            Core.current?.applyRecipe(
                                 RCP_BUY_CHARACTER,
                                 arrayOf()
                             )
@@ -691,7 +691,7 @@ class GameScreenActivity : AppCompatActivity(),
 
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.engine.applyRecipe(recipeId, itemIds)
+                    Core.current?.applyRecipe(recipeId, itemIds)
                 }
 
                 withContext(Main) {
@@ -797,7 +797,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.engine.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
+                                Core.current?.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, arrayOf())
                             }
 
                             withContext(Main) {
@@ -832,7 +832,7 @@ class GameScreenActivity : AppCompatActivity(),
             displayLoading(this, getString(R.string.loading_get_dev_items))
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.engine.applyRecipe(RCP_GET_TEST_ITEMS, arrayOf())
+                Core.current?.applyRecipe(RCP_GET_TEST_ITEMS, arrayOf())
             }
 
             withContext(Main) {
@@ -861,7 +861,7 @@ class GameScreenActivity : AppCompatActivity(),
             displayLoading(this, getString(R.string.loading_get_pylons))
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.engine.getPylons(500)
+                Core.current?.getPylons(500)
             }
 
             withContext(Main) {
@@ -895,7 +895,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 CoroutineScope(IO).launch {
                     val tx = txFlow {
-                        Core.engine.fulfillTrade(trade.id, itemIds)
+                        Core.current?.fulfillTrade(trade.id, itemIds)
                     }
 
                     withContext(Main) {
@@ -963,7 +963,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.engine.createTrade(
+                Core.current?.createTrade(
                     coinInput,
                     itemInput,
                     coinOutput,
@@ -1052,7 +1052,7 @@ class GameScreenActivity : AppCompatActivity(),
                     )
                 CoroutineScope(IO).launch {
                     val tx = txFlow {
-                        Core.engine.cancelTrade(trade.id)
+                        Core.current?.cancelTrade(trade.id)
                     }
 
                     withContext(Main) {
@@ -1127,7 +1127,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.engine.setItemFieldString(character.id, "Name", name)
+                Core.current?.setItemFieldString(character.id, "Name", name)
             }
 
             withContext(Main) {
@@ -1208,7 +1208,7 @@ class GameScreenActivity : AppCompatActivity(),
             val loading = displayLoading(this, getString(R.string.send_items_loading))
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.engine.sendItems(player.address, friendAddress, itemIds.map { it.id })
+                    Core.current?.sendItems(player.address, friendAddress, itemIds.map { it.id })
                 }
 
                 withContext(Main) {
@@ -1243,7 +1243,7 @@ class GameScreenActivity : AppCompatActivity(),
             }
 
             val tx = txFlow {
-                Core.engine.googleIapGetPylons(
+                Core.current?.googleIapGetPylons(
                     productId = purchase.sku,
                     purchaseToken = purchase.purchaseToken,
                     receiptData = purchase.originalJson,

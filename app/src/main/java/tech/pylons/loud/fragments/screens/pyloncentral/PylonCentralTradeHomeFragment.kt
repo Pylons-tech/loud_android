@@ -15,8 +15,8 @@ import tech.pylons.loud.constants.Trade
 import tech.pylons.loud.fragments.lists.trade.MyTradeRecyclerViewAdapter
 import tech.pylons.loud.fragments.lists.trade.TradeFragment
 import tech.pylons.loud.models.trade.*
-import com.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.tx.recipe.ItemInput
+import tech.pylons.wallet.core.Core
+import tech.pylons.lib.types.tx.recipe.ItemInput
 import kotlinx.android.synthetic.main.fragment_pylon_central_trade_home.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -70,19 +70,19 @@ class PylonCentralTradeHomeFragment : Fragment() {
         currentType = type
         val player = model.getPlayer().value
         CoroutineScope(Dispatchers.IO).launch {
-            val tradesResponse = Core.engine.listTrades()
-            val trades = tradesResponse.filter {
+            val tradesResponse = Core.current?.listTrades()
+            val trades = tradesResponse?.filter {
                 !it.completed && !it.disabled && it.extraInfo.contains(Trade.DEFAULT)
             }
             Log.info(trades.toString())
 
-            val list = trades.filter {
+            val list = trades?.filter {
                 if (type == MY_TRADES) {
                     it.sender == player?.address
                 } else {
                     it.sender != player?.address
                 }
-            }.map {
+            }?.map {
                 if (it.itemOutputs.isNotEmpty()) {
                     SellItemTrade(
                         it.id,
@@ -119,7 +119,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
 
             if (c is TradeFragment.OnListFragmentInteractionListener) {
                 withContext(Main) {
-                    view.adapter = MyTradeRecyclerViewAdapter(list, c)
+                    view.adapter = MyTradeRecyclerViewAdapter(list!!, c)
                 }
             }
 
@@ -128,7 +128,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
                     button_market.visibility = View.VISIBLE
                     button_my_trades.visibility = View.GONE
 
-                    if (list.isEmpty()) {
+                    if (list!!.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_my_trades)
                     } else {
                         text_trade_situation.text = resources.getQuantityString(
@@ -141,7 +141,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
                     button_my_trades.visibility = View.VISIBLE
                     button_market.visibility = View.GONE
 
-                    if (list.isEmpty()) {
+                    if (list!!.isEmpty()) {
                         text_trade_situation.text = getString(R.string.trade_situation_no_market)
                     } else {
                         text_trade_situation.text = resources.getQuantityString(

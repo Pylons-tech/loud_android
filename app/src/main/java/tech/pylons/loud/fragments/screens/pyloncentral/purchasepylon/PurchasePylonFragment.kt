@@ -12,7 +12,7 @@ import com.android.billingclient.api.*
 import tech.pylons.loud.R
 import tech.pylons.loud.constants.GameSku.INAPP_SKUS
 import tech.pylons.loud.localdb.LocalDb
-import com.pylons.wallet.core.Core
+import tech.pylons.wallet.core.Core
 import kotlinx.android.synthetic.main.purchase_item.view.*
 import kotlinx.android.synthetic.main.purchase_pylon_fragment.*
 import kotlinx.coroutines.*
@@ -143,9 +143,9 @@ class PurchasePylonFragment : Fragment() {
 
             val pendingPurchases = mutableListOf<Purchase>()
             cachedPurchases.forEach {
-                val exists = Core.engine.checkGoogleIapOrder(it.purchaseToken)
+                val exists = Core.current?.engine?.checkGoogleIapOrder(it.purchaseToken)
 
-                if (exists) {
+                if (exists!!) {
                     Log.info("purchase exists delete local")
                     localCacheClient.purchaseDao().delete(it)
                 } else {

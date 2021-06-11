@@ -1,7 +1,7 @@
 package tech.pylons.loud.utils
 
 import tech.pylons.loud.BuildConfig
-import com.pylons.wallet.core.Core
+import tech.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Backend
 import com.pylons.wallet.core.types.Config
 import java.util.logging.Logger
@@ -42,7 +42,7 @@ object CoreController {
     }
 
     fun getItemById(id: String): tech.pylons.lib.types.tx.item.Item? {
-        val profile = Core.engine.getOwnBalances()
+        val profile = Core.current?.getOwnBalances()
         return profile?.items?.find { it.id == id }
     }
 }

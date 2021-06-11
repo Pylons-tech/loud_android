@@ -46,7 +46,7 @@ import tech.pylons.loud.models.trade.CharacterSpec
 import tech.pylons.loud.models.trade.MaterialSpec
 import tech.pylons.loud.models.trade.Spec
 import tech.pylons.loud.models.trade.WeaponSpec
-import com.pylons.wallet.core.types.tx.recipe.*
+import tech.pylons.lib.types.tx.recipe.*
 import tech.pylons.lib.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.create_trade_buy.*
 import kotlinx.android.synthetic.main.create_trade_confirm.*

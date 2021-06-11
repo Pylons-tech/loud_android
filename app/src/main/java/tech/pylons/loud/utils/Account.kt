@@ -6,7 +6,7 @@ import android.content.Intent
 import tech.pylons.loud.R
 import tech.pylons.loud.activities.GameScreenActivity
 import tech.pylons.loud.models.User
-import com.pylons.wallet.core.Core
+import tech.pylons.wallet.core.Core
 import com.pylons.wallet.core.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
@@ -24,14 +24,14 @@ object Account {
         } else {
             // no keys get account keys
             CoroutineScope(Dispatchers.IO).launch {
-                val tx = Core.engine.registerNewProfile(username, null)
+                val tx = Core.current?.registerNewProfile(username, null)
                 tx.submit()
                 Log.info(tx?.toString())
            //     Log.info(tx.id)
                 delay(5000)
-                Core.engine.getOwnBalances()
+                Core.current?.getOwnBalances()
 
-                val tx2 = Core.engine.getPylons(500)
+                val tx2 = Core.current?.getPylons(500)
                 tx2.submit()
                 delay(5000)
 
@@ -94,16 +94,16 @@ object Account {
     }
 
     private suspend fun createAccount(): Profile? {
-        val tx = Core.engine.createChainAccount()
+        val tx = Core.current?.createChainAccount()
         tx.submit()
         // TODO("Remove delay, walletcore should handle it")
         delay(5000)
-        Core.engine.getOwnBalances()
+        Core.current?.getOwnBalances()
 
-        val tx2 = Core.engine.getPylons(500)
+        val tx2 = Core.current?.getPylons(500)
         tx2.submit()
         delay(5000)
-        return Core.engine.getOwnBalances()
+        return Core.current?.getOwnBalances()
     }
 
     private fun setupWithKeys(context: Context, username: String, playerKeys: String) {
@@ -126,7 +126,7 @@ object Account {
 
         CoroutineScope(Dispatchers.IO).launch {
             CoreController.bootstrapCore()
-            var profile = Core.engine.getOwnBalances()
+            var profile = Core.current?.getOwnBalances()
             Log.info(profile.toString())
 
             // I have keys but no account on chain

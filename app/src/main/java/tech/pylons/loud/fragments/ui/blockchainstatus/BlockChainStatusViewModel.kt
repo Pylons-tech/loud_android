@@ -3,7 +3,7 @@ package tech.pylons.loud.fragments.ui.blockchainstatus
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.pylons.wallet.core.Core
+import tech.pylons.wallet.core.Core
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.withContext
 
@@ -20,7 +20,7 @@ class BlockChainStatusViewModel : ViewModel() {
     }
 
     suspend fun getStatusBlock() {
-        val statusBlock = Core.engine.getStatusBlock()
+        val statusBlock = Core.current?.getStatusBlock()
         withContext(Main) {
             _blockHeight.value = statusBlock.height
         }
