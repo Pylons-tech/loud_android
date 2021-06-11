@@ -7,7 +7,7 @@ import tech.pylons.loud.models.Weapon
 import com.pylons.wallet.core.engine.TxPylonsEngine
 import tech.pylons.lib.types.tx.Coin
 import com.pylons.wallet.core.types.LockedCoinDetails
-import com.pylons.wallet.core.types.Profile
+import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.tx.item.Item
 import org.junit.Test
 import org.junit.Assert.*

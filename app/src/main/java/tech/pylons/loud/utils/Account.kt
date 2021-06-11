@@ -7,7 +7,7 @@ import tech.pylons.loud.R
 import tech.pylons.loud.activities.GameScreenActivity
 import tech.pylons.loud.models.User
 import tech.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.Profile
+import tech.pylons.lib.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.*
@@ -24,15 +24,16 @@ object Account {
         } else {
             // no keys get account keys
             CoroutineScope(Dispatchers.IO).launch {
-                val tx = Core.current?.registerNewProfile(username, null)
-                tx.submit()
+//                val tx = Core.current?.registerNewProfile(username, null)
+                val tx = Core.current?.newProfile(username, null)
+                tx?.submit()
                 Log.info(tx?.toString())
            //     Log.info(tx.id)
-                delay(5000)
-                Core.current?.getOwnBalances()
+//                delay(5000)
+//                Core.current?.getOwnBalances()
 
                 val tx2 = Core.current?.getPylons(500)
-                tx2.submit()
+                tx2?.submit()
                 delay(5000)
 
                 val playerKeys = CoreController.dumpUserData()
@@ -93,19 +94,18 @@ object Account {
         }
     }
 
-    private suspend fun createAccount(): Profile? {
-        val tx = Core.current?.createChainAccount()
-        tx.submit()
-        // TODO("Remove delay, walletcore should handle it")
-        delay(5000)
-        Core.current?.getOwnBalances()
+    @ExperimentalUnsignedTypes
+    private fun createAccount(username:String): Profile? {
+        //add new core to Multicore
+
+        val tx = Core.current?.newProfile(username, null)
+        //Core.engine.getOwnBalances()
 
         val tx2 = Core.current?.getPylons(500)
-        tx2.submit()
-        delay(5000)
-        return Core.current?.getOwnBalances()
+        return Core.current?.getProfile(null)
     }
 
+    @ExperimentalUnsignedTypes
     private fun setupWithKeys(context: Context, username: String, playerKeys: String) {
         CoreController.setUserData(playerKeys)
 
@@ -126,13 +126,13 @@ object Account {
 
         CoroutineScope(Dispatchers.IO).launch {
             CoreController.bootstrapCore()
-            var profile = Core.current?.getOwnBalances()
+            var profile = Core.current?.getProfile()
             Log.info(profile.toString())
 
             // I have keys but no account on chain
             // TODO("Remove this check, walletcore should handle this once done")
             if (profile == null) {
-                profile = createAccount()
+                profile = createAccount(username)
             }
 
             if (profile != null) {

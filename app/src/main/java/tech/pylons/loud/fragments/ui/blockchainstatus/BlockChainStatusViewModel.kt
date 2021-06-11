@@ -19,10 +19,12 @@ class BlockChainStatusViewModel : ViewModel() {
 
     }
 
+    @ExperimentalUnsignedTypes
     suspend fun getStatusBlock() {
-        val statusBlock = Core.current?.getStatusBlock()
+        Core.current?.updateStatusBlock()
+        val statusBlock = Core.current?.statusBlock
         withContext(Main) {
-            _blockHeight.value = statusBlock.height
+            _blockHeight.value = statusBlock?.height
         }
     }
 

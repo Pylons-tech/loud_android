@@ -5,7 +5,7 @@ import tech.pylons.loud.R
 import tech.pylons.loud.constants.Coin
 import tech.pylons.loud.constants.Recipe.LOUD_CBID
 import tech.pylons.loud.models.trade.*
-import com.pylons.wallet.core.types.Profile
+import tech.pylons.lib.types.Profile
 import com.squareup.moshi.JsonAdapter
 import com.squareup.moshi.JsonClass
 import com.squareup.moshi.Moshi
@@ -122,7 +122,7 @@ data class User(
         val prevActiveCharacterId = getActiveCharacter()?.id
         val prevActiveWeaponId = getActiveWeapon()?.id
 
-        address = profile.credentials.address
+        address = profile.address
 
         var pylonAmount = 0L
         var goldAmount = 0L
@@ -137,7 +137,7 @@ data class User(
 
         var lockedGold = 0L
         var lockedPylonAmount = 0L
-        profile.lockedCoinDetails.amount.forEach {
+        profile.coins.forEach {
             when (it.denom) {
                 Coin.PYLON -> lockedPylonAmount = it.amount
                 Coin.LOUD -> lockedGold = it.amount

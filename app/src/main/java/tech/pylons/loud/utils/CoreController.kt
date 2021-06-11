@@ -1,9 +1,9 @@
 package tech.pylons.loud.utils
 
-import tech.pylons.loud.BuildConfig
+import tech.pylons.lib.types.Backend
+import tech.pylons.lib.types.Config
 import tech.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.Backend
-import com.pylons.wallet.core.types.Config
+import tech.pylons.wallet.core.Multicore
 import java.util.logging.Logger
 
 /**
@@ -23,14 +23,16 @@ object CoreController {
      * Call setUserData first if user data exists.
      */
     fun bootstrapCore() {
-        Core.start(config, userJson)
+        Multicore.enable(config)
+//        Core.start(config, userJson)
     }
 
     /**
      * Serializes current user-determined core state (keys, etc.) as a JSON string.
      * Store this on the filesystem so you can retrieve it later.
      */
-    fun dumpUserData(): String = Core.backupUserData().orEmpty()
+    @ExperimentalUnsignedTypes
+    fun dumpUserData(): String = Core.current?.backupUserData().orEmpty()
 
     /**
      * Sets the JSON string we're going to pass to the core as an argument when we bootstrap it.
@@ -41,8 +43,9 @@ object CoreController {
         userJson = json
     }
 
+    @ExperimentalUnsignedTypes
     fun getItemById(id: String): tech.pylons.lib.types.tx.item.Item? {
-        val profile = Core.current?.getOwnBalances()
+        val profile = Core.current?.getProfile()
         return profile?.items?.find { it.id == id }
     }
 }
