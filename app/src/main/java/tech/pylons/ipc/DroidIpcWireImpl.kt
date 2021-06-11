@@ -15,7 +15,7 @@ import tech.pylons.loud.services.WalletInitializer
 class DroidIpcWireImpl : DroidIpcWire() {
 
     companion object {
-        private const val TAG: String = "Pylons/Easel"
+        private const val TAG: String = "Pylons/" + BuildConfig.APP_NAME
 
         init {
             implementation = DroidIpcWireImpl()

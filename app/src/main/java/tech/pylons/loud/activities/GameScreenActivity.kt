@@ -84,9 +84,10 @@ import tech.pylons.loud.utils.Preferences.getFriendAddress
 import tech.pylons.loud.utils.RenderText.getFightIcon
 import tech.pylons.loud.utils.UI.displayLoading
 import tech.pylons.loud.utils.UI.displayMessage
-import com.pylons.wallet.core.Core
-import com.pylons.wallet.core.types.Coin
-import com.pylons.wallet.core.types.Transaction
+import tech.pylons.wallet.core.Core
+import tech.pylons.wallet.Constants.Coin
+//import com.pylons.wallet.core.types.Coin
+import tech.pylons.lib.types.Transaction
 import com.pylons.wallet.core.types.tx.recipe.CoinInput
 import com.pylons.wallet.core.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*

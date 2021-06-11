@@ -18,6 +18,7 @@ import java.util.ArrayList
 import kotlinx.coroutines.*
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
+import tech.pylons.loud.BuildConfig
 
 
 class LoginActivity : AppCompatActivity() {
@@ -70,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             if (nftRecipe != null) {
                 runBlocking {
                     launch(Dispatchers.IO) {
-                        WalletInitializer.getWallet().executeRecipe(nftRecipe.name, "Easel_autocookbook_cosmos1n5euj3rmtm3yvwc8afcjtfnprtt7y9xv2pmm4Q", listOf()) {
+                        WalletInitializer.getWallet().executeRecipe(nftRecipe.name, BuildConfig.APP_NAME + "_autocookbook_cosmos1n5euj3rmtm3yvwc8afcjtfnprtt7y9xv2pmm4Q", listOf()) {
                                 if (it?.code == Transaction.ResponseCode.OK)
                                     Log.i("Execute executeRecipe succes with code ", it.code.toString())
                             }

@@ -317,11 +317,11 @@ class WalletNftService {
                 }
             }
 
-            //get Easel Cookbook
+            //get LOUD Cookbook
             //second cookbook creation always fails wtf.
-            //val Easel_cookbook_name = "${appName}_autocookbook_${userProfile?.address}"
+            //val LOUD_cookbook_name = "${appName}_autocookbook_${userProfile?.address}"
             //Companion.userCookbook = Companion.userCookbooks.find{
-            //    it.name == Easel_cookbook_name
+            //    it.name == LOUD_cookbook_name
             //}
             if (userCookbooks.isNotEmpty()) {
                 userCookbook = userCookbooks.get(0)
@@ -389,7 +389,7 @@ class WalletNftService {
     fun createAutoCookbook(context:Context?, profile:Profile?) {
         runBlocking {
             launch {
-                WalletInitializer.getWallet().createAutoCookbook(profile!!, "Easel", onCreateAutoCookbook(context))
+                WalletInitializer.getWallet().createAutoCookbook(profile!!, BuildConfig.APP_NAME, onCreateAutoCookbook(context))
             }
         }
     }
@@ -519,7 +519,7 @@ class WalletNftService {
                 //create cookbook
                 runBlocking {
                     launch {
-                        WalletInitializer.getWallet().createAutoCookbook(profile!!, "Easel") {
+                        WalletInitializer.getWallet().createAutoCookbook(profile!!, BuildConfig.APP_NAME) {
                             if (it != null) {
 
                             }

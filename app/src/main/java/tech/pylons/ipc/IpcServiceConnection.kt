@@ -7,11 +7,12 @@ import android.content.ServiceConnection
 import android.os.IBinder
 import android.util.Log
 import tech.pylons.ipc.IIpcInterface.Stub
+import tech.pylons.loud.BuildConfig
 
 class IpcServiceConnection(ctx: Context) : ServiceConnection {
 
     private var isServiceBinded: Boolean = false
-    private val TAG: String = "Pylons/Easel"
+    private val TAG: String = "Pylons/" + BuildConfig.APP_NAME
 
     private var context: Context? = ctx
 
@@ -20,7 +21,7 @@ class IpcServiceConnection(ctx: Context) : ServiceConnection {
 
     fun getFromWallet(): String? {
         val msg =  iIpcService!!.wallet2easel()
-        println("getFromWallet ${msg}")
+        println("getFromWallet $msg")
         return msg
     }
 
@@ -50,10 +51,6 @@ class IpcServiceConnection(ctx: Context) : ServiceConnection {
         Log.i(TAG, "Bind")
         val serviceIntent = Intent("tech.pylons.wallet.ipc.BIND")
         serviceIntent.setPackage("tech.pylons.wallet")
-        /*val serviceIntent = Intent()
-            .setComponent(ComponentName(
-                "tech.pylons.wallet",
-                "tech.pylons.wallet.ipc.IpcService"))*/
         context!!.bindService(serviceIntent, this, Context.BIND_AUTO_CREATE)
     }
 
