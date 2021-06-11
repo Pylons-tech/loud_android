@@ -143,6 +143,7 @@ class CreateTradeFragment : Fragment() {
                                 LOUD_CBID,
                                 ItemInput(
                                     "",
+                                    ConditionList(listOf(), listOf(), listOf()),
                                     listOf(
                                         DoubleInputParam(
                                             "XP",
@@ -174,6 +175,7 @@ class CreateTradeFragment : Fragment() {
                                 LOUD_CBID,
                                 ItemInput(
                                     "",
+                                    ConditionList(listOf(), listOf(), listOf()),
                                     listOf(),
                                     listOf(
                                         LongInputParam(
@@ -194,6 +196,7 @@ class CreateTradeFragment : Fragment() {
                                 LOUD_CBID,
                                 ItemInput(
                                     "",
+                                    ConditionList(listOf(), listOf(), listOf()),
                                     listOf(),
                                     listOf(
                                         LongInputParam(
