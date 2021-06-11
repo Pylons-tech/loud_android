@@ -14,6 +14,17 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import tech.pylons.lib.types.tx.trade.TradeItemInput
+import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
+import kotlinx.android.synthetic.main.content_game_screen.*
+import kotlinx.android.synthetic.main.dialog_input_text.view.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import tech.pylons.lib.types.Transaction
+import tech.pylons.lib.types.tx.Coin
+import tech.pylons.lib.types.tx.recipe.CoinInput
+import tech.pylons.lib.types.tx.recipe.Recipe
 import tech.pylons.loud.R
 import tech.pylons.loud.constants.FightId.ID_ACID_GIANT
 import tech.pylons.loud.constants.FightId.ID_FIRE_GIANT
@@ -60,16 +71,16 @@ import tech.pylons.loud.constants.Recipe.RCP_WOODEN_SWORD_UPGRADE
 import tech.pylons.loud.fragments.lists.character.CharacterFragment
 import tech.pylons.loud.fragments.lists.fight.FightFragment
 import tech.pylons.loud.fragments.lists.friend.FriendFragment
-import tech.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
 import tech.pylons.loud.fragments.lists.item.ItemFragment
-import tech.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment
-import tech.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
-import tech.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import tech.pylons.loud.fragments.lists.itemspec.ItemSpecFragment
 import tech.pylons.loud.fragments.lists.trade.TradeFragment
+import tech.pylons.loud.fragments.screens.forest.ForestFightPreviewFragment
+import tech.pylons.loud.fragments.screens.pyloncentral.CreateTradeFragment
+import tech.pylons.loud.fragments.screens.pyloncentral.PylonCentralHomeFragment
 import tech.pylons.loud.fragments.screens.pyloncentral.purchasepylon.PurchasePylonFragment
 import tech.pylons.loud.fragments.screens.senditem.SendItemConfirmFragment
 import tech.pylons.loud.fragments.screens.senditem.SendItemViewModel
+import tech.pylons.loud.fragments.screens.setting.SettingsScreenFragment
 import tech.pylons.loud.fragments.ui.BottomNavigationFragment
 import tech.pylons.loud.fragments.ui.PlayerStatusFragment
 import tech.pylons.loud.fragments.ui.blockchainstatus.BlockChainStatusViewModel
@@ -85,19 +96,6 @@ import tech.pylons.loud.utils.RenderText.getFightIcon
 import tech.pylons.loud.utils.UI.displayLoading
 import tech.pylons.loud.utils.UI.displayMessage
 import tech.pylons.wallet.core.Core
-import tech.pylons.wallet.Constants.Coin
-//import com.pylons.wallet.core.types.Coin
-import tech.pylons.lib.types.Transaction
-import com.pylons.wallet.core.types.tx.recipe.CoinInput
-import com.pylons.wallet.core.types.tx.trade.TradeItemInput
-import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
-
-import kotlinx.android.synthetic.main.content_game_screen.*
-import kotlinx.android.synthetic.main.dialog_input_text.view.*
-import kotlinx.coroutines.*
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
-import tech.pylons.lib.types.tx.recipe.Recipe
 import java.util.*
 import java.util.logging.Logger
 import kotlin.concurrent.fixedRateTimer
@@ -125,7 +123,7 @@ class GameScreenActivity : AppCompatActivity(),
         lateinit var fightPreview: Fight
         var shopAction = 0
         private val tradeInput = MutableLiveData<ItemSpec>()
-        private val tradeOutput = MutableLiveData<com.pylons.wallet.core.types.tx.item.Item>()
+        private val tradeOutput = MutableLiveData<tech.pylons.lib.types.tx.item.Item>()
         lateinit var trade: Trade
         lateinit var tradeBuyMatchingItems: List<Item>
 
@@ -153,11 +151,11 @@ class GameScreenActivity : AppCompatActivity(),
             tradeInput.value = item
         }
 
-        fun getTradeOutput(): MutableLiveData<com.pylons.wallet.core.types.tx.item.Item> {
+        fun getTradeOutput(): MutableLiveData<tech.pylons.lib.types.tx.item.Item> {
             return tradeOutput
         }
 
-        fun setTradeOutput(item: com.pylons.wallet.core.types.tx.item.Item?) {
+        fun setTradeOutput(item: tech.pylons.lib.types.tx.item.Item?) {
             tradeOutput.value = item
         }
     }
@@ -955,7 +953,7 @@ class GameScreenActivity : AppCompatActivity(),
         coinInput: List<CoinInput>,
         itemInput: List<TradeItemInput>,
         coinOutput: List<Coin>,
-        itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
+        itemOutput: List<tech.pylons.lib.types.tx.item.Item>,
         extraInfo: String
     ) {
         val loading =

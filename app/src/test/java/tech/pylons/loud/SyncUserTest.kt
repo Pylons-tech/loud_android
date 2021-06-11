@@ -5,10 +5,10 @@ import tech.pylons.loud.models.Material
 import tech.pylons.loud.models.User
 import tech.pylons.loud.models.Weapon
 import com.pylons.wallet.core.engine.TxPylonsEngine
-import com.pylons.wallet.core.types.Coin
+import tech.pylons.lib.types.tx.Coin
 import com.pylons.wallet.core.types.LockedCoinDetails
 import com.pylons.wallet.core.types.Profile
-import com.pylons.wallet.core.types.tx.item.Item
+import tech.pylons.lib.types.tx.item.Item
 import org.junit.Test
 import org.junit.Assert.*
 

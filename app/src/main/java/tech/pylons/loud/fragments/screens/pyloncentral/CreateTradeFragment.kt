@@ -47,7 +47,7 @@ import tech.pylons.loud.models.trade.MaterialSpec
 import tech.pylons.loud.models.trade.Spec
 import tech.pylons.loud.models.trade.WeaponSpec
 import com.pylons.wallet.core.types.tx.recipe.*
-import com.pylons.wallet.core.types.tx.trade.TradeItemInput
+import tech.pylons.lib.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.create_trade_buy.*
 import kotlinx.android.synthetic.main.create_trade_confirm.*
 import kotlinx.android.synthetic.main.create_trade_sell.*
@@ -65,8 +65,8 @@ class CreateTradeFragment : Fragment() {
 
     private var coinInput = listOf<CoinInput>()
     private var itemInput = listOf<TradeItemInput>()
-    private var coinOutput = listOf<com.pylons.wallet.core.types.Coin>()
-    private var itemOutput = listOf<com.pylons.wallet.core.types.tx.item.Item>()
+    private var coinOutput = listOf<tech.pylons.lib.types.tx.Coin>()
+    private var itemOutput = listOf<tech.pylons.lib.types.tx.item.Item>()
     private var extraInfo = Trade.DEFAULT
     private lateinit var itemBuyFragment: ItemSpecFragment
     private lateinit var characterSellFragment: CharacterFragment
@@ -114,8 +114,8 @@ class CreateTradeFragment : Fragment() {
         fun onCreateTrade(
             coinInput: List<CoinInput>,
             itemInput: List<TradeItemInput>,
-            coinOutput: List<com.pylons.wallet.core.types.Coin>,
-            itemOutput: List<com.pylons.wallet.core.types.tx.item.Item>,
+            coinOutput: List<tech.pylons.lib.types.tx.Coin>,
+            itemOutput: List<tech.pylons.lib.types.tx.item.Item>,
             extraInfo: String
         )
     }
@@ -460,7 +460,7 @@ class CreateTradeFragment : Fragment() {
                 if (amount.isNotBlank() && amount.toLong() >= MINIMUM_TRADE_PRICE && amount.toLong() <= player?.unlockedPylon ?: -1
                 ) {
                     coinOutput = listOf(
-                        com.pylons.wallet.core.types.Coin(
+                        tech.pylons.lib.types.tx.Coin(
                             Coin.PYLON,
                             amount.toLong()
                         )
@@ -513,7 +513,7 @@ class CreateTradeFragment : Fragment() {
                     val player = model.getPlayer().value
                     if (amount.isNotBlank() && amount.toLong() > 0 && amount.toLong() <= player?.unlockedGold ?: -1) {
                         coinOutput = listOf(
-                            com.pylons.wallet.core.types.Coin(
+                            tech.pylons.lib.types.tx.Coin(
                                 Coin.LOUD,
                                 amount.toLong()
                             )
