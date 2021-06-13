@@ -3,7 +3,6 @@ package tech.pylons.loud.services
 import android.content.Context
 import android.content.pm.PackageManager
 import androidx.startup.Initializer
-import tech.pylons.ipc.DroidIpcWireImpl
 import tech.pylons.ipc.IpcServiceConnection
 import tech.pylons.lib.Wallet
 import java.lang.ref.WeakReference
@@ -11,23 +10,24 @@ import java.lang.ref.WeakReference
 class WalletInitializer : Initializer<Wallet> {
 
     /**
+     *
      * - Initialize AndroidWallet instance
+     *
      * - Bind IPC service connection with Wallet-UI
+     *
      */
-
     override fun create(context: Context): Wallet {
         if (instance == null) {
-            //non implemented api
-            //init WalletAndroid
-            _DroidIpcWireImpl = DroidIpcWireImpl()
             instance = Wallet.android()
         }
 
         isWalletInitialized = true
+
         ipcServiceConnection = WeakReference(IpcServiceConnection(context))
         if (ifWalletExists(context)) {
             ipcServiceConnection!!.get()!!.bind() // do bind here
         }
+
         return instance as Wallet
     }
 
@@ -37,7 +37,6 @@ class WalletInitializer : Initializer<Wallet> {
 
     companion object {
         var instance: Wallet? = null
-        var _DroidIpcWireImpl: DroidIpcWireImpl? = null
         var isWalletInitialized: Boolean = false
 
         var ipcServiceConnection: WeakReference<IpcServiceConnection>? = null
@@ -53,7 +52,8 @@ class WalletInitializer : Initializer<Wallet> {
                 true
             } catch (e: PackageManager.NameNotFoundException) {
                 false
-            } else
+            }
+        else
             false
     }
 }

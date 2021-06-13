@@ -1,5 +1,6 @@
 package tech.pylons.loud.activities
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -66,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         if (user != null) {
             initAccount(this, user.name)
         } else {
-            goToLogin()
+            goToGame(this)
         }
     }
 
@@ -74,5 +75,13 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
         finish()
+    }
+
+    private fun goToGame(context: Context) {
+        with(context) {
+            val intent = Intent(this, GameScreenActivity::class.java)
+            startActivity(intent)
+            (this as Activity).finish()
+        }
     }
 }

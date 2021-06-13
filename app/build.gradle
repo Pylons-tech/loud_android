@@ -32,11 +32,11 @@ android {
     flavorDimensions "default"
     productFlavors {
         dev {
-            buildConfigField "String", "API_URL", '"http://35.238.123.59"'
+            buildConfigField "String", "API_URL", '"https://api.testnet.pylons.tech"'
         }
-        local {
-            buildConfigField "String", "API_URL", '"http://192.168.1.69:1317"'
-        }
+//        local {
+//            buildConfigField "String", "API_URL", '"http://192.168.1.69:1317"'
+//        }
     }
 
 // To inline the bytecode built with JVM target 1.8 into

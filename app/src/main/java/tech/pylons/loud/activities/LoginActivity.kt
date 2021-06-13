@@ -24,6 +24,7 @@ import tech.pylons.loud.BuildConfig
 class LoginActivity : AppCompatActivity() {
     private var loading: AlertDialog? = null
 
+    @ExperimentalUnsignedTypes
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -46,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
         loading?.dismiss()
     }
 
-    fun executeRecipe() {
-        var recipes = ArrayList<Recipe>()
+    private fun executeRecipe() {
+        val recipes = ArrayList<Recipe>()
         try {
             runBlocking {
                 launch(Dispatchers.IO) {
@@ -67,7 +68,7 @@ class LoginActivity : AppCompatActivity() {
         }
 
         try {
-            var nftRecipe = recipes.find { it.name == "test NFT recipe" }
+            val nftRecipe = recipes.find { it.name == "test NFT recipe" }
             if (nftRecipe != null) {
                 runBlocking {
                     launch(Dispatchers.IO) {

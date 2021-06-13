@@ -2,6 +2,7 @@ package tech.pylons.loud.utils
 
 import tech.pylons.lib.types.Backend
 import tech.pylons.lib.types.Config
+import tech.pylons.loud.BuildConfig
 import tech.pylons.wallet.core.Core
 import tech.pylons.wallet.core.Multicore
 import java.util.logging.Logger
@@ -14,7 +15,7 @@ object CoreController {
 
     private val config = Config(
         Backend.LIVE_DEV,
-        listOf(tech.pylons.loud.BuildConfig.API_URL)
+        listOf(BuildConfig.API_URL)
     ) // should list real ips for remote notes, ask mike for that
     private var userJson = ""
 

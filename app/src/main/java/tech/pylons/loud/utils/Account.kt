@@ -17,6 +17,7 @@ import java.util.logging.Logger
 object Account {
     private val Log = Logger.getLogger(Account::class.java.name)
 
+    @ExperimentalUnsignedTypes
     fun initAccount(context: Context, username: String) {
         val playerKeys = getPlayerKeys(context, username)
         if (playerKeys != null) {
@@ -24,19 +25,18 @@ object Account {
         } else {
             // no keys get account keys
             CoroutineScope(Dispatchers.IO).launch {
-//                val tx = Core.current?.registerNewProfile(username, null)
-                val tx = Core.current?.newProfile(username, null)
+                val tx = Core.current?.engine?.registerNewProfile(username, null)
                 tx?.submit()
                 Log.info(tx?.toString())
-           //     Log.info(tx.id)
-//                delay(5000)
-//                Core.current?.getOwnBalances()
+                //     Log.info(tx.id)
+                delay(5000)
+                Core.current?.getProfile()
 
                 val tx2 = Core.current?.getPylons(500)
                 tx2?.submit()
                 delay(5000)
-
                 val playerKeys = CoreController.dumpUserData()
+
                 Log.info(playerKeys)
                 savePlayerKeys(context, username, playerKeys)
                 setupWithKeys(context, username, playerKeys)
@@ -102,7 +102,7 @@ object Account {
         //Core.engine.getOwnBalances()
 
         val tx2 = Core.current?.getPylons(500)
-        return Core.current?.getProfile(null)
+        return Core.current?.getProfile()
     }
 
     @ExperimentalUnsignedTypes
@@ -125,7 +125,7 @@ object Account {
         )
 
         CoroutineScope(Dispatchers.IO).launch {
-            CoreController.bootstrapCore()
+//            CoreController.bootstrapCore()
             var profile = Core.current?.getProfile()
             Log.info(profile.toString())
 
