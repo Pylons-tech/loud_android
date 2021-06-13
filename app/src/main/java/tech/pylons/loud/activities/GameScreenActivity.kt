@@ -592,12 +592,12 @@ class GameScreenActivity : AppCompatActivity(),
         syncProfile()
 
         val id = tx.id
-        return if (id != null) ({
+        return if (id != null) {
             Log.info(tx.id)
             val txResult = Core.current?.getTransaction(id)
             Log.info(txResult.toString())
-            txResult
-        })!! else {
+            txResult!!
+        } else {
             tx
         }
     }
@@ -977,7 +977,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.current?.createTrade(
+                Core.current?.engine?.createTrade(
                     coinInput,
                     itemInput,
                     coinOutput,
@@ -1125,7 +1125,7 @@ class GameScreenActivity : AppCompatActivity(),
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
             val name = mDialogView.edit_text.text.toString()
             if (name.isNotBlank()) {
-//                onRenameCharacter(character, name)
+                onRenameCharacter(character, name)
                 alert.dismiss()
             } else {
                 Toast.makeText(this, getString(R.string.enter_valid_name), Toast.LENGTH_SHORT)
@@ -1134,7 +1134,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
     }
 
-    /*@ExperimentalUnsignedTypes
+    @ExperimentalUnsignedTypes
     private fun onRenameCharacter(character: Character, name: String) {
         val loading =
             displayLoading(
@@ -1143,7 +1143,7 @@ class GameScreenActivity : AppCompatActivity(),
             )
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.current?.setItemFieldString(character.id, "Name", name)
+                Core.current?.engine?.setItemFieldString(character.id, "Name", name)!!
             }
 
             withContext(Main) {
@@ -1162,8 +1162,9 @@ class GameScreenActivity : AppCompatActivity(),
             }
         }
 
-    }*/
+    }
 
+    @ExperimentalUnsignedTypes
     override fun onItemTradeBuy(item: Item) {
         promptTrade(model.trade, listOf(item.id))
     }
@@ -1218,13 +1219,14 @@ class GameScreenActivity : AppCompatActivity(),
         findNavController(R.id.nav_host_fragment_send_item).navigate(R.id.sendItemConfirmFragment)
     }
 
+    @ExperimentalUnsignedTypes
     override fun onSendItems(friendAddress: String, itemIds: List<Item>) {
         val player = model.getPlayer().value
         player?.let {
             val loading = displayLoading(this, getString(R.string.send_items_loading))
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.current?.sendItems(player.address, friendAddress, itemIds.map { it.id })
+                    Core.current?.engine?.sendItems(player.address, /*listOf(friendAddress),*/ itemIds.map { it.id })!!
                 }
 
                 withContext(Main) {
