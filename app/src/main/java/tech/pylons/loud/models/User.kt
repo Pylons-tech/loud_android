@@ -90,7 +90,7 @@ data class User(
 
             val moshi = Moshi.Builder().build()
             val jsonAdapter: JsonAdapter<User> =
-                moshi.adapter<User>(User::class.java)
+                moshi.adapter(User::class.java)
             val json = jsonAdapter.toJson(player)
 
             with(sharedPref.edit()) {
@@ -108,7 +108,7 @@ data class User(
             )
             val moshi = Moshi.Builder().build()
             val jsonAdapter: JsonAdapter<User> =
-                moshi.adapter<User>(User::class.java)
+                moshi.adapter(User::class.java)
             val json = jsonAdapter.toJson(player)
 
             with(sharedPref.edit()) {
@@ -165,16 +165,16 @@ data class User(
                     val character = Character(
                         it.id,
                         it.strings["Name"] ?: "",
-                        it.longs["level"] ?: 0,
+                        it.longs["level"]?.toLong() ?: 0,
                         0.0,
                         0,
                         it.lastUpdate,
                         0,
-                        it.doubles["XP"] ?: 0.0,
-                        it.longs["GiantKill"] ?: 0,
-                        it.longs["Special"] ?: 0,
-                        it.longs["SpecialDragonKill"] ?: 0,
-                        it.longs["UndeadDragonKill"] ?: 0,
+                        it.doubles["XP"]?.toDouble() ?: 0.0,
+                        it.longs["GiantKill"]?.toLong() ?: 0,
+                        it.longs["Special"]?.toLong() ?: 0,
+                        it.longs["SpecialDragonKill"]?.toLong() ?: 0,
+                        it.longs["UndeadDragonKill"]?.toLong() ?: 0,
                         lockedTo
                     )
                     characters.add(character)
@@ -184,9 +184,9 @@ data class User(
                         val weapon = Weapon(
                             it.id,
                             it.strings["Name"] ?: "",
-                            it.longs["level"] ?: 0,
-                            it.doubles["attack"] ?: 0.0,
-                            it.longs["value"] ?: 0,
+                            it.longs["level"]?.toLong() ?: 0,
+                            it.doubles["attack"]?.toDouble() ?: 0.0,
+                            it.longs["value"]?.toLong() ?: 0,
                             0,
                             listOf(),
                             it.lastUpdate,
@@ -197,9 +197,9 @@ data class User(
                         val material = Material(
                             it.id,
                             it.strings["Name"] ?: "",
-                            it.longs["level"] ?: 0,
-                            it.doubles["attack"] ?: 0.0,
-                            it.longs["value"] ?: 0,
+                            it.longs["level"]?.toLong() ?: 0,
+                            it.doubles["attack"]?.toDouble() ?: 0.0,
+                            it.longs["value"]?.toLong() ?: 0,
                             it.lastUpdate,
                             lockedTo
                         )

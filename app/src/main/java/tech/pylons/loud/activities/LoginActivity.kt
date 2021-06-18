@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
             initAccount(this, username)
         }
 
-        executeRecipe()
+//        executeRecipe()
     }
 
     override fun onDestroy() {

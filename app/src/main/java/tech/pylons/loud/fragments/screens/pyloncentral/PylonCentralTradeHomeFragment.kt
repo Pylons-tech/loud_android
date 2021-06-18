@@ -66,6 +66,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
         }
     }
 
+    @ExperimentalUnsignedTypes
     private fun getTrades(type: Int) {
         currentType = type
         val player = model.getPlayer().value
@@ -89,7 +90,7 @@ class PylonCentralTradeHomeFragment : Fragment() {
                         CoinInput(it.coinInputs[0].coin, it.coinInputs[0].count),
                         ItemOutput(
                             it.itemOutputs[0].strings["Name"] ?: "",
-                            it.itemOutputs[0].longs["level"] ?: 0
+                            it.itemOutputs[0].longs["level"]?.toLong() ?: 0L
                         ),
                         it.sender == player?.address,
                         it.sender
