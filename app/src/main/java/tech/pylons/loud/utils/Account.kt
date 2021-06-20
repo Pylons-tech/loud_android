@@ -82,7 +82,7 @@ object Account {
                 try {
                     val moshi = Moshi.Builder().build()
                     val jsonAdapter: JsonAdapter<User> =
-                        moshi.adapter<User>(User::class.java)
+                        moshi.adapter(User::class.java)
 
                     return jsonAdapter.fromJson(playerJSON)!!
                 } catch (ex: Exception) {
@@ -160,7 +160,7 @@ object Account {
         }
     }
 
-    private fun goToGame(context: Context) {
+    fun goToGame(context: Context) {
         with(context) {
             val intent = Intent(this, GameScreenActivity::class.java)
             startActivity(intent)

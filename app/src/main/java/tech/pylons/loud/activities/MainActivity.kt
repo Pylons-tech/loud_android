@@ -1,14 +1,12 @@
 package tech.pylons.loud.activities
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tech.pylons.loud.R
+import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.Account.getCurrentUser
-import tech.pylons.loud.utils.Account.initAccount
 import tech.pylons.loud.utils.CoreController
 import tech.pylons.loud.utils.Preferences.setFriendAddress
 import java.util.logging.Logger
@@ -65,23 +63,10 @@ class MainActivity : AppCompatActivity() {
 
         val user = getCurrentUser(this)
         if (user != null) {
-            initAccount(this, user.name)
+//            Account.initAccount(this, user.name)
         } else {
-            goToGame(this)
+            Account.goToGame(this)
         }
     }
 
-    private fun goToLogin() {
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivity(intent)
-        finish()
-    }
-
-    private fun goToGame(context: Context) {
-        with(context) {
-            val intent = Intent(this, GameScreenActivity::class.java)
-            startActivity(intent)
-            (this as Activity).finish()
-        }
-    }
 }

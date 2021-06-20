@@ -9,15 +9,16 @@ import tech.pylons.lib.types.Cookbook
 import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
+import tech.pylons.loud.utils.Account
 import java.math.BigDecimal
 
 
 class WalletNftService {
 
-    companion object{
-        var userProfile:Profile? = null
+    companion object {
+        var userProfile: Profile? = null
         var userCookbooks = mutableListOf<Cookbook>()
-        var userCookbook:Cookbook? = null
+        var userCookbook: Cookbook? = null
         var userNfts = mutableListOf<Recipe>()
         var appName = BuildConfig.APP_NAME
         var appPkgName = BuildConfig.APPLICATION_ID
@@ -38,23 +39,25 @@ class WalletNftService {
      * @param description
      */
     fun createNft(
-        context:Context,
+        context: Context,
         name: String,
         price: String,
         royalty: String,
         quantity: Long,
         url: String,
         description: String,
-        callback: (Boolean)->Unit
+        callback: (Boolean) -> Unit
     ) {
         //if cookbook not created, create cookbook
         if (userCookbook == null) {
             CoroutineScope(Dispatchers.IO).launch {
-                withContext(Dispatchers.Main){
+                withContext(Dispatchers.Main) {
                     if (context != null) {
-                        Toast.makeText(context,
+                        Toast.makeText(
+                            context,
                             "Portfolio not initiated",
-                            Toast.LENGTH_LONG).show()
+                            Toast.LENGTH_LONG
+                        ).show()
 
                     }
                 }
@@ -66,7 +69,8 @@ class WalletNftService {
         }
 
         val NFT_id = name.replace(" ", "_") //NFT Item ID
-        val NFT_recipe_description = "this recipe is to issue NFT: ${name} on NFT Cookbook: ${userCookbook?.name!!}"
+        val NFT_recipe_description =
+            "this recipe is to issue NFT: ${name} on NFT Cookbook: ${userCookbook?.name!!}"
 
 
 
@@ -97,13 +101,19 @@ class WalletNftService {
                                     //Residual% definition
                                     //Pls confirm if this is the right place for Residual defintion
                                     DoubleParam(
-                                        key="Residual%", //this should be reserved keyword for NFT
+                                        key = "Residual%", //this should be reserved keyword for NFT
                                         program = "",
-                                        rate = BigDecimal.valueOf(1).multiply(BigDecimal.valueOf(1000000000000000000)).toString(), //  "1000000000000000000", //"1.0",
+                                        rate = BigDecimal.valueOf(1)
+                                            .multiply(BigDecimal.valueOf(1000000000000000000))
+                                            .toString(), //  "1000000000000000000", //"1.0",
                                         weightRanges = listOf(
                                             DoubleWeightRange(
-                                                upper= royalty.toBigDecimal().multiply(BigDecimal.valueOf(1000000000000000000)).toString(), //"${royalty}000000000000000000",  //20%
-                                                lower = royalty.toBigDecimal().multiply(BigDecimal.valueOf(1000000000000000000)).toString(),
+                                                upper = royalty.toBigDecimal()
+                                                    .multiply(BigDecimal.valueOf(1000000000000000000))
+                                                    .toString(), //"${royalty}000000000000000000",  //20%
+                                                lower = royalty.toBigDecimal()
+                                                    .multiply(BigDecimal.valueOf(1000000000000000000))
+                                                    .toString(),
                                                 weight = 1
                                             )
                                         )
@@ -113,13 +123,15 @@ class WalletNftService {
                                     //NFT Quantity
                                     //Pls confirm if this is the right place for NFT Quantity defintion
                                     LongParam(
-                                        key="Quantity",
+                                        key = "Quantity",
                                         program = "",
-                                        rate = BigDecimal.valueOf(1).multiply(BigDecimal.valueOf(1000000000000000000)).toString(), //"1.0",
+                                        rate = BigDecimal.valueOf(1)
+                                            .multiply(BigDecimal.valueOf(1000000000000000000))
+                                            .toString(), //"1.0",
                                         weightRanges = listOf(
                                             LongWeightRange(
-                                                upper=quantity.toString() , //quantity 10 copies
-                                                lower=quantity.toString(),
+                                                upper = quantity.toString(), //quantity 10 copies
+                                                lower = quantity.toString(),
                                                 weight = 1
                                             )
                                         )
@@ -128,19 +140,25 @@ class WalletNftService {
                                 strings = listOf(
                                     //pls confirm this field
                                     StringParam(
-                                        rate = BigDecimal.valueOf(1).multiply(BigDecimal.valueOf(1000000000000000000)).toString(), // "1.0"
+                                        rate = BigDecimal.valueOf(1)
+                                            .multiply(BigDecimal.valueOf(1000000000000000000))
+                                            .toString(), // "1.0"
                                         key = "Name",
                                         value = name,
                                         program = ""
                                     ),
                                     StringParam(
-                                        rate = BigDecimal.valueOf(1).multiply(BigDecimal.valueOf(1000000000000000000)).toString(), // "1.0"
+                                        rate = BigDecimal.valueOf(1)
+                                            .multiply(BigDecimal.valueOf(1000000000000000000))
+                                            .toString(), // "1.0"
                                         key = "NFT_URL",
                                         value = url,
                                         program = ""
                                     ),
                                     StringParam(
-                                        rate = BigDecimal.valueOf(1).multiply(BigDecimal.valueOf(1000000000000000000)).toString(), // "1.0"
+                                        rate = BigDecimal.valueOf(1)
+                                            .multiply(BigDecimal.valueOf(1000000000000000000))
+                                            .toString(), // "1.0"
                                         key = "Description",
                                         value = description,
                                         program = ""
@@ -159,7 +177,7 @@ class WalletNftService {
                             weight = "1"
                         )
                     )
-                ){
+                ) {
                     val transaction = it
                     var ret = false
                     Log.i("onNftRetrieved()", "Response from Wallet: $it")
@@ -219,11 +237,11 @@ class WalletNftService {
         return {
             val transaction = it
             Log.i("onNftRetrieved()", "Response from Wallet: $it")
-            when(it){
-                null->{
+            when (it) {
+                null -> {
                     //if this is correct logic?
-                    CoroutineScope(Dispatchers.IO).launch{
-                        withContext(Dispatchers.Main){
+                    CoroutineScope(Dispatchers.IO).launch {
+                        withContext(Dispatchers.Main) {
                             Toast.makeText(
                                 context,
                                 "Creating Nft Cancelled!",
@@ -232,7 +250,7 @@ class WalletNftService {
                         }
                     }
                 }
-                else->{
+                else -> {
                     //retrieve NFT list
                     listNfts(context)
 
@@ -244,13 +262,14 @@ class WalletNftService {
                             val code = transaction?.code
                             val raw_log = transaction?.raw_log
 
-                            if(code != Transaction.ResponseCode.OK){
-                                Toast.makeText(context,
+                            if (code != Transaction.ResponseCode.OK) {
+                                Toast.makeText(
+                                    context,
                                     "Creating NFT failed: ${raw_log}",
-                                    Toast.LENGTH_LONG).show()
+                                    Toast.LENGTH_LONG
+                                ).show()
                                 return@withContext
-                            }
-                            else{
+                            } else {
                                 Toast.makeText(
                                     context,
                                     "Successfully Created Nft!",
@@ -267,25 +286,33 @@ class WalletNftService {
 
     /**
      *  Wallet API fetchProfile
+     *  @param context
+     *  @param address if null, default address
+     *  @callback Boolean true if profile exists, else false
      */
-    fun fetchProfile(context: Context?, address: String?) {
+    private fun fetchProfile(context: Context?, address: String?, callback: (Boolean) -> Unit) {
         runBlocking {
             launch {
-                WalletInitializer.getWallet().fetchProfile(address){
+                WalletInitializer.getWallet().fetchProfile(address) {
                     val profile = it
-                    when(profile) {
-                        null->{}
-                        else->{
+                    var ret = false
+                    when (profile) {
+                        null -> {
+                            ret = false
+                        }
+                        else -> {
                             val address = profile.address
                             val items = profile.items
                             val coins = profile.coins
                             userProfile = profile
-
-                            //retrieve cookbook list
-                            //listNfts(context)
-                            listCookbooks(context)
+                            //liveUserData.postValue(profile)
+                            Account.setCurrentAccountUserName(context!!, profile.address)
+                            WalletLiveData.setUserProfile(userProfile)
+                            ret = true
                         }
                     }
+
+                    callback.invoke(ret)
                 }
             }
         }
@@ -296,38 +323,43 @@ class WalletNftService {
      * Wallet API listCookbooks
      * Cookbook naming rule: {appName}_autocookbook_{profileaddress}
      */
-    fun listCookbooks(context: Context?){
-        runBlocking {
-            launch {
-                WalletInitializer.getWallet().listCookbooks(onListCookbooks(context))
+    private fun listCookbooks(context: Context?, callback: (() -> Unit)? = null) {
+        CoroutineScope(Dispatchers.IO).launch {
+            WalletInitializer.getWallet().listCookbooks() {
+                val cookbooks = it
+                if (cookbooks.isNotEmpty()) {
+                    userCookbook = cookbooks.find {
+                        it.sender == userProfile?.address && it.name.startsWith(BuildConfig.APP_NAME)
+                    }
+                }
+                WalletLiveData.setUserCookbook(userCookbook)
+
+                callback?.invoke()
             }
         }
     }
 
-    fun onListCookbooks(context:Context?): (List<Cookbook>)->Unit {
+    /*private fun onListCookbooks(context: Context?): (List<Cookbook>) -> Unit {
         return {
             //get all cookbooks
-            val cookbooks = it
-
-            if (cookbooks.isNotEmpty()) {
+            if (it.isNotEmpty()) {
                 userCookbooks.clear()
-                cookbooks.forEach {
-                    if (it.sender == userProfile?.address)
-                        userCookbooks.add(it)
+                it.forEach { one ->
+                    if (one.sender == userProfile?.address) {
+                        if (one.name.startsWith(BuildConfig.APP_NAME))
+                            userCookbook = one
+
+                        userCookbooks.add(one)
+                    }
                 }
             }
 
-            //get LOUD Cookbook
-            //second cookbook creation always fails wtf.
-            //val LOUD_cookbook_name = "${appName}_autocookbook_${userProfile?.address}"
-            //Companion.userCookbook = Companion.userCookbooks.find{
-            //    it.name == LOUD_cookbook_name
-            //}
-            if (userCookbooks.isNotEmpty()) {
-                userCookbook = userCookbooks.get(0)
-            }
+//            if (userCookbooks.isNotEmpty()) {
+//                userCookbook = userCookbooks.get(0)
+//            }
 
             if (userCookbook != null) {
+
                 //retrieve NFT list
                 listNfts(context)
             } else {
@@ -336,16 +368,16 @@ class WalletNftService {
                 createAutoCookbook(context, userProfile)
             }
         }
-    }
+    }*/
 
     fun buyPylons(context: Context?) {
         CoroutineScope(Dispatchers.IO).launch {
             //loading screen launch
-            WalletInitializer.getWallet().buyPylons(onBuyPylons(context))
+            WalletInitializer.getWallet().buyPylons(onPylonsBought(context))
         }
     }
 
-    fun onBuyPylons(context:Context?):(Transaction?)->Unit {
+    private fun onPylonsBought(context: Context?): (Transaction?) -> Unit {
         //loading screen dismiss
         return {
             val transaction = it
@@ -358,24 +390,34 @@ class WalletNftService {
     /**
      * Wallet API listRecipes
      */
-    fun listNfts(context:Context?){
+    private fun listNfts(context: Context?, callback: ((List<Recipe>) -> Unit)? = null) {
         // recipes
         runBlocking {
             launch {
-                WalletInitializer.getWallet().listRecipes(onListNfts(context))
-
+                WalletInitializer.getWallet().listRecipesBySender() {
+                    val nfts = it
+                    if (nfts.isNotEmpty()) {
+                        userNfts.clear()
+                        nfts.forEach {
+                            if (it.sender == Companion.userProfile?.address)
+                                userNfts.add(it)
+                        }
+                    }
+                    if (callback != null) {
+                        callback.invoke(userNfts.toList())
+                    }
+                }
             }
-
         }
     }
 
-    fun onListNfts(context:Context?): (List<Recipe>)->Unit {
+    fun onListNfts(context: Context?): (List<Recipe>) -> Unit {
         return {
             val nfts = it
             if (nfts.isNotEmpty()) {
                 userNfts.clear()
                 nfts.forEach {
-                    if(it.sender == userProfile?.address)
+                    if (it.sender == userProfile?.address)
                         userNfts.add(it)
                 }
             }
@@ -386,54 +428,97 @@ class WalletNftService {
                 Toast.LENGTH_LONG).show()*/
     }
 
-    fun createAutoCookbook(context:Context?, profile:Profile?) {
-        runBlocking {
-            launch {
-                WalletInitializer.getWallet().createAutoCookbook(profile!!, BuildConfig.APP_NAME, onCreateAutoCookbook(context))
+    private fun createAutoCookbook(
+        context: Context?,
+        profile: Profile?,
+        callback: ((Boolean) -> Unit)? = null
+    ) {
+        CoroutineScope(Dispatchers.IO).launch {
+            var ret = false
+            var message = ""
+            WalletInitializer.getWallet().createAutoCookbook(
+                profile!!,
+                BuildConfig.APP_NAME
+            ) {
+                val transaction = it
+                when (transaction) {
+                    null -> {
+                        message = "Create portfolio failed"
+                        ret = false
+                    }
+                    else -> {
+                        if (transaction.code == Transaction.ResponseCode.OK) {
+                            message = "Create Portfolio Success"
+                            ret = true
+                        } else {
+                            //transaction failed
+                            message =
+                                "Create Portfolio failed raw_log: ${transaction.raw_log}"
+                            ret = false
+                        }
+                    }
+                }
+                //reject or exception handling
+                CoroutineScope(Dispatchers.IO).launch {
+                    withContext(Dispatchers.Main) {
+                        if (context != null) {
+                            Toast.makeText(
+                                context,
+                                message,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        if (callback != null) {
+                            callback.invoke(ret)
+                        }
+                    }
+                }
             }
         }
     }
 
-    fun onCreateAutoCookbook(context:Context?) : (Transaction?)->Unit{
+    fun onCreateAutoCookbook(context: Context?): (Transaction?) -> Unit {
         return {
 
-            val transaction = it
-            when (transaction) {
+            when (val transaction = it) {
                 null -> {
                     //reject or exception handling
-                    if(context != null) {
+                    if (context != null) {
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {
-                                Toast.makeText(context,
+                                Toast.makeText(
+                                    context,
                                     "Create Portfolio failed",
-                                    Toast.LENGTH_LONG).show()
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                     }
                 }
                 else -> {
-                    if(transaction.code == Transaction.ResponseCode.OK){
+                    if (transaction.code == Transaction.ResponseCode.OK) {
                         //transaction ok
                         //retrieve NFT list
                         CoroutineScope(Dispatchers.IO).launch {
                             withContext(Dispatchers.Main) {
-                                Toast.makeText(context,
+                                Toast.makeText(
+                                    context,
                                     "Create Portfolio Success",
-                                    Toast.LENGTH_LONG).show()
+                                    Toast.LENGTH_LONG
+                                ).show()
                             }
                         }
                         listCookbooks(context)
-                    }
-                    else
-                    {
+                    } else {
                         //transaction failed
-
-                        if(context != null) {
+                        if (context != null) {
                             CoroutineScope(Dispatchers.IO).launch {
                                 withContext(Dispatchers.Main) {
-                                    Toast.makeText(context,
+                                    Toast.makeText(
+                                        context,
                                         "Create Portfolio failed raw_log: ${transaction.raw_log}",
-                                        Toast.LENGTH_LONG).show()
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
 
                             }
@@ -445,31 +530,49 @@ class WalletNftService {
         }
     }
 
-
-    fun initUserInfo(context: Context?){
+    fun initUserInfo(context: Context?) {
         CoroutineScope(Dispatchers.IO).launch {
-            if(userProfile == null){
+            if (userProfile == null) {
                 //testCreateNft(context)
-                fetchProfile(context, null)
-
+                fetchProfile(context, null){
+                    when(it) {
+                        true->{
+                            //retrieved profile
+                        }
+                        false->{
+                            //no profile
+                        }
+                    }
+                }
             }
         }
     }
 
-    fun executeRecipe(recipe: String, cookbook:String, itemInputs: List<String>, context: Context) {
+    fun executeRecipe(
+        recipe: String,
+        cookbook: String,
+        itemInputs: List<String>,
+        context: Context
+    ) {
 
         CoroutineScope(Dispatchers.IO).launch {
-            WalletInitializer.getWallet().executeRecipe(recipe, cookbook, itemInputs, callback=onExecuteRecipe(context))
+            WalletInitializer.getWallet()
+                .executeRecipe(
+                    recipe,
+                    cookbook,
+                    itemInputs,
+                    callback = onExecuteRecipe(context)
+                )
         }
     }
 
-    fun onExecuteRecipe(context: Context): (Transaction?)->Unit {
+    fun onExecuteRecipe(context: Context): (Transaction?) -> Unit {
         return {
 
         }
     }
 
-    fun GetWebLink(recipeName:String, recipeId: String): String {
+    fun GetWebLink(recipeName: String, recipeId: String): String {
         return WalletInitializer.getWallet().generateWebLink(recipeName, recipeId)
     }
 
@@ -481,13 +584,13 @@ class WalletNftService {
      * 4. Create test NFT Recipe
      * 5. Execute test NFT Recipe
      */
-    fun testCreateNft(context: Context?){
+    fun testCreateNft(context: Context?) {
 
         CoroutineScope(Dispatchers.IO).launch {
             var profile: Profile? = null
-            var cookbooks = ArrayList<Cookbook>()
+            val cookbooks = ArrayList<Cookbook>()
             var cookbook: Cookbook? = null
-            var recipes = ArrayList<Recipe>()
+            val recipes = ArrayList<Recipe>()
 
             // fetch profile
             runBlocking {
@@ -519,11 +622,12 @@ class WalletNftService {
                 //create cookbook
                 runBlocking {
                     launch {
-                        WalletInitializer.getWallet().createAutoCookbook(profile!!, BuildConfig.APP_NAME) {
-                            if (it != null) {
+                        WalletInitializer.getWallet()
+                            .createAutoCookbook(profile!!, BuildConfig.APP_NAME) {
+                                if (it != null) {
 
+                                }
                             }
-                        }
                     }
                 }
             }
@@ -580,12 +684,12 @@ class WalletNftService {
                                 doubles = listOf(
 
                                     DoubleParam(
-                                        key="Residual%", //this should be reserved keyword for NFT
+                                        key = "Residual%", //this should be reserved keyword for NFT
                                         program = "",
                                         rate = "1.0",
                                         weightRanges = listOf(
                                             DoubleWeightRange(
-                                                upper="20", //20%
+                                                upper = "20", //20%
                                                 lower = "20",
                                                 weight = 1
                                             )
@@ -594,13 +698,15 @@ class WalletNftService {
                                 ),
                                 longs = listOf(
                                     LongParam(
-                                        key="Quantity",
+                                        key = "Quantity",
                                         program = "",
                                         rate = "1.0",
                                         weightRanges = listOf(
                                             LongWeightRange(
-                                                upper=BigDecimal.valueOf(10).setScale(18).toString(), //quantity 10 copies
-                                                lower=BigDecimal.valueOf(10).setScale(18).toString(),
+                                                upper = BigDecimal.valueOf(10).setScale(18)
+                                                    .toString(), //quantity 10 copies
+                                                lower = BigDecimal.valueOf(10).setScale(18)
+                                                    .toString(),
                                                 weight = 1
                                             )
                                         )
@@ -648,8 +754,8 @@ class WalletNftService {
                         nft_recipe.name,
                         nft_recipe.cookbookId,
                         listOf()
-                    ){
-                        if(it?.code == Transaction.ResponseCode.OK) {
+                    ) {
+                        if (it?.code == Transaction.ResponseCode.OK) {
 
                         }
                     }
@@ -659,7 +765,7 @@ class WalletNftService {
             //check
             runBlocking {
                 launch {
-                    WalletInitializer.getWallet().fetchProfile(null){
+                    WalletInitializer.getWallet().fetchProfile(null) {
                         profile = it
                     }
                 }
