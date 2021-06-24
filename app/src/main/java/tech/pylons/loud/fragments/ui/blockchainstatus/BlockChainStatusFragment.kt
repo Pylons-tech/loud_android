@@ -28,7 +28,7 @@ class BlockChainStatusFragment : Fragment() {
         })
 
         viewModel.blockHeight.observe(viewLifecycleOwner, Observer {
-            text_block_height.text = it.toString()
+//            text_block_height.text = it.toString()
         })
     }
 
