@@ -306,7 +306,7 @@ class WalletNftService {
                             val coins = profile.coins
                             userProfile = profile
                             //liveUserData.postValue(profile)
-                            Account.setCurrentAccountUserName(context!!, profile.address)
+//                            Account.setCurrentAccountUserName(context!!, profile.address)
                             WalletLiveData.setUserProfile(userProfile)
                             ret = true
                         }

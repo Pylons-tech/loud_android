@@ -1,10 +1,13 @@
 package tech.pylons.loud.activities
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import tech.pylons.loud.R
+import tech.pylons.loud.services.WalletLiveData
 import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.Account.getCurrentUser
 import tech.pylons.loud.utils.CoreController
@@ -21,7 +24,7 @@ class MainActivity : AppCompatActivity() {
         init()
     }
 
-    private fun initIntent() {
+    private fun readIntentData() {
         val action: String? = intent?.action
         val data: Uri? = intent?.data
 
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        initIntent()
+        readIntentData()
 
         val sharedPrefD =
             getSharedPreferences(getString(R.string.preference_file_default), Context.MODE_PRIVATE)
@@ -59,14 +62,25 @@ class MainActivity : AppCompatActivity() {
             Log.info(it.toString())
         }
 
-        CoreController.bootstrapCore() // should actually call setUserData first
+        // We don't need to bootstrapCore anymore since it will be done by Wallet App.
+//         CoreController.bootstrapCore() // should actually call setUserData first
 
-        val user = getCurrentUser(this)
-        if (user != null) {
-//            Account.initAccount(this, user.name)
-        } else {
-            Account.goToGame(this)
+        WalletLiveData.getUserProfile().observe(this) {
+            if (it != null) {
+                with(this) {
+                    val intent = Intent(this, GameScreenActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                }
+            }
         }
+
+//        val user = getCurrentUser(this)
+//        if (user != null) {
+//            Account.initAccount(this, user.name)
+//        } else {
+//            Account.goToGame(this)
+//        }
     }
 
 }

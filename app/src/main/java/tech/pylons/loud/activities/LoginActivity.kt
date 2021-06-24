@@ -7,7 +7,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import tech.pylons.loud.R
 import tech.pylons.loud.services.WalletInitializer
-import tech.pylons.loud.utils.Account.initAccount
 import tech.pylons.loud.utils.UI.displayLoading
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +18,7 @@ import kotlinx.coroutines.*
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
 import tech.pylons.loud.BuildConfig
+import tech.pylons.loud.utils.Account
 
 
 class LoginActivity : AppCompatActivity() {
@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             loading = displayLoading(this, getString(R.string.loading_account, username))
-            initAccount(this, username)
+            Account.initAccount(this, username)
         }
 
 //        executeRecipe()

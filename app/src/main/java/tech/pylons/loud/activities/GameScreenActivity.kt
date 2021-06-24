@@ -172,7 +172,7 @@ class GameScreenActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
 
-        val currentPlayer = getCurrentUser(this)
+        /*val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
             model.setPlayer(currentPlayer)
 
@@ -187,7 +187,7 @@ class GameScreenActivity : AppCompatActivity(),
             startActivity(intent)
             finish()
             return
-        }
+        }*/
     }
 
     override fun onDestroy() {
