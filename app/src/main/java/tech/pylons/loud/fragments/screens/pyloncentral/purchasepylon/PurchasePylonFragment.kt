@@ -201,7 +201,7 @@ class PurchasePylonFragment : Fragment() {
             if (purchase.purchaseState == Purchase.PurchaseState.PURCHASED) {
                 validPurchases.add(purchase)
             } else if (purchase.purchaseState == Purchase.PurchaseState.PENDING) {
-                Log.info("Received a pending purchase of SKU: ${purchase.sku}")
+                Log.info("Received a pending purchase of SKU: ${purchase.skus[0]}")
                 // handle pending purchases, e.g. confirm with users about the pending
                 // purchases, prompt them to complete it, etc.
             }
@@ -245,7 +245,7 @@ class PurchasePylonFragment : Fragment() {
                 Log.info("originalJson: ${it.originalJson}")
                 Log.info("packageName: ${it.packageName}")
                 Log.info("purchaseToken: ${it.purchaseToken}")
-                Log.info("sku: ${it.sku}")
+                Log.info("sku: ${it.skus[0]}")
                 Log.info("obfuscatedAccountId: ${it.accountIdentifiers?.obfuscatedAccountId}")
                 Log.info("obfuscatedProfileId: ${it.accountIdentifiers?.obfuscatedProfileId}")
             }
@@ -267,7 +267,7 @@ class PurchasePylonFragment : Fragment() {
                     Log.info("developerPayload: ${it.developerPayload}")
                     Log.info("originalJson: ${it.originalJson}")
                     Log.info("purchaseToken: ${it.purchaseToken}")
-                    Log.info("sku: ${it.sku}")
+                    Log.info("sku: ${it.skus[0]}")
                 }
             } else {
                 Log.info("no purchase list")

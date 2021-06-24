@@ -1263,7 +1263,7 @@ class GameScreenActivity : AppCompatActivity(),
 
             val tx = txFlow {
                 Core.current?.googleIapGetPylons(
-                    productId = purchase.sku,
+                    productId = purchase.skus[0],
                     purchaseToken = purchase.purchaseToken,
                     receiptData = purchase.originalJson,
                     signature = purchase.signature
