@@ -29,6 +29,9 @@ class IpcServiceConnection(ctx: Context) : ServiceConnection {
         iIpcService!!.easel2wallet(json)
     }
 
+    fun getCoreData(whatToGet: Int): String? {
+        return iIpcService!!.getCoreData(whatToGet)
+    }
 
     fun isIPCAvailable(): Boolean {
         Log.i(TAG, "Wallet ipc service is binded? $isServiceBinded")

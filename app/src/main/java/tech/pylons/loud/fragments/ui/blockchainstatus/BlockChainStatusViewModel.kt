@@ -3,9 +3,8 @@ package tech.pylons.loud.fragments.ui.blockchainstatus
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import tech.pylons.wallet.core.Core
-import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.withContext
+import tech.pylons.ipc.CoreProvider
+import tech.pylons.loud.services.WalletInitializer
 
 class BlockChainStatusViewModel : ViewModel() {
     private val _blockHeight = MutableLiveData<Long>()
@@ -16,19 +15,14 @@ class BlockChainStatusViewModel : ViewModel() {
 
     init {
         println("BlockChainStatusViewModel")
-
     }
 
     @ExperimentalUnsignedTypes
-    suspend fun getStatusBlock() {
-        Core.current?.updateStatusBlock()
-        val statusBlock = Core.current?.statusBlock
-        withContext(Main) {
-            _blockHeight.value = statusBlock?.height
-        }
+    fun getStatusBlock() {
+        _blockHeight.postValue(CoreProvider.getBlockStatusHeight())
     }
 
     fun setTx(tx: String) {
-        _lastTx.value = tx
+        _lastTx.postValue(tx)
     }
 }
