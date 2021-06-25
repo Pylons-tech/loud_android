@@ -35,7 +35,7 @@ class FightFragment : Fragment() {
                     columnCount <= 1 -> LinearLayoutManager(context)
                     else -> GridLayoutManager(context, columnCount)
                 }
-                adapter = MyFightRecyclerViewAdapter(kotlin.collections.listOf(), listener)
+                adapter = MyFightRecyclerViewAdapter(listOf(), listener)
             }
         }
         return view
@@ -46,7 +46,7 @@ class FightFragment : Fragment() {
         if (context is OnListFragmentInteractionListener) {
             listener = context
         } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
+            throw RuntimeException("$context must implement OnListFragmentInteractionListener")
         }
     }
 

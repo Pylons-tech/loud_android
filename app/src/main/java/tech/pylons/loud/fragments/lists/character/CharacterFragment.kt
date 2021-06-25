@@ -51,9 +51,7 @@ class CharacterFragment : Fragment() {
         super.onAttach(context)
         if (context is OnListFragmentInteractionListener) {
             listener = context
-        } else {
-            throw RuntimeException(context.toString() + " must implement OnListFragmentInteractionListener")
-        }
+        } else throw RuntimeException("$context must implement OnListFragmentInteractionListener")
     }
 
     override fun onDetach() {

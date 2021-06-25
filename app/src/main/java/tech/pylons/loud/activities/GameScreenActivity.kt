@@ -1,6 +1,5 @@
 package tech.pylons.loud.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.android.billingclient.api.Purchase
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import tech.pylons.lib.types.tx.trade.TradeItemInput
 import kotlinx.android.synthetic.main.bottom_sheet_friend.view.*
 import kotlinx.android.synthetic.main.content_game_screen.*
 import kotlinx.android.synthetic.main.dialog_input_text.view.*
@@ -25,6 +23,7 @@ import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.Coin
 import tech.pylons.lib.types.tx.recipe.CoinInput
 import tech.pylons.lib.types.tx.recipe.Recipe
+import tech.pylons.lib.types.tx.trade.TradeItemInput
 import tech.pylons.loud.R
 import tech.pylons.loud.constants.FightId.ID_ACID_GIANT
 import tech.pylons.loud.constants.FightId.ID_FIRE_GIANT
@@ -89,9 +88,7 @@ import tech.pylons.loud.models.*
 import tech.pylons.loud.models.fight.Fight
 import tech.pylons.loud.models.trade.*
 import tech.pylons.loud.services.WalletInitializer
-import tech.pylons.loud.utils.Account.getCurrentUser
 import tech.pylons.loud.utils.CoreController.getItemById
-import tech.pylons.loud.utils.Preferences.getFriendAddress
 import tech.pylons.loud.utils.RenderText.getFightIcon
 import tech.pylons.loud.utils.UI.displayLoading
 import tech.pylons.loud.utils.UI.displayMessage

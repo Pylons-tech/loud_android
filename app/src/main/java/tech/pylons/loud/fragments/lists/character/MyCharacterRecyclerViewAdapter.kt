@@ -24,26 +24,23 @@ class MyCharacterRecyclerViewAdapter(
     private val mListener: OnListFragmentInteractionListener?,
     private val mode: Int
 ) : RecyclerView.Adapter<MyCharacterRecyclerViewAdapter.ViewHolder>() {
+
     private val Log = Logger.getLogger(MyCharacterRecyclerViewAdapter::class.java.name)
 
-    private val mOnClickListener: View.OnClickListener
-    var selectedPos = RecyclerView.NO_POSITION
+    private val mOnClickListener: View.OnClickListener = View.OnClickListener { v ->
+        val item = v.tag as Character
+        // Notify the active callbacks interface (the activity, if the fragment is attached to
+        // one) that an item has been selected.
 
-    init {
-        mOnClickListener = View.OnClickListener { v ->
-            val item = v.tag as Character
-            // Notify the active callbacks interface (the activity, if the fragment is attached to
-            // one) that an item has been selected.
-
-            when(mode) {
-                1-> mListener?.onCharacter(item)
-                2-> mListener?.onBuyCharacter(item)
-                3 -> mListener?.onCharacterTradeSell(item)
-                4 -> mListener?.onCharacterUpdate(item)
-            }
-
+        when (mode) {
+            1 -> mListener?.onCharacter(item)
+            2 -> mListener?.onBuyCharacter(item)
+            3 -> mListener?.onCharacterTradeSell(item)
+            4 -> mListener?.onCharacterUpdate(item)
         }
     }
+
+    var selectedPos = RecyclerView.NO_POSITION
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -54,7 +51,7 @@ class MyCharacterRecyclerViewAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = mValues[position]
         holder.mContentView.text = "${item.name} Lv${item.level}"
-        holder.itemView.isSelected = selectedPos == position;
+        holder.itemView.isSelected = selectedPos == position
 
         if (item.lockedTo.isNotBlank()) {
             with(mListener as Context) {
