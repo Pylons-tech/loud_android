@@ -61,7 +61,7 @@ class PlayerStatusFragment : Fragment() {
             findNavController().navigate(R.id.inventoryFragment)
         }
 
-        model.getPlayer().observe(viewLifecycleOwner, Observer<User> { player ->
+        model.getPlayer().observe(viewLifecycleOwner, { player ->
             text_player_name.text = player.name
             text_player_gold.text = player.gold.toString()
             text_player_pylon.text = player.pylonAmount.toString()

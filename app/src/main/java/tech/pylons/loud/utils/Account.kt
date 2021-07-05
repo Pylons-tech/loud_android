@@ -18,28 +18,29 @@ object Account {
     private val Log = Logger.getLogger(Account::class.java.name)
 
     @ExperimentalUnsignedTypes
-    fun initAccount(context: Context, username: String) {
+    fun initPlayer(context: Context, username: String, profile: Profile) {
         val playerKeys = getPlayerKeys(context, username)
         if (playerKeys != null) {
-            setupWithKeys(context, username, playerKeys)
+            setupWithKeys(context, username, playerKeys, profile)
         } else {
             // no keys get account keys
             CoroutineScope(Dispatchers.IO).launch {
-                val tx = Core.current?.engine?.registerNewProfile(username, null)
-                tx?.submit()
-                Log.info(tx?.toString())
-                //     Log.info(tx.id)
-                delay(5000)
-                Core.current?.getProfile()
+//                val tx = Core.current?.engine?.registerNewProfile(username, null)
+//                tx?.submit()
+//                Log.info(tx?.toString())
+//                //     Log.info(tx.id)
+//                delay(5000)
+//                Core.current?.getProfile()
+//
+//                val tx2 = Core.current?.getPylons(500)
+//                tx2?.submit()
+//                delay(5000)
 
-                val tx2 = Core.current?.getPylons(500)
-                tx2?.submit()
-                delay(5000)
                 val playerKeys = CoreController.dumpUserData()
 
                 Log.info(playerKeys)
                 savePlayerKeys(context, username, playerKeys)
-                setupWithKeys(context, username, playerKeys)
+                setupWithKeys(context, username, playerKeys, profile)
             }
         }
     }
@@ -106,7 +107,7 @@ object Account {
     }
 
     @ExperimentalUnsignedTypes
-    private fun setupWithKeys(context: Context, username: String, playerKeys: String) {
+    private fun setupWithKeys(context: Context, username: String, playerKeys: String, profile: Profile) {
         CoreController.setUserData(playerKeys)
 
         val currentPlayer = getUser(context, username) ?: User(
@@ -126,24 +127,16 @@ object Account {
 
         CoroutineScope(Dispatchers.IO).launch {
 //            CoreController.bootstrapCore()
-            var profile = Core.current?.getProfile()
-            Log.info(profile.toString())
+//            var profile = Core.current?.getProfile()
+//            Log.info(profile.toString())
 
             // I have keys but no account on chain
             // TODO("Remove this check, walletcore should handle this once done")
-            if (profile == null) {
-                profile = createAccount(username)
-            }
 
-            if (profile != null) {
-                currentPlayer.syncProfile(profile)
-                currentPlayer.saveSync(context)
-                setCurrentAccountUserName(context, currentPlayer.name)
-                goToGame(context)
-            } else {
-                // delay not enough? rerun.
-                setupWithKeys(context, username, playerKeys)
-            }
+            currentPlayer.syncProfile(profile)
+            currentPlayer.saveSync(context)
+            setCurrentAccountUserName(context, currentPlayer.name)
+//            goToGame(context)
         }
     }
 

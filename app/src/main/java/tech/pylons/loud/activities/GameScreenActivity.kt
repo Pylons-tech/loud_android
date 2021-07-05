@@ -88,6 +88,7 @@ import tech.pylons.loud.models.*
 import tech.pylons.loud.models.fight.Fight
 import tech.pylons.loud.models.trade.*
 import tech.pylons.loud.services.WalletInitializer
+import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.CoreController.getItemById
 import tech.pylons.loud.utils.RenderText.getFightIcon
 import tech.pylons.loud.utils.UI.displayLoading
@@ -145,7 +146,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
 
         fun setTradeInput(item: ItemSpec?) {
-            tradeInput.value = item
+            tradeInput.value = item!!
         }
 
         fun getTradeOutput(): MutableLiveData<tech.pylons.lib.types.tx.item.Item> {
@@ -153,7 +154,7 @@ class GameScreenActivity : AppCompatActivity(),
         }
 
         fun setTradeOutput(item: tech.pylons.lib.types.tx.item.Item?) {
-            tradeOutput.value = item
+            tradeOutput.value = item!!
         }
     }
 
@@ -168,6 +169,8 @@ class GameScreenActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
+
+        model.setPlayer(Account.getCurrentUser(this)!!)
 
         /*val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {

@@ -29,7 +29,7 @@ class IpcServiceConnection(ctx: Context) : ServiceConnection {
         iIpcService!!.easel2wallet(json)
     }
 
-    fun getCoreData(whatToGet: Int): String? {
+    fun getCoreData(whatToGet: String): String? {
         return iIpcService!!.getCoreData(whatToGet)
     }
 

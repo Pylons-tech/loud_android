@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
             loading = displayLoading(this, getString(R.string.loading_account, username))
-            Account.initAccount(this, username)
+//            Account.initPlayer(this, username)
         }
 
 //        executeRecipe()

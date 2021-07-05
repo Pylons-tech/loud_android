@@ -8,5 +8,5 @@ interface IIpcInterface {
 
     void easel2wallet(String json);
 
-    String getCoreData(int whatToGet);
+    String getCoreData(String whatToGet);
 }

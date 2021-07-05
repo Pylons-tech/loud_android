@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import tech.pylons.ipc.CoreProvider
 import tech.pylons.loud.R
 import tech.pylons.loud.services.WalletLiveData
 import tech.pylons.loud.utils.Account
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity() {
         WalletLiveData.getUserProfile().observe(this) {
             if (it != null) {
                 with(this) {
+                    Account.initPlayer(this, CoreProvider.getUserName(), it)
                     val intent = Intent(this, GameScreenActivity::class.java)
                     startActivity(intent)
                     finish()
