@@ -102,7 +102,7 @@
                 android:id="@+id/layout_active_character_badges"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"></LinearLayout>
+                android:orientation="horizontal" />
         </LinearLayout>
 
         <LinearLayout

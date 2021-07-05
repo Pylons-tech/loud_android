@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.dialog_input_text.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.Coin
 import tech.pylons.lib.types.tx.recipe.CoinInput
@@ -88,6 +89,8 @@ import tech.pylons.loud.models.*
 import tech.pylons.loud.models.fight.Fight
 import tech.pylons.loud.models.trade.*
 import tech.pylons.loud.services.WalletInitializer
+import tech.pylons.loud.services.WalletLiveData
+import tech.pylons.loud.services.WalletNftService
 import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.CoreController.getItemById
 import tech.pylons.loud.utils.RenderText.getFightIcon
@@ -163,6 +166,8 @@ class GameScreenActivity : AppCompatActivity(),
     private val blockChainStatusViewModel: BlockChainStatusViewModel by viewModels()
     private lateinit var getStatusBlockTimer: Timer
     private lateinit var localCacheClient: LocalDb
+
+    private val nftService: WalletNftService = WalletNftService()
 
     private val cookbookId = "Cookbook"
 
@@ -606,9 +611,16 @@ class GameScreenActivity : AppCompatActivity(),
     private suspend fun syncProfile() {
         val player = model.getPlayer().value
         if (player != null) {
-            val profile = Core.current?.getProfile()
+            var profile : Profile? = null
+            nftService.fetchProfile(this, null){
+                when(it) {
+                    true->{
+                        profile = WalletLiveData.getUserProfile().value
+                    }
+                }
+            }
             if (profile != null) {
-                player.syncProfile(profile)
+                player.syncProfile(profile!!)
                 withContext(Main) {
                     model.setPlayer(player)
                 }

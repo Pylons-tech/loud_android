@@ -290,7 +290,7 @@ class WalletNftService {
      *  @param address if null, default address
      *  @callback Boolean true if profile exists, else false
      */
-    private fun fetchProfile(context: Context?, address: String?, callback: (Boolean) -> Unit) {
+    fun fetchProfile(context: Context?, address: String?, callback: (Boolean) -> Unit) {
         runBlocking {
             launch {
                 WalletInitializer.getWallet().fetchProfile(address) {

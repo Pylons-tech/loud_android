@@ -1,6 +1,5 @@
 package tech.pylons.loud.activities
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,8 +9,6 @@ import tech.pylons.ipc.CoreProvider
 import tech.pylons.loud.R
 import tech.pylons.loud.services.WalletLiveData
 import tech.pylons.loud.utils.Account
-import tech.pylons.loud.utils.Account.getCurrentUser
-import tech.pylons.loud.utils.CoreController
 import tech.pylons.loud.utils.Preferences.setFriendAddress
 import java.util.logging.Logger
 
