@@ -1,15 +1,16 @@
 package tech.pylons.loud.services
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import kotlinx.coroutines.*
-import tech.pylons.loud.BuildConfig
 import tech.pylons.lib.types.Cookbook
 import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
-import tech.pylons.loud.utils.Account
+import tech.pylons.loud.BuildConfig
+import tech.pylons.loud.utils.UI
 import java.math.BigDecimal
 
 
@@ -20,8 +21,6 @@ class WalletNftService {
         var userCookbooks = mutableListOf<Cookbook>()
         var userCookbook: Cookbook? = null
         var userNfts = mutableListOf<Recipe>()
-        var appName = BuildConfig.APP_NAME
-        var appPkgName = BuildConfig.APPLICATION_ID
     }
 
     /**
@@ -71,8 +70,6 @@ class WalletNftService {
         val NFT_id = name.replace(" ", "_") //NFT Item ID
         val NFT_recipe_description =
             "this recipe is to issue NFT: ${name} on NFT Cookbook: ${userCookbook?.name!!}"
-
-
 
         runBlocking {
             launch {
@@ -323,12 +320,11 @@ class WalletNftService {
      * Wallet API listCookbooks
      * Cookbook naming rule: {appName}_autocookbook_{profileaddress}
      */
-    private fun listCookbooks(context: Context?, callback: (() -> Unit)? = null) {
+    fun listCookbooks(context: Context?, callback: (() -> Unit)? = null) {
         CoroutineScope(Dispatchers.IO).launch {
-            WalletInitializer.getWallet().listCookbooks() {
-                val cookbooks = it
-                if (cookbooks.isNotEmpty()) {
-                    userCookbook = cookbooks.find {
+            WalletInitializer.getWallet().listCookbooks { cb ->
+                if (cb.isNotEmpty()) {
+                    userCookbook = cb.find {
                         it.sender == userProfile?.address && it.name.startsWith(BuildConfig.APP_NAME)
                     }
                 }
@@ -370,6 +366,44 @@ class WalletNftService {
         }
     }*/
 
+    fun callCreateAutoCookbook(context: Context) {
+        val loading = UI.displayLoading(context, "Creating AutoCookbook ...")
+
+        CoroutineScope(Dispatchers.IO).launch {
+            createAutoCookbook(
+                context,
+                userProfile
+            ) { ret ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    loading.dismiss()
+                    when (ret) {
+                        true -> {
+                            //cookbook created
+                            listCookbooks(
+                                context
+                            ) { }
+                        }
+                        false -> {
+                            withContext(Dispatchers.Main) {
+                                //cookbook creation failed
+                                UI.displayConfirm(context,
+                                    "Portfolio Creation Failed.\r\nWill you retry Portfolio Creation?",
+                                    callbackOK = {
+                                        callCreateAutoCookbook(context)
+                                    },
+                                    callbackCancel = {
+
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
     fun buyPylons(context: Context?) {
         CoroutineScope(Dispatchers.IO).launch {
             //loading screen launch
@@ -394,7 +428,7 @@ class WalletNftService {
         // recipes
         runBlocking {
             launch {
-                WalletInitializer.getWallet().listRecipesBySender() {
+                WalletInitializer.getWallet().listRecipesBySender {
                     val nfts = it
                     if (nfts.isNotEmpty()) {
                         userNfts.clear()
@@ -434,14 +468,13 @@ class WalletNftService {
         callback: ((Boolean) -> Unit)? = null
     ) {
         CoroutineScope(Dispatchers.IO).launch {
-            var ret = false
-            var message = ""
+            var ret: Boolean
+            var message: String
             WalletInitializer.getWallet().createAutoCookbook(
                 profile!!,
                 BuildConfig.APP_NAME
             ) {
-                val transaction = it
-                when (transaction) {
+                when (val transaction = it) {
                     null -> {
                         message = "Create portfolio failed"
                         ret = false
@@ -468,9 +501,7 @@ class WalletNftService {
                                 Toast.LENGTH_LONG
                             ).show()
                         }
-                        if (callback != null) {
-                            callback.invoke(ret)
-                        }
+                        callback?.invoke(ret)
                     }
                 }
             }
@@ -534,12 +565,12 @@ class WalletNftService {
         CoroutineScope(Dispatchers.IO).launch {
             if (userProfile == null) {
                 //testCreateNft(context)
-                fetchProfile(context, null){
-                    when(it) {
-                        true->{
+                fetchProfile(context, null) {
+                    when (it) {
+                        true -> {
                             //retrieved profile
                         }
-                        false->{
+                        false -> {
                             //no profile
                         }
                     }

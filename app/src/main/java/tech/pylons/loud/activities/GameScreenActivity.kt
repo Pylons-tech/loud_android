@@ -1,5 +1,6 @@
 package tech.pylons.loud.activities
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.widget.Toast
@@ -56,6 +57,7 @@ import tech.pylons.loud.constants.Location.INVENTORY
 import tech.pylons.loud.constants.Location.PYLONS_CENTRAL
 import tech.pylons.loud.constants.Location.SETTINGS
 import tech.pylons.loud.constants.Location.SHOP
+import tech.pylons.loud.constants.Recipe.LOUD_CBID
 import tech.pylons.loud.constants.Recipe.RCP_BUY_ANGEL_SWORD
 import tech.pylons.loud.constants.Recipe.RCP_BUY_BRONZE_SWORD
 import tech.pylons.loud.constants.Recipe.RCP_BUY_CHARACTER
@@ -169,13 +171,26 @@ class GameScreenActivity : AppCompatActivity(),
 
     private val nftService: WalletNftService = WalletNftService()
 
-    private val cookbookId = "Cookbook"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
 
         model.setPlayer(Account.getCurrentUser(this)!!)
+
+        nftService.listCookbooks(this)
+
+        WalletLiveData.getUserCookbook().observe(this) { cookbook ->
+            when (cookbook) {
+                null -> {
+                    nftService.callCreateAutoCookbook(this)
+                }
+                else -> {
+                    LOUD_CBID = cookbook.id
+                    Toast.makeText(this, "Your cookbook ID: $LOUD_CBID", Toast.LENGTH_LONG)
+                        .show()
+                }
+            }
+        }
 
         /*val currentPlayer = getCurrentUser(this)
         if (currentPlayer != null) {
@@ -411,8 +426,8 @@ class GameScreenActivity : AppCompatActivity(),
                             nft_recipe!!.name,
                             nft_recipe!!.cookbookId,
                             listOf()
-                        ){
-                            if(it?.code == tech.pylons.lib.types.Transaction.ResponseCode.OK) {
+                        ) {
+                            if (it?.code == tech.pylons.lib.types.Transaction.ResponseCode.OK) {
 
                             }
                         }
@@ -454,7 +469,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                     CoroutineScope(IO).launch {
                         val tx = txFlow {
-                            Core.current?.applyRecipe(RCP_SELL_SWORD, cookbookId, listOf(item.id))!!
+                            Core.current?.applyRecipe(RCP_SELL_SWORD, LOUD_CBID, listOf(item.id))!!
                         }
 
                         withContext(Main) {
@@ -519,7 +534,7 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.current?.applyRecipe(recipeId, cookbookId, listOf(item.id))!!
+                                Core.current?.applyRecipe(recipeId, LOUD_CBID, listOf(item.id))!!
                             }
 
                             withContext(Main) {
@@ -611,10 +626,10 @@ class GameScreenActivity : AppCompatActivity(),
     private suspend fun syncProfile() {
         val player = model.getPlayer().value
         if (player != null) {
-            var profile : Profile? = null
-            nftService.fetchProfile(this, null){
-                when(it) {
-                    true->{
+            var profile: Profile? = null
+            nftService.fetchProfile(this, null) {
+                when (it) {
+                    true -> {
                         profile = WalletLiveData.getUserProfile().value
                     }
                 }
@@ -644,15 +659,21 @@ class GameScreenActivity : AppCompatActivity(),
                         displayLoading(this, getString(R.string.loading_buy_character, item.name))
 
                     CoroutineScope(IO).launch {
-                        val tx = txFlow {
-                            Core.current?.applyRecipe(
-                                RCP_BUY_CHARACTER,
-                                cookbookId,
-                                listOf()
-                            )!!
-                        }
+//                        val tx = txFlow {
+                        nftService.executeRecipe(
+                            RCP_BUY_CHARACTER,
+                            LOUD_CBID,
+                            listOf(),
+                            this@GameScreenActivity
+                        )
+                        /*Core.current?.applyRecipe(
+                            RCP_BUY_CHARACTER,
+                            cookbookId,
+                            listOf()
+                        )!!*/
+//                        }
 
-                        withContext(Main) {
+                        /*withContext(Main) {
                             val message = if (tx.code == Transaction.ResponseCode.OK) {
                                 getString(
                                     R.string.buy_character_complete,
@@ -681,7 +702,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                                 onNavigation(INVENTORY)
                             }
-                        }
+                        }*/
                     }
                 }
                 .setNegativeButton(getString(R.string.cancel)) { dialog, _ ->
@@ -691,6 +712,12 @@ class GameScreenActivity : AppCompatActivity(),
             val alert = dialogBuilder.create()
             alert.setTitle(getString(R.string.confirm))
             alert.show()
+        }
+    }
+
+    fun onExecuteRecipe(context: Context): (Transaction?) -> Unit {
+        return {
+
         }
     }
 
@@ -712,7 +739,7 @@ class GameScreenActivity : AppCompatActivity(),
 
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.current?.applyRecipe(recipeId, cookbookId, itemIds.toList())!!
+                    Core.current?.applyRecipe(recipeId, LOUD_CBID, itemIds.toList())!!
                 }
 
                 withContext(Main) {
@@ -759,11 +786,13 @@ class GameScreenActivity : AppCompatActivity(),
                                                 3L -> getString(R.string.acid_dragon)
                                                 else -> ""
                                             }
-                                            message += "\n${getString(
-                                                R.string.fight_giant_special,
-                                                special,
-                                                dragon
-                                            )}"
+                                            message += "\n${
+                                                getString(
+                                                    R.string.fight_giant_special,
+                                                    special,
+                                                    dragon
+                                                )
+                                            }"
 
                                             nav_host_fragment.findNavController()
                                                 .navigate(R.id.forestScreenFragment)
@@ -771,10 +800,12 @@ class GameScreenActivity : AppCompatActivity(),
 
                                     }
                                 }
-                                4 -> message += "\n ${getString(
-                                    R.string.you_got_bonus_item,
-                                    player.getItemNameByItemId(tx.txData.output[3].itemId)
-                                )}"
+                                4 -> message += "\n ${
+                                    getString(
+                                        R.string.you_got_bonus_item,
+                                        player.getItemNameByItemId(tx.txData.output[3].itemId)
+                                    )
+                                }"
                             }
                         }
                     } else {
@@ -819,7 +850,11 @@ class GameScreenActivity : AppCompatActivity(),
                             )
                         CoroutineScope(IO).launch {
                             val tx = txFlow {
-                                Core.current?.applyRecipe(RCP_BUY_GOLD_WITH_PYLON, cookbookId, listOf())!!
+                                Core.current?.applyRecipe(
+                                    RCP_BUY_GOLD_WITH_PYLON,
+                                    LOUD_CBID,
+                                    listOf()
+                                )!!
                             }
 
                             withContext(Main) {
@@ -855,7 +890,7 @@ class GameScreenActivity : AppCompatActivity(),
             displayLoading(this, getString(R.string.loading_get_dev_items))
         CoroutineScope(IO).launch {
             val tx = txFlow {
-                Core.current?.applyRecipe(RCP_GET_TEST_ITEMS, cookbookId, listOf())!!
+                Core.current?.applyRecipe(RCP_GET_TEST_ITEMS, LOUD_CBID, listOf())!!
             }
 
             withContext(Main) {
@@ -1238,7 +1273,9 @@ class GameScreenActivity : AppCompatActivity(),
             val loading = displayLoading(this, getString(R.string.send_items_loading))
             CoroutineScope(IO).launch {
                 val tx = txFlow {
-                    Core.current?.engine?.sendItems(player.address, /*listOf(friendAddress),*/ itemIds.map { it.id })!!
+                    Core.current?.engine?.sendItems(
+                        player.address, /*listOf(friendAddress),*/
+                        itemIds.map { it.id })!!
                 }
 
                 withContext(Main) {

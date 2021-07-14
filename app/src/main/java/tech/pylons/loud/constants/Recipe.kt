@@ -1,7 +1,7 @@
 package tech.pylons.loud.constants
 
 object Recipe {
-    const val LOUD_CBID = "LOUD-v0.1.0-1589853709"
+    var LOUD_CBID = "LOUD-v0.1.0-1589853709"
     const val RCP_BUY_GOLD_WITH_PYLON = "LOUD-buy-gold-from-pylons-recipe-v0.1.0-1589853709"
     const val RCP_BUY_CHARACTER = "LOUD-get-character-recipe-v0.1.0-1589853709"
     const val RCP_SELL_SWORD = "LOUD-sell-an-item-recipe-v0.1.0-1589853709"
