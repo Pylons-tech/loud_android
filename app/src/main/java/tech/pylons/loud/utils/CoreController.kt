@@ -14,7 +14,8 @@ object CoreController {
     private val Log = Logger.getLogger(CoreController::class.java.name)
 
     private val config = Config(
-        Backend.LIVE_DEV,
+        Backend.TESTNET,
+        "pylons-testnet", true,
         listOf(BuildConfig.API_URL)
     ) // should list real ips for remote notes, ask mike for that
     private var userJson = ""

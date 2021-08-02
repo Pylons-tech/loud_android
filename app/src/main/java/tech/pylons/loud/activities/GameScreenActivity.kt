@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.dialog_input_text.view.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import tech.pylons.ipc.WalletHandler
 import tech.pylons.lib.types.Profile
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.Coin
@@ -90,12 +91,10 @@ import tech.pylons.loud.localdb.LocalDb
 import tech.pylons.loud.models.*
 import tech.pylons.loud.models.fight.Fight
 import tech.pylons.loud.models.trade.*
-import tech.pylons.loud.services.WalletInitializer
-import tech.pylons.loud.services.WalletLiveData
-import tech.pylons.loud.services.WalletNftService
 import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.CoreController.getItemById
 import tech.pylons.loud.utils.RenderText.getFightIcon
+import tech.pylons.loud.utils.UI
 import tech.pylons.loud.utils.UI.displayLoading
 import tech.pylons.loud.utils.UI.displayMessage
 import tech.pylons.wallet.core.Core
@@ -169,25 +168,24 @@ class GameScreenActivity : AppCompatActivity(),
     private lateinit var getStatusBlockTimer: Timer
     private lateinit var localCacheClient: LocalDb
 
-    private val nftService: WalletNftService = WalletNftService()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_game_screen)
 
         model.setPlayer(Account.getCurrentUser(this)!!)
 
-        nftService.listCookbooks(this)
+        WalletHandler.listCookbooks(this)
 
-        WalletLiveData.getUserCookbook().observe(this) { cookbook ->
+        WalletHandler.getLiveUserCookbook().observe(this) { cookbook ->
             when (cookbook) {
                 null -> {
-                    nftService.callCreateAutoCookbook(this)
+                    callCreateAutoCookbook(this)
                 }
                 else -> {
                     LOUD_CBID = cookbook.id
                     Toast.makeText(this, "Your cookbook ID: $LOUD_CBID", Toast.LENGTH_LONG)
                         .show()
+                    Log.info("LOUD cookbook ID: $LOUD_CBID")
                 }
             }
         }
@@ -225,6 +223,41 @@ class GameScreenActivity : AppCompatActivity(),
         Log.info("onResume")
         super.onResume()
         initTimer()
+    }
+
+    private fun callCreateAutoCookbook(context: Context) {
+        val loading = UI.displayLoading(context, "Creating AutoCookbook ...")
+        CoroutineScope(Dispatchers.IO).launch {
+            WalletHandler.createAutoCookbook(
+                context,
+                WalletHandler.getUserProfile()
+            ) { ret ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    loading.dismiss()
+                    when (ret) {
+                        true -> {
+                            //cookbook created
+                            WalletHandler.listCookbooks(
+                                context
+                            ) { }
+                        }
+                        false -> {
+                            withContext(Dispatchers.Main) {
+                                //cookbook creation failed
+                                UI.displayConfirm(context,
+                                    "Portfolio Creation Failed.\r\nWill you retry Portfolio Creation?",
+                                    callbackOK = {
+                                        callCreateAutoCookbook(context)
+                                    },
+                                    callbackCancel = {
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun initTimer() {
@@ -409,7 +442,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                 runBlocking {
                     launch {
-                        WalletInitializer.getWallet().listRecipes {
+                        WalletHandler.getWallet().listRecipes {
                             it.forEach {
                                 recipes.add(it)
                             }
@@ -422,7 +455,7 @@ class GameScreenActivity : AppCompatActivity(),
                 //create NFT
                 runBlocking {
                     launch {
-                        WalletInitializer.getWallet().executeRecipe(
+                        WalletHandler.getWallet().executeRecipe(
                             nft_recipe!!.name,
                             nft_recipe!!.cookbookId,
                             listOf()
@@ -627,10 +660,10 @@ class GameScreenActivity : AppCompatActivity(),
         val player = model.getPlayer().value
         if (player != null) {
             var profile: Profile? = null
-            nftService.fetchProfile(this, null) {
+            WalletHandler.fetchProfile(this, null) {
                 when (it) {
                     true -> {
-                        profile = WalletLiveData.getUserProfile().value
+                        profile = WalletHandler.getUserProfile()
                     }
                 }
             }
@@ -660,7 +693,7 @@ class GameScreenActivity : AppCompatActivity(),
 
                     CoroutineScope(IO).launch {
 //                        val tx = txFlow {
-                        nftService.executeRecipe(
+                        WalletHandler.executeRecipe(
                             RCP_BUY_CHARACTER,
                             LOUD_CBID,
                             listOf(),

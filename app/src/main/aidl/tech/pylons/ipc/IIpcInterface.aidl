@@ -4,9 +4,9 @@ package tech.pylons.ipc;
 
 interface IIpcInterface {
 
-    String wallet2easel();
+    String wallet2client();
 
-    void easel2wallet(String json);
+    void client2wallet(String json);
 
     String getCoreData(String whatToGet);
 }

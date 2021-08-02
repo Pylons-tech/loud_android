@@ -6,7 +6,6 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import tech.pylons.loud.R
-import tech.pylons.loud.services.WalletInitializer
 import tech.pylons.loud.utils.UI.displayLoading
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.coroutines.Dispatchers
@@ -15,10 +14,10 @@ import kotlinx.coroutines.runBlocking
 import tech.pylons.lib.types.tx.recipe.Recipe
 import java.util.ArrayList
 import kotlinx.coroutines.*
+import tech.pylons.ipc.WalletHandler
 import tech.pylons.lib.types.Transaction
 import tech.pylons.lib.types.tx.recipe.*
 import tech.pylons.loud.BuildConfig
-import tech.pylons.loud.utils.Account
 
 
 class LoginActivity : AppCompatActivity() {
@@ -52,9 +51,9 @@ class LoginActivity : AppCompatActivity() {
         try {
             runBlocking {
                 launch(Dispatchers.IO) {
-                    WalletInitializer.getWallet().listRecipes {
-                        it.forEach {
-                            recipes.add(it)
+                    WalletHandler.getWallet().listRecipes {
+                        it.forEach { rcp ->
+                            recipes.add(rcp)
                         }
                     }
                 }
@@ -72,7 +71,7 @@ class LoginActivity : AppCompatActivity() {
             if (nftRecipe != null) {
                 runBlocking {
                     launch(Dispatchers.IO) {
-                        WalletInitializer.getWallet().executeRecipe(nftRecipe.name, BuildConfig.APP_NAME + "_autocookbook_cosmos1n5euj3rmtm3yvwc8afcjtfnprtt7y9xv2pmm4Q", listOf()) {
+                        WalletHandler.getWallet().executeRecipe(nftRecipe.name, BuildConfig.APP_NAME + "_autocookbook_cosmos1n5euj3rmtm3yvwc8afcjtfnprtt7y9xv2pmm4Q", listOf()) {
                                 if (it?.code == Transaction.ResponseCode.OK)
                                     Log.i("Execute executeRecipe succes with code ", it.code.toString())
                             }

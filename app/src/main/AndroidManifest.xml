@@ -43,7 +43,7 @@
             android:exported="false"
             tools:node="merge">
             <!-- This entry makes ExampleLoggerInitializer discoverable. -->
-            <meta-data  android:name="tech.pylons.loud.services.WalletInitializer" android:value="androidx.startup" />
+            <meta-data  android:name="tech.pylons.ipc.WalletHandler" android:value="androidx.startup" />
         </provider>
     </application>
 

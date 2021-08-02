@@ -3,7 +3,7 @@ package tech.pylons.loud.fragments.ui.blockchainstatus
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import tech.pylons.ipc.CoreProvider
+import tech.pylons.ipc.WalletHandler
 
 class BlockChainStatusViewModel : ViewModel() {
     private val _blockHeight = MutableLiveData<Long>()
@@ -18,7 +18,7 @@ class BlockChainStatusViewModel : ViewModel() {
 
     @ExperimentalUnsignedTypes
     fun getStatusBlock() {
-        _blockHeight.postValue(CoreProvider.getBlockStatusHeight())
+        _blockHeight.postValue(WalletHandler.getBlockStatusHeight())
     }
 
     fun setTx(tx: String) {

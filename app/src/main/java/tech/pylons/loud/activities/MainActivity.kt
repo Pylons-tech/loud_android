@@ -5,9 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import tech.pylons.ipc.CoreProvider
+import tech.pylons.ipc.WalletHandler
 import tech.pylons.loud.R
-import tech.pylons.loud.services.WalletLiveData
 import tech.pylons.loud.utils.Account
 import tech.pylons.loud.utils.Preferences.setFriendAddress
 import java.util.logging.Logger
@@ -63,10 +62,10 @@ class MainActivity : AppCompatActivity() {
         // We don't need to bootstrapCore anymore since it will be done by Wallet App.
 //         CoreController.bootstrapCore() // should actually call setUserData first
 
-        WalletLiveData.getUserProfile().observe(this) {
+        WalletHandler.getLiveUserProfile().observe(this) {
             if (it != null) {
                 with(this) {
-                    Account.initPlayer(this, CoreProvider.getUserName(), it)
+                    Account.initPlayer(this, WalletHandler.getUserName(), it)
                     val intent = Intent(this, GameScreenActivity::class.java)
                     startActivity(intent)
                     finish()
